@@ -1,6 +1,6 @@
 # dotfiles
 
-My personal dotfiles for Void Linux and a Sway/Wayland desktop, managed with GNU Stow. They are machine-specific, so review them before use.
+My personal dotfiles for Void Linux and a Sway/Noctalia desktop, managed with GNU Stow.
 
 ## Install
 

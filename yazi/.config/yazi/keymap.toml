@@ -1,0 +1,6 @@
+[mgr]
+prepend_keymap = [
+	# In yazi.nvim, enter directories or return files to the existing Neovim.
+	# Standalone, dispatch files through Yazi's opener rules (e.g. Swayimg).
+	{ on = "<Enter>", run = '''shell --block -- if [ -n "$NVIM_CWD" ] && [ -d %h ]; then ya emit enter; else ya emit open --hovered; fi''', desc = "Open intelligently" },
+]

@@ -1,0 +1,13 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Vim
+GenericName=Text Editor
+Comment=Edit text files in Vim
+TryExec=/usr/bin/vim
+Exec=/usr/bin/foot --app-id=vim /usr/bin/vim %F
+Icon=gvim
+Terminal=false
+Categories=Utility;TextEditor;
+Keywords=Text;Editor;Vim;Vi;Terminal;
+StartupNotify=false

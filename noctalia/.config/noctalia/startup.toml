@@ -1,0 +1,7 @@
+# Keep radios off when Noctalia starts. They remain available through the
+# Control Center and bar widgets when needed.
+[hooks]
+started = [
+  "noctalia msg wifi-disable",
+  "noctalia msg bluetooth-disable",
+]

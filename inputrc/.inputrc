@@ -1,0 +1,41 @@
+$include /etc/inputrc
+
+# Up/Down search history for what you have already typed instead of walking
+# every command blindly. Type `xbps` then Up and you only see xbps commands.
+"\e[A": history-search-backward
+"\e[B": history-search-forward
+# Same keys as reported in application cursor mode (tmux, some TUIs).
+"\eOA": history-search-backward
+"\eOB": history-search-forward
+
+# Ctrl-Left / Ctrl-Right move by word.
+"\e[1;5C": forward-word
+"\e[1;5D": backward-word
+
+# Completion
+set completion-ignore-case on
+set completion-map-case on          # treat - and _ as equivalent
+set show-all-if-ambiguous on        # one Tab lists, not two
+set show-all-if-unmodified on
+set completion-query-items 200
+set page-completions off
+set mark-symlinked-directories on
+set colored-stats on                # colour completions like ls does
+set colored-completion-prefix on
+set menu-complete-display-prefix on
+set visible-stats on                # append / * @ to completion types
+
+# Don't beep or flash on an ambiguous completion.
+set bell-style none
+
+# If you ever `set -o vi`, uncomment these to get a cursor-shape mode
+# indicator. Leave them off in emacs mode: show-mode-in-prompt also applies
+# there and readline's default emacs indicator is a literal "@" in the prompt.
+# set show-mode-in-prompt on
+# set emacs-mode-string "\1\e[6 q\2"
+# set vi-ins-mode-string "\1\e[6 q\2"
+# set vi-cmd-mode-string "\1\e[2 q\2"
+
+# Paste large blocks safely: bracketed paste stops a multi-line paste from
+# executing line by line before you have read it.
+set enable-bracketed-paste on

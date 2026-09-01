@@ -1,0 +1,8 @@
+#!/bin/sh
+
+# mandoc supplies a temporary file; also support piped input for direct use.
+if [ "$#" -gt 0 ]; then
+    cat -- "$@"
+else
+    cat
+fi | col -bx | bat --plain --language=man

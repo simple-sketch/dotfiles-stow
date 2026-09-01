@@ -1,0 +1,94 @@
+# shikane - dynamic output configuration
+# Docs: man 5 shikane, man 1 shikanectl
+#
+# How selection works: a profile is only considered if EVERY connected display
+# matches an output AND no output in the profile is left unmatched. That is what
+# makes "docked" vs "undocked" automatic - no priority list needed.
+#
+# Ranking: "docked" confirms the built-in connector against both its name and
+# description, while the two manual layouts use the name alone. This makes
+# "docked" win automatically without tying the config to display hardware;
+# use shikanectl switch to select a manual layout.
+# Search arrays are conjunctive: EVERY entry must match the same display. They
+# refine an identity and are not an OR/fallback list.
+#
+# Modes use each display's EDID-preferred resolution and refresh rate. shikane
+# cannot express relative positions (upstream issue #34), so dual-screen
+# profiles run arrange-outputs.sh after apply. It reads Sway's final logical
+# dimensions (including transform and scale), places the requested output on
+# the left and vertically centers the other output. Sway calls the same helper
+# with --toggle and a profile name to select that mode, then reverse the current
+# side-by-side order on subsequent key presses without saved state.
+
+# Connector classes. The external expression covers common direct, USB-C dock
+# and DisplayPort-MST names without mistaking the built-in eDP panel for one.
+# external: ^(DP|HDMI-[AB]|DVI-[ADI]|VGA|USB-C)-[0-9]+(-[0-9]+)*$
+# internal: ^(eDP|LVDS)-[0-9]+$
+
+# External monitor connected -> built-in panel off, external in landscape.
+[[profile]]
+name = "docked"
+    [[profile.output]]
+    # AND: the internal connector must match both the canonical output name and
+    # the compositor description. Two matching attributes also rank this
+    # automatic profile above the regex-only manual layouts.
+    search = ["n/^(eDP|LVDS)-[0-9]+$", "d/(eDP|LVDS)-[0-9]+"]
+    enable = false
+
+    [[profile.output]]
+    search = "n/^(DP|HDMI-[AB]|DVI-[ADI]|VGA|USB-C)-[0-9]+(-[0-9]+)*$"
+    enable = true
+    mode = "preferred"
+    position = "0,0"
+    transform = "normal"
+
+# External rotated 90 degrees, laptop panel initially stays on its right. The
+# helper derives both output names, the right-hand position and vertical
+# centering. Mod+Shift+V selects this mode, then toggles which output is left.
+# Manual only: shikanectl switch portrait
+[[profile]]
+name = "portrait"
+    [[profile.output]]
+    search = "n/^(eDP|LVDS)-[0-9]+$"
+    enable = true
+    mode = "preferred"
+    transform = "normal"
+
+    [[profile.output]]
+    search = "n/^(DP|HDMI-[AB]|DVI-[ADI]|VGA|USB-C)-[0-9]+(-[0-9]+)*$"
+    enable = true
+    exec = ["$HOME/.config/sway/scripts/arrange-outputs.sh \"$SHIKANE_OUTPUT_NAME\""]
+    mode = "preferred"
+    position = "0,0"
+    transform = "90"
+
+# Both screens on, side by side: external landscape, laptop panel initially to
+# its right. The helper derives both output names and their positions. Sway's
+# Mod+Shift+G binding selects this mode, then toggles which one is on the left.
+# Manual only (regex searches keep it ranked below "docked"):
+#     shikanectl switch extend
+[[profile]]
+name = "extend"
+    [[profile.output]]
+    search = "n/^(DP|HDMI-[AB]|DVI-[ADI]|VGA|USB-C)-[0-9]+(-[0-9]+)*$"
+    enable = true
+    exec = ["$HOME/.config/sway/scripts/arrange-outputs.sh \"$SHIKANE_OUTPUT_NAME\""]
+    mode = "preferred"
+    position = "0,0"
+    transform = "normal"
+
+    [[profile.output]]
+    search = "n/^(eDP|LVDS)-[0-9]+$"
+    enable = true
+    mode = "preferred"
+    transform = "normal"
+
+# Nothing else connected -> built-in panel on.
+[[profile]]
+name = "undocked"
+    [[profile.output]]
+    # Same vendor-neutral connector checks as the automatic docked profile.
+    search = ["n/^(eDP|LVDS)-[0-9]+$", "d/(eDP|LVDS)-[0-9]+"]
+    enable = true
+    mode = "preferred"
+    position = "0,0"

@@ -1,0 +1,306 @@
+### Variables
+
+# Super key (Mod1 = Alt).
+set $mod Mod4
+# Vim-style directions.
+set $left h
+set $down j
+set $up k
+set $right l
+
+# Floating-window size (% of current workspace).
+set $floating_width 45
+set $floating_height 55
+
+# Match the GTK/XWayland cursor.
+seat * xcursor_theme Bibata-Modern-Ice 24
+
+# Export session variables before Noctalia so D-Bus services inherit them.
+exec "dbus-update-activation-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP XDG_SESSION_TYPE XDG_SESSION_DESKTOP QT_QPA_PLATFORM; exec noctalia"
+
+
+# Start PipeWire after removing stale sessions that can break Bluetooth audio.
+# Recovery: ~/.config/sway/scripts/start-audio.sh &
+exec ~/.config/sway/scripts/start-audio.sh
+
+# Pointer focus: yes, no, or always.
+focus_follows_mouse yes
+
+# Honor cross-workspace application focus requests.
+focus_on_window_activation focus
+
+# Inspect Wayland app IDs and XWayland properties:
+# swaymsg -r -t get_tree | jq '.. | objects | select(.app_id != null or .window != null) | {name, app_id, shell, window_properties}'
+
+# Size and center app-created floating windows.
+for_window [floating] resize set width $floating_width ppt height $floating_height ppt, move position center
+
+# Float selected Wayland apps; include geometry because criteria are not re-run.
+for_window [app_id="^flameshot$"] floating enable, resize set width $floating_width ppt height $floating_height ppt, move position center
+for_window [app_id="^com[.]gabm[.]satty$"] floating enable, resize set width $floating_width ppt height $floating_height ppt, move position center
+for_window [app_id="^dev[.]noctalia[.]Noctalia$"] floating enable, resize set width $floating_width ppt height $floating_height ppt, move position center
+for_window [app_id="(?i)^thunar$"] floating enable, resize set width $floating_width ppt height $floating_height ppt, move position center
+
+# XWayland fallbacks; Noctalia has no observed class.
+for_window [class="(?i)^(flameshot|satty|thunar)$"] floating enable, resize set width $floating_width ppt height $floating_height ppt, move position center
+
+# Sway already floats typed dialogs; the generic rule sizes them.
+# Use roles only as a fallback for legacy X11 windows with incomplete hints.
+for_window [window_role="(?i)^(about|organizer|preferences|bubble|page-info|pop-up|task_dialog|toolbox|webconsole)$"] floating enable, resize set width $floating_width ppt height $floating_height ppt, move position center
+
+
+# Terminal.
+set $term foot
+
+# Launcher.
+#set $menu wmenu-run
+set $menu noctalia msg panel-toggle launcher
+
+# Browser; keep in sync with BROWSER in ~/.bash_profile.
+set $browser firefox
+
+# Send browser windows to workspace 1 (Wayland app_id and XWayland class).
+# Matching is case-insensitive and unanchored. For unusual IDs, update these
+# patterns and browser.sh's BROWSER_ID. Inspect: swaymsg -t get_tree | grep app_id
+for_window [app_id="(?i)$browser"] move container to workspace number 1, workspace number 1
+
+# Floating terminal.
+set $floating_term ghostty
+for_window [app_id="(?i)$floating_term"] floating enable, resize set width $floating_width ppt height $floating_height ppt, move position center
+
+# Float Yazi under.
+set $file_manager $floating_term -e yazi 
+for_window [app_id="(?i)$file_manager"] floating enable, resize set width $floating_width ppt height $floating_height ppt, move position center
+
+# Editor.
+set $text_editor neovide
+
+# Neovide: workspace 2.
+for_window [app_id="(?i)^neovide$"] move container to workspace number 2, workspace number 2
+
+# Swayimg: workspace 4; app config disables overlay mode.
+for_window [app_id="^swayimg$"] move container to workspace number 4, workspace number 4
+
+# VLC: workspace 5.
+for_window [app_id="(?i)^vlc$"] move container to workspace number 5, workspace number 5
+
+# Window switcher.
+set $window_switcher_overview noctalia msg window-switcher
+
+### Displays (Shikane)
+
+# Restart Shikane; profiles select docked or undocked layouts.
+exec_always "pkill -x shikane; shikane"
+
+# Portrait dual-screen; repeat to swap left and right.
+bindsym $mod+Shift+v exec ~/.config/sway/scripts/arrange-outputs.sh --toggle portrait
+
+# External-only landscape.
+bindsym $mod+Shift+b exec shikanectl switch docked
+
+# Landscape dual-screen; repeat to swap left and right.
+bindsym $mod+Shift+g exec ~/.config/sway/scripts/arrange-outputs.sh --toggle extend
+
+
+### Input
+
+  input type:touchpad {
+      dwt enabled
+      tap enabled
+      natural_scroll enabled
+      middle_emulation enabled
+  }
+
+
+    # US/LT layouts.
+    input "type:keyboard" {
+        xkb_layout "us,lt"
+    }
+
+    # Super+\ cycles layouts.
+    bindsym --to-code $mod+backslash input "type:keyboard" xkb_switch_layout next
+
+
+
+### Key bindings
+
+# Basics
+    # Close focused window.
+    bindsym $mod+Shift+q kill
+
+    # Right-click a title bar to close.
+    bindsym button3 kill
+
+    # Terminal.
+    bindsym $mod+Return fullscreen disable; exec $term
+
+    # Launcher.
+    bindsym $mod+d exec $menu
+
+    # Focus the browser, open another window, or launch it.
+    set $browser_focus_or_new ~/.config/sway/scripts/browser.sh
+    bindsym $mod+y fullscreen disable; exec $browser_focus_or_new $browser
+
+    # Floating terminal.
+    bindsym $mod+Shift+Return fullscreen disable; exec $floating_term
+
+    # File manager.
+    bindsym $mod+n fullscreen disable; exec $file_manager
+
+    # Editor.
+    bindsym $mod+t fullscreen disable; exec $text_editor
+
+    # Window switcher.
+    bindsym $mod+o exec $window_switcher_overview
+
+    # Toggle Noctalia bars and reserved space.
+    bindsym $mod+Control+c exec noctalia msg bar-toggle
+
+    # Super+drag moves; Super+right-drag resizes (also tiled windows).
+    floating_modifier $mod normal
+
+    # Reload config.
+    bindsym $mod+Shift+c reload
+
+    # End the Wayland session.
+    # bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -B 'Yes, exit sway' 'swaymsg exit'
+    bindsym $mod+Shift+e exec noctalia msg panel-toggle session
+
+# Focus and movement
+    # Vim-style focus.
+    bindsym $mod+$left focus left
+    bindsym $mod+$down focus down
+    bindsym $mod+$up focus up
+    bindsym $mod+$right focus right
+    # Arrow-key focus.
+    bindsym $mod+Left focus left
+    bindsym $mod+Down focus down
+    bindsym $mod+Up focus up
+    bindsym $mod+Right focus right
+
+    # Super+scroll changes pane focus.
+    bindsym --whole-window $mod+button4 focus prev sibling
+    bindsym --whole-window $mod+button5 focus next sibling
+
+    # Super+Shift+scroll changes workspace.
+    bindsym --whole-window $mod+Shift+button4 workspace prev
+    bindsym --whole-window $mod+Shift+button5 workspace next
+
+    # Super+Shift+Vim key moves the focused window.
+    bindsym $mod+Shift+$left move left
+    bindsym $mod+Shift+$down move down
+    bindsym $mod+Shift+$up move up
+    bindsym $mod+Shift+$right move right
+    # Super+Shift+arrow moves the focused window.
+    bindsym $mod+Shift+Left move left
+    bindsym $mod+Shift+Down move down
+    bindsym $mod+Shift+Up move up
+    bindsym $mod+Shift+Right move right
+
+# Workspaces
+
+    # Cycle active workspaces.
+    bindsym $mod+Tab workspace next
+    bindsym $mod+Shift+Tab workspace prev
+    # Switch workspace.
+    bindsym $mod+1 workspace number 1
+    bindsym $mod+2 workspace number 2
+    bindsym $mod+3 workspace number 3
+    bindsym $mod+4 workspace number 4
+    bindsym $mod+5 workspace number 5
+    bindsym $mod+6 workspace number 6
+    bindsym $mod+7 workspace number 7
+    bindsym $mod+8 workspace number 8
+    bindsym $mod+9 workspace number 9
+    bindsym $mod+0 workspace number 10
+    # Move focused window to a workspace.
+    bindsym $mod+Shift+1 move container to workspace number 1
+    bindsym $mod+Shift+2 move container to workspace number 2
+    bindsym $mod+Shift+3 move container to workspace number 3
+    bindsym $mod+Shift+4 move container to workspace number 4
+    bindsym $mod+Shift+5 move container to workspace number 5
+    bindsym $mod+Shift+6 move container to workspace number 6
+    bindsym $mod+Shift+7 move container to workspace number 7
+    bindsym $mod+Shift+8 move container to workspace number 8
+    bindsym $mod+Shift+9 move container to workspace number 9
+    bindsym $mod+Shift+0 move container to workspace number 10
+
+# Layouts
+    # Horizontal or vertical split.
+    bindsym $mod+b splith
+    bindsym $mod+v splitv
+
+    # Layout style.
+    bindsym $mod+s layout stacking
+    bindsym $mod+w layout tabbed
+    bindsym $mod+e layout toggle split
+
+    # Fullscreen.
+    bindsym $mod+f fullscreen
+
+    # Toggle floating.
+    bindsym $mod+Shift+space floating toggle
+
+    # Switch between tiled and floating focus.
+    bindsym $mod+space focus mode_toggle
+
+    # Focus parent.
+    bindsym $mod+a focus parent
+# Scratchpad
+
+    # Stash the focused window; support standard and keypad minus.
+    bindsym $mod+Shift+minus move scratchpad
+    bindsym $mod+Shift+KP_Subtract move scratchpad
+
+    # Show, hide, or cycle scratchpad windows.
+    bindsym $mod+minus scratchpad show
+    bindsym $mod+KP_Subtract scratchpad show
+
+# Resize mode
+mode "resize" {
+    # Vim keys.
+    bindsym $left resize shrink width 10px
+    bindsym $down resize grow height 10px
+    bindsym $up resize shrink height 10px
+    bindsym $right resize grow width 10px
+
+    # Arrow keys.
+    bindsym Left resize shrink width 10px
+    bindsym Down resize grow height 10px
+    bindsym Up resize shrink height 10px
+    bindsym Right resize grow width 10px
+
+    # Exit resize mode.
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+bindsym $mod+r mode "resize"
+
+
+# Media keys
+
+# Direct brightnessctl alternative:
+# bindsym --locked XF86MonBrightnessDown exec brightnessctl set 5%-
+# bindsym --locked XF86MonBrightnessUp exec brightnessctl set 5%+
+
+# Brightness with Noctalia OSD.
+bindsym --locked XF86MonBrightnessDown exec noctalia msg brightness-down
+bindsym --locked XF86MonBrightnessUp exec noctalia msg brightness-up
+
+# Volume.
+bindsym --locked XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle
+bindsym --locked XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -5%
+bindsym --locked XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5%
+bindsym --locked XF86AudioMicMute exec pactl set-source-mute @DEFAULT_SOURCE@ toggle
+
+# Playback.
+bindsym --locked XF86AudioPlay exec playerctl play-pause
+bindsym --locked XF86AudioPause exec playerctl play-pause
+bindsym --locked XF86AudioPrev exec playerctl previous
+bindsym --locked XF86AudioNext exec playerctl next
+bindsym --locked XF86AudioStop exec playerctl stop
+
+
+# Screenshot.
+bindsym Print exec flameshot gui
+

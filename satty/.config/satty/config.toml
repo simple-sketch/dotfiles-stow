@@ -1,0 +1,5 @@
+[general]
+output-filename = "~/Pictures/Screenshots/screenshot-%Y-%m-%d_%H:%M:%S.png"
+auto-copy = false
+save-after-copy = false
+early-exit = ["all"]

@@ -1,0 +1,14 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Yazi File Manager
+GenericName=File Manager
+Comment=Browse files with Yazi in Kitty
+TryExec=/usr/bin/yazi
+Exec=/usr/bin/kitty --class kitty-yazi /usr/bin/yazi %f
+Icon=utilities-terminal
+Terminal=false
+StartupNotify=false
+NoDisplay=false
+Categories=System;FileTools;FileManager;
+MimeType=inode/directory;

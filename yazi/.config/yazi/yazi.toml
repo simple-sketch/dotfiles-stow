@@ -1,0 +1,26 @@
+[mgr]
+show_hidden = true
+
+[opener]
+edit = [
+    { run = 'nvim %s', block = true, desc = "Neovim" },
+    { run = 'neovide --no-fork %s', block = true, desc = "Neovide" },
+    { run = 'zed %s', block = true, desc = "Zed" },
+    { run = 'vim %s', block = true, desc = "Vim" }
+]
+swayimg = [
+    { run = "swayimg %s1", orphan = true, desc = "Swayimg", for = "linux" }
+]
+
+[open]
+prepend_rules = [
+    # Add Swayimg to the interactive opener list for directories. Passing the
+    # directory path makes Swayimg load every supported image inside it.
+    { url = "*/", use = [ "edit", "swayimg", "open", "reveal" ] },
+    { mime = "image/*", use = [ "swayimg", "open", "reveal" ] },
+    { url = "*.ini", use = "edit" },
+    { url = "*.sh", use = "edit" },
+    { url = "*.vim", use = "edit" },
+    { url = ".vimrc", use = "edit" },
+    { mime = "text/*", use = "edit" }
+]

@@ -142,10 +142,10 @@ builtin = "Dracula"
 mode = "dark"
 
 [wallpaper.default]
-path = "/usr/share/noctalia/assets/noctalia-wallpaper.png"
+path = "/usr/share/void-artwork/splash.png"
 
 [wallpaper.last]
-path = "/usr/share/noctalia/assets/noctalia-wallpaper.png"
+path = "/usr/share/void-artwork/splash.png"
 
 [weather]
 enabled = false

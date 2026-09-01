@@ -23,6 +23,10 @@ exec "dbus-update-activation-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CU
 # Recovery: ~/.config/sway/scripts/start-audio.sh &
 exec ~/.config/sway/scripts/start-audio.sh
 
+# Preload Kitty's GPU and font state. Kitty launchers join this instance group,
+# makes faster startup.
+exec "exec /usr/bin/kitty --detach --detached-log=$HOME/.local/state/kitty-sway-server.log --single-instance --instance-group=sway-shortcuts --start-as=hidden /usr/bin/sleep infinity"
+
 # Pointer focus: yes, no, or always.
 focus_follows_mouse yes
 

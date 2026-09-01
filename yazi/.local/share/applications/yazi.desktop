@@ -6,7 +6,7 @@ GenericName=File Manager
 Comment=Browse files with Yazi in Kitty
 TryExec=/usr/bin/yazi
 Exec=kitty --single-instance --instance-group=sway-shortcuts --class kitty-yazi /usr/bin/yazi %f
-Icon=utilities-terminal
+Icon=yazi
 Terminal=false
 StartupNotify=false
 NoDisplay=false

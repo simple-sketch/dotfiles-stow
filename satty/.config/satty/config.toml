@@ -3,3 +3,7 @@ output-filename = "~/Pictures/Screenshots/screenshot-%Y-%m-%d_%H:%M:%S.png"
 auto-copy = false
 save-after-copy = false
 early-exit = ["all"]
+
+# Satty exits immediately after copying, so send confirmation through Noctalia.
+copy-command = "wl-copy --type image/png && noctalia msg notification-show 'Screenshot copied' 'Copied to the clipboard.'"
+disable-notifications = true

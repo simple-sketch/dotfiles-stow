@@ -11,7 +11,7 @@ start = [ "group:g2", "workspaces" ]
     enabled = true
     fill = "surface_variant"
     id = "g1"
-    members = [ "control-center", "theme_mode" ]
+    members = [ "control-center", "theme_mode", "privacy" ]
     opacity = 1.0
     padding = 6.0
 
@@ -41,7 +41,7 @@ start = [ "group:g2", "workspaces" ]
     enabled = true
     fill = "surface_variant"
     id = "g4"
-    members = [ "bluetooth", "volume", "brightness" ]
+    members = [ "keyboard_layout", "bluetooth", "volume", "brightness" ]
     opacity = 1.0
     padding = 6.0
 
@@ -133,6 +133,7 @@ screen_time_enabled = false
 
     [shell.screenshot]
     confirm_region = true
+    copy_to_clipboard = false
     pipe_command = "satty -f -"
     pipe_to_command = true
     save_to_file = false
@@ -152,6 +153,12 @@ enabled = false
 
 [widget.brightness]
 show_label = false
+
+[widget.keyboard_layout]
+display = "short"
+
+[widget.privacy]
+hide_inactive = true
 
 [widget.network]
 show_label = false

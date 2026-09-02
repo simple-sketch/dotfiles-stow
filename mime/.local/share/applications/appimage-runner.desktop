@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=AppImage Runner
+Comment=Run AppImage applications
+Exec=/usr/bin/env -- %f
+Terminal=false
+NoDisplay=true
+MimeType=application/vnd.appimage;
+Categories=Utility;

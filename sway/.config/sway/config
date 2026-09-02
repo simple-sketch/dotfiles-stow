@@ -308,3 +308,20 @@ bindsym --locked XF86AudioStop exec playerctl stop
 # Screenshot.
 bindsym Print exec flameshot gui
 
+
+### Default Swaybar (disabled)
+
+# Uncomment this block to use Sway's default bar.
+# bar {
+#     position top
+#
+#     # Update the bar whenever the command prints a new line.
+#     status_command while date +'%Y-%m-%d %X'; do sleep 1; done
+#
+#     colors {
+#         statusline #ffffff
+#         background #323232
+#         inactive_workspace #32323200 #32323200 #5c5c5c
+#     }
+# }
+

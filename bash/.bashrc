@@ -91,10 +91,6 @@ alias swayreload='swaymsg reload'
 alias swaytree='swaymsg -t get_tree | jq'
 alias swayoutputs='swaymsg -t get_outputs | jq -r ".[] | \"\(.name)  \(.make) \(.model)  \(.current_mode.width)x\(.current_mode.height)@\(.current_mode.refresh/1000)\""'
 alias swaylog='less +G "$XDG_STATE_HOME/sway.log"'
-alias c='wl-copy'
-alias v='wl-paste'
-# Region screenshot straight to the clipboard.
-alias shot='grim -g "$(slurp)" - | wl-copy && notify-send "Screenshot copied"'
 
 # --- Misc ------------------------------------------------------------------
 alias df='df -hT -x tmpfs -x devtmpfs'

@@ -41,6 +41,7 @@ if filereadable(s:plug_path)
   Plug 'jlanzarotta/bufexplorer'
   Plug 'airblade/vim-gitgutter'
   Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
+  Plug 'voldikss/vim-floaterm', { 'on': 'FloatermNew' }
 
   call plug#end()
 
@@ -172,8 +173,20 @@ function! s:ReplaceVisualSelection() abort
   call s:PromptReplacement()
 endfunction
 
+" Open Lazygit at the current buffer's project root in a popup terminal.
+function! s:OpenLazygit() abort
+  if !executable('lazygit')
+    echohl ErrorMsg
+    echom 'lazygit is not installed or not on $PATH'
+    echohl None
+    return
+  endif
+  FloatermNew --name=lazygit --cwd=<buffer-root> --width=0.95 --height=0.95 --autoclose=smart lazygit
+endfunction
+
 nnoremap <leader>r *N:<C-u>call <SID>PromptReplacement()<CR>
 xnoremap <silent> <leader>r :<C-u>call <SID>ReplaceVisualSelection()<CR>
+nnoremap <silent> <leader>gg <Cmd>call <SID>OpenLazygit()<CR>
 nnoremap <silent> <Esc><Esc> <Cmd>nohlsearch<CR>
 nnoremap <silent> <F5> <Cmd>UndotreeToggle<CR>
 nnoremap <silent> <leader>ff <Cmd>Files<CR>

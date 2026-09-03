@@ -1,4 +1,7 @@
 git:
+  # Block force pushes; regular pushes still use the confirmation below.
+  disableForcePushing: true
+
   # The first renderer is Lazygit's default.
   diffRenderers:
     - name: word-diff

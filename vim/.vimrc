@@ -1,3 +1,7 @@
+" Yazi replaces Vim's bundled netrw file browser.
+let g:loaded_netrw = 1
+let g:loaded_netrwPlugin = 1
+
 source $VIMRUNTIME/defaults.vim
 
 let mapleader = ' '
@@ -41,7 +45,11 @@ if filereadable(s:plug_path)
       return
     endif
     PlugInstall --sync
-    execute 'source ' . fnameescape($MYVIMRC)
+    " plug#end() loads newly installed plugins, but the colorscheme check below
+    " has already run during startup, so apply it explicitly on the first run.
+    if !empty(globpath(&runtimepath, 'colors/dracula.vim'))
+      colorscheme dracula
+    endif
   endfunction
 
   augroup PlugBootstrap

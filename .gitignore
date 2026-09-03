@@ -1,3 +1,12 @@
 # Downloaded and managed automatically by vim-plug.
 /vim/.vim/autoload/plug.vim
 /vim/.vim/plugged/
+
+# Generated Vim state. These files are not configuration and may contain
+# local file paths or recoverable buffer contents.
+/vim/.vim/.netrwhist
+/vim/.vim/backup/
+/vim/.vim/swp/
+/vim/.vim/undo/
+/vim/.vim/view/
+/vim/.viminfo

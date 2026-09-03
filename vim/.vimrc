@@ -7,6 +7,9 @@ source $VIMRUNTIME/defaults.vim
 let mapleader = ' '
 let maplocalleader = ' '
 
+" Briefly show the region copied by a yank.
+let g:highlightedyank_highlight_duration = 400
+
 " Useful packages bundled with Vim 9.
 packadd! comment
 packadd! matchit
@@ -31,6 +34,7 @@ if filereadable(s:plug_path)
   Plug 'editorconfig/editorconfig-vim'
   Plug 'tpope/vim-repeat'
   Plug 'tpope/vim-surround'
+  Plug 'machakann/vim-highlightedyank'
   Plug 'wellle/targets.vim'
   Plug 'justinmk/vim-sneak'
   Plug 'junegunn/fzf.vim'

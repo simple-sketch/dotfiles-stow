@@ -192,9 +192,11 @@ nnoremap <silent> <leader>gg <Cmd>call <SID>OpenLazygit()<CR>
 nnoremap <silent> <Esc><Esc> <Cmd>nohlsearch<CR>
 nnoremap <silent> <F5> <Cmd>UndotreeToggle<CR>
 nnoremap <silent> <leader>ff <Cmd>Files<CR>
-nnoremap <silent> <C-M-x> <Cmd>Files<CR>
 nnoremap <silent> <leader>fg <Cmd>Rg<CR>
 nnoremap <silent> <leader>fb <Cmd>Buffers<CR>
+
+" Vim otherwise sends Ctrl-Alt-X to terminal jobs as U+0098, which fzf ignores.
+tnoremap <silent> <C-M-x> <Esc><C-x>
 
 " Keep comment text objects on ic/ac; use ih/ah for GitGutter hunks.
 omap ih <Plug>(GitGutterTextObjectInnerPending)

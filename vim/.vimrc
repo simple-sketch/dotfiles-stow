@@ -41,7 +41,6 @@ if filereadable(s:plug_path)
   Plug 'wellle/targets.vim'
   Plug 'justinmk/vim-sneak'
   Plug 'junegunn/fzf.vim'
-  Plug 'jlanzarotta/bufexplorer'
   Plug 'airblade/vim-gitgutter'
   Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
   Plug 'voldikss/vim-floaterm', { 'on': 'FloatermNew' }

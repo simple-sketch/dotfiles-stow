@@ -1,5 +1,10 @@
 [mgr]
 prepend_keymap = [
+	# Vim-like directory history. If <C-i> conflicts with <Tab> because CSI-u
+	# is unsupported, use Yazi's built-in keys: H = previous and L = next.
+	{ on = "<C-o>", run = "back",    desc = "Previous directory" },
+	{ on = "<C-i>", run = "forward", desc = "Next directory" },
+
 	# In yazi.nvim, enter directories or return files to the existing Neovim.
 	# Standalone, dispatch files through Yazi's opener rules (e.g. Swayimg).
 	{ on = "<Enter>", run = '''shell --block -- if [ -n "$NVIM_CWD" ] && [ -d %h ]; then ya emit enter; else ya emit open --hovered; fi''', desc = "Open intelligently" },

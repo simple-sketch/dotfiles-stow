@@ -7,6 +7,13 @@ g:loaded_netrwPlugin = 1
 set nomodeline
 set confirm
 
+# Vim enables Kitty's CSI-u key protocol in Kitty, Foot, and Ghostty. It can
+# make a physical Escape fail to match an <Esc> mapping, so use legacy keys.
+if &term =~# 'kitty\|foot\|ghostty'
+  set keyprotocol=kitty:none,foot:none,ghostty:none
+  &term = &term
+endif
+
 g:mapleader = ' '
 g:maplocalleader = ' '
 

@@ -192,6 +192,7 @@ nnoremap <silent> <leader>gg <Cmd>call <SID>OpenLazygit()<CR>
 nnoremap <silent> <Esc><Esc> <Cmd>nohlsearch<CR>
 nnoremap <silent> <F5> <Cmd>UndotreeToggle<CR>
 nnoremap <silent> <leader>ff <Cmd>Files<CR>
+nnoremap <silent> <C-M-x> <Cmd>Files<CR>
 nnoremap <silent> <leader>fg <Cmd>Rg<CR>
 nnoremap <silent> <leader>fb <Cmd>Buffers<CR>
 

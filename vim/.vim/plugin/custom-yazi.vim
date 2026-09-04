@@ -42,4 +42,16 @@ enddef
 command! -nargs=? -complete=file Yazi Open(<q-args>)
 nnoremap <silent> <leader>e <Cmd>Yazi<CR>
 
+# Replace Vim's disabled directory browser when started as `vim DIRECTORY`.
+def OpenDirectoryArgument()
+  if argc() == 1 && isdirectory(argv(0))
+    Open(argv(0))
+  endif
+enddef
+
+augroup YaziDirectoryStartup
+  autocmd!
+  autocmd VimEnter * OpenDirectoryArgument()
+augroup END
+
 defcompile

@@ -4,14 +4,18 @@ let g:loaded_netrwPlugin = 1
 
 source $VIMRUNTIME/defaults.vim
 
+set nomodeline
+set confirm
+
 let mapleader = ' '
 let maplocalleader = ' '
 
 " Briefly show the region copied by a yank.
-let g:highlightedyank_highlight_duration = 400
+let g:hlyank_duration = 400
 
 " Useful packages bundled with Vim 9.
 packadd! comment
+packadd! hlyank
 packadd! matchit
 
 " Bootstrap the minimalist vim-plug manager once.
@@ -34,7 +38,6 @@ if filereadable(s:plug_path)
   Plug 'editorconfig/editorconfig-vim'
   Plug 'tpope/vim-repeat'
   Plug 'tpope/vim-surround'
-  Plug 'machakann/vim-highlightedyank'
   Plug 'wellle/targets.vim'
   Plug 'justinmk/vim-sneak'
   Plug 'junegunn/fzf.vim'

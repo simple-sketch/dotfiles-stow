@@ -1,33 +1,45 @@
-" Open Yazi in vim-floaterm and edit the files selected with Enter.
+vim9script noclear
+
+# Open Yazi in vim-floaterm and edit the files selected with Enter.
 if exists('g:loaded_simple_yazi')
   finish
 endif
-let g:loaded_simple_yazi = 1
+g:loaded_simple_yazi = 1
 
-function! s:InitialPath(argument) abort
-  let l:path = empty(a:argument) ? expand('%:p') : expand(a:argument)
-  if empty(l:path) || l:path =~# '^[[:alnum:].+-]\+://'
+def Error(message: string)
+  echohl ErrorMsg
+  echomsg message
+  echohl None
+enddef
+
+def InitialPath(argument: string): string
+  var path = empty(argument) ? expand('%:p') : expand(argument)
+  if empty(path) || path =~# '^[[:alnum:].+-]\+://'
     return getcwd()
   endif
-  return fnamemodify(l:path, ':p')
-endfunction
+  return fnamemodify(path, ':p')
+enddef
 
-function! s:ShellEscape(value) abort
-  " Prevent :execute from expanding a literal bang as the previous command.
-  return escape(shellescape(a:value), '!')
-endfunction
+def ShellEscape(value: string): string
+  # Prevent :execute from expanding a literal bang as the previous command.
+  return escape(shellescape(value), '!')
+enddef
 
-function! s:Open(argument) abort
+def Open(argument: string)
   if !executable('yazi')
-    echohl ErrorMsg
-    echom 'Yazi executable not found in PATH'
-    echohl None
+    Error('Yazi executable not found in PATH')
+    return
+  endif
+  if exists(':FloatermNew') != 2
+    Error('vim-floaterm is unavailable')
     return
   endif
 
-  let l:path = s:ShellEscape(s:InitialPath(a:argument))
-  execute 'FloatermNew --name=yazi --width=0.8 --height=0.8 --autoclose=always --opener=edit yazi ' . l:path
-endfunction
+  final path = ShellEscape(InitialPath(argument))
+  execute 'FloatermNew --name=yazi --width=0.8 --height=0.8 --autoclose=always --opener=edit yazi ' .. path
+enddef
 
-command! -nargs=? -complete=file Yazi call <SID>Open(<q-args>)
+command! -nargs=? -complete=file Yazi Open(<q-args>)
 nnoremap <silent> <leader>e <Cmd>Yazi<CR>
+
+defcompile

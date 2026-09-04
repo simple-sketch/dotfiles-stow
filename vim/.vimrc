@@ -1,41 +1,47 @@
-" Yazi replaces Vim's bundled netrw file browser.
-let g:loaded_netrw = 1
-let g:loaded_netrwPlugin = 1
+vim9script
 
-source $VIMRUNTIME/defaults.vim
+# Yazi replaces Vim's bundled netrw file browser.
+g:loaded_netrw = 1
+g:loaded_netrwPlugin = 1
 
 set nomodeline
 set confirm
 
-let mapleader = ' '
-let maplocalleader = ' '
+g:mapleader = ' '
+g:maplocalleader = ' '
 
-" Briefly show the region copied by a yank.
-let g:hlyank_duration = 400
+# Briefly show the region copied by a yank.
+g:hlyank_duration = 400
 
-" Useful packages bundled with Vim 9.
+# Useful packages bundled with Vim 9.
 packadd! comment
+packadd! editorconfig
 packadd! hlyank
 packadd! matchit
 
-" Bootstrap the minimalist vim-plug manager once.
-let s:vim_dir = expand('~/.vim')
-let s:plug_path = s:vim_dir . '/autoload/plug.vim'
-let s:plug_url = 'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+# Bootstrap the minimalist vim-plug manager once.
+final vim_dir = expand('~/.vim')
+final plug_path = vim_dir .. '/autoload/plug.vim'
+const plug_url = 'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
 
-if !filereadable(s:plug_path) && executable('curl')
-  call mkdir(fnamemodify(s:plug_path, ':h'), 'p', 0700)
-  call system('curl -fsSLo ' . shellescape(s:plug_path) . ' ' . shellescape(s:plug_url))
-  if v:shell_error
-    call delete(s:plug_path)
+def Error(message: string)
+  echohl ErrorMsg
+  echomsg message
+  echohl None
+enddef
+
+if !filereadable(plug_path) && executable('curl')
+  mkdir(fnamemodify(plug_path, ':h'), 'p', 0o700)
+  system('curl -fsSLo ' .. shellescape(plug_path) .. ' ' .. shellescape(plug_url))
+  if v:shell_error != 0
+    delete(plug_path)
   endif
 endif
 
-if filereadable(s:plug_path)
-  call plug#begin(s:vim_dir . '/plugged')
+if filereadable(plug_path)
+  plug#begin(vim_dir .. '/plugged')
 
   Plug 'dracula/vim', { 'as': 'dracula' }
-  Plug 'editorconfig/editorconfig-vim'
   Plug 'tpope/vim-repeat'
   Plug 'tpope/vim-surround'
   Plug 'wellle/targets.vim'
@@ -45,31 +51,35 @@ if filereadable(s:plug_path)
   Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
   Plug 'voldikss/vim-floaterm', { 'on': 'FloatermNew' }
 
-  call plug#end()
+  plug#end()
 
-  function! s:InstallMissingPlugins() abort
-    if empty(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
-      return
-    endif
-    PlugInstall --sync
-    " plug#end() loads newly installed plugins, but the colorscheme check below
-    " has already run during startup, so apply it explicitly on the first run.
-    if !empty(globpath(&runtimepath, 'colors/dracula.vim'))
-      colorscheme dracula
-    endif
-  endfunction
+  def InstallMissingPlugins()
+    for plugin in values(g:plugs)
+      if !isdirectory(get(plugin, 'dir', ''))
+        execute 'PlugInstall --sync'
+        # plug#end() loads newly installed plugins, but the colorscheme check
+        # below has already run during startup, so apply it on the first run.
+        if !empty(globpath(&runtimepath, 'colors/dracula.vim'))
+          colorscheme dracula
+        endif
+        return
+      endif
+    endfor
+  enddef
 
   augroup PlugBootstrap
     autocmd!
-    autocmd VimEnter * call <SID>InstallMissingPlugins()
+    autocmd VimEnter * InstallMissingPlugins()
   augroup END
 else
-  echohl WarningMsg
-  echom 'vim-plug is unavailable; install curl and restart Vim'
-  echohl None
+  Error('vim-plug is unavailable; install curl and restart Vim')
 endif
 
-" Editing defaults. Project .editorconfig files override indentation as needed.
+# vim-plug configures filetypes itself; load the remaining Vim defaults after
+# it so that filetype detection is not needlessly rebuilt during startup.
+source $VIMRUNTIME/defaults.vim
+
+# Editing defaults. Project .editorconfig files override indentation as needed.
 set autoindent
 set expandtab
 set shiftwidth=4
@@ -78,8 +88,9 @@ set tabstop=4
 set hidden
 set linebreak
 set breakindent
+set smoothscroll
 
-" Search and command-line completion.
+# Search and command-line completion.
 set ignorecase
 set smartcase
 set hlsearch
@@ -91,7 +102,7 @@ if executable('rg')
   set grepformat=%f:%l:%c:%m
 endif
 
-" Interface.
+# Interface.
 set number
 set relativenumber
 set signcolumn=yes
@@ -114,98 +125,102 @@ if !empty(globpath(&runtimepath, 'colors/dracula.vim'))
   colorscheme dracula
 endif
 
-" Keep recovery files out of project directories.
-let s:swap_dir = s:vim_dir . '/swp'
-let s:undo_dir = s:vim_dir . '/undo'
-for s:dir in [s:swap_dir, s:undo_dir]
-  if !isdirectory(s:dir)
-    call mkdir(s:dir, 'p', 0700)
+# Keep recovery files out of project directories.
+final swap_dir = vim_dir .. '/swp'
+final undo_dir = vim_dir .. '/undo'
+for directory in [swap_dir, undo_dir]
+  if !isdirectory(directory)
+    mkdir(directory, 'p', 0o700)
   endif
 endfor
-let &directory = s:swap_dir . '//'
-let &undodir = s:undo_dir . '//'
+&directory = swap_dir .. '//'
+&undodir = undo_dir .. '//'
 set undofile
 
-" Show absolute line numbers while inserting, relative numbers otherwise.
+# Show absolute line numbers while inserting, relative numbers otherwise.
 augroup NumberToggle
   autocmd!
   autocmd InsertEnter * setlocal norelativenumber
   autocmd InsertLeave * setlocal relativenumber
 augroup END
 
-" Search, project files, buffers, and undo history.
-" Complete replacement text from unique words in the current buffer.
-function! s:BufferWords(ArgLead, CmdLine, CursorPos) abort
-  let l:prefix = tolower(a:ArgLead)
-  let l:words = {}
-  for l:line in getline(1, '$')
-    for l:word in split(l:line, '\W\+')
-      if !empty(l:word) && stridx(tolower(l:word), l:prefix) == 0
-        let l:words[l:word] = 1
-      endif
-    endfor
+# Search, project files, buffers, and undo history.
+# Complete replacement text from unique keyword characters in the current buffer.
+def BufferWords(arg_lead: string, _: string, _: number): list<string>
+  final prefix = tolower(arg_lead)
+  var words: dict<bool> = {}
+  for match in matchstrlist(getline(1, '$'), '\k\+')
+    final word = match.text
+    if stridx(tolower(word), prefix) == 0
+      words[word] = true
+    endif
   endfor
-  return sort(keys(l:words))
-endfunction
+  return sort(keys(words))
+enddef
 
-let s:buffer_word_completion = 'customlist,' . expand('<SID>') . 'BufferWords'
+final buffer_word_completion = 'customlist,' .. expand('<SID>') .. 'BufferWords'
 
-function! s:PromptReplacement() abort
-  call inputsave()
+def PromptReplacement()
+  var replacement = ''
+  inputsave()
   try
-    let l:replacement = input('Replace with: ', '', s:buffer_word_completion)
+    replacement = input('Replace with: ', '', buffer_word_completion)
   finally
-    call inputrestore()
+    inputrestore()
   endtry
-  if empty(l:replacement)
-    echo 'Replacement cancelled'
+  execute '%s//' .. escape(replacement, '\/&~') .. '/gc'
+enddef
+
+# Replace the selected text throughout the file without changing registers.
+def ReplaceVisualSelection()
+  execute "normal! \<Esc>"
+  final selected_lines = getregion(getpos("'<"), getpos("'>"), {
+    type: visualmode(),
+    exclusive: &selection ==# 'exclusive',
+  })
+  if empty(selected_lines)
     return
   endif
-  execute '%s//' . escape(l:replacement, '\/&~') . '/gc'
-endfunction
+  final escaped_lines = mapnew(selected_lines, (_, line) => escape(line, '\'))
+  @/ = '\V' .. join(escaped_lines, '\n')
+  PromptReplacement()
+enddef
 
-" Replace the word under the cursor or selected text throughout the file.
-function! s:ReplaceVisualSelection() abort
-  let l:saved_register = getreg('z')
-  let l:saved_register_type = getregtype('z')
-  normal! gv"zy
-  let l:selection = substitute(getreg('z'), "\n$", '', '')
-  call setreg('z', l:saved_register, l:saved_register_type)
-  let @/ = '\V' . escape(l:selection, '\')
-  call s:PromptReplacement()
-endfunction
-
-" Open Lazygit at the current buffer's project root in a popup terminal.
-function! s:OpenLazygit() abort
+# Open Lazygit at the current buffer's project root in a popup terminal.
+def OpenLazygit()
   if !executable('lazygit')
-    echohl ErrorMsg
-    echom 'lazygit is not installed or not on $PATH'
-    echohl None
+    Error('lazygit is not installed or not on $PATH')
     return
   endif
-  FloatermNew --name=lazygit --cwd=<buffer-root> --width=0.8 --height=0.8 --autoclose=smart lazygit
-endfunction
+  if exists(':FloatermNew') != 2
+    Error('vim-floaterm is unavailable')
+    return
+  endif
+  execute 'FloatermNew --name=lazygit --cwd=<buffer-root> --width=0.8 --height=0.8 --autoclose=smart lazygit'
+enddef
 
-nnoremap <leader>r *N:<C-u>call <SID>PromptReplacement()<CR>
-xnoremap <silent> <leader>r :<C-u>call <SID>ReplaceVisualSelection()<CR>
-nnoremap <silent> <leader>gg <Cmd>call <SID>OpenLazygit()<CR>
+nnoremap <leader>r *N<ScriptCmd>PromptReplacement()<CR>
+xnoremap <leader>r <ScriptCmd>ReplaceVisualSelection()<CR>
+nnoremap <leader>gg <ScriptCmd>OpenLazygit()<CR>
 nnoremap <silent> <Esc><Esc> <Cmd>nohlsearch<CR>
 nnoremap <silent> <F5> <Cmd>UndotreeToggle<CR>
 nnoremap <silent> <leader>ff <Cmd>Files<CR>
 nnoremap <silent> <leader>fg <Cmd>Rg<CR>
 nnoremap <silent> <leader>fb <Cmd>Buffers<CR>
 
-" Vim otherwise sends Ctrl-Alt-X to terminal jobs as U+0098, which fzf ignores.
+# Vim otherwise sends Ctrl-Alt-X to terminal jobs as U+0098, which fzf ignores.
 tnoremap <silent> <C-M-x> <Esc><C-x>
 
-" Keep comment text objects on ic/ac; use ih/ah for GitGutter hunks.
+# Keep comment text objects on ic/ac; use ih/ah for GitGutter hunks.
 omap ih <Plug>(GitGutterTextObjectInnerPending)
 omap ah <Plug>(GitGutterTextObjectOuterPending)
 xmap ih <Plug>(GitGutterTextObjectInnerVisual)
 xmap ah <Plug>(GitGutterTextObjectOuterVisual)
 
-" Move between splits without the extra Ctrl-W chord.
+# Move between splits without the extra Ctrl-W chord.
 nnoremap <C-h> <C-w><C-h>
 nnoremap <C-j> <C-w><C-j>
 nnoremap <C-k> <C-w><C-k>
 nnoremap <C-l> <C-w><C-l>
+
+defcompile

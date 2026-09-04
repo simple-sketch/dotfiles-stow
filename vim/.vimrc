@@ -112,7 +112,7 @@ set splitbelow
 set splitright
 set updatetime=250
 
-if has('clipboard')
+if has('unnamedplus')
   set clipboard=unnamedplus
 endif
 
@@ -144,35 +144,9 @@ augroup NumberToggle
   autocmd InsertLeave * setlocal relativenumber
 augroup END
 
-# Search, project files, buffers, and undo history.
-# Complete replacement text from unique keyword characters in the current buffer.
-def BufferWords(arg_lead: string, _: string, _: number): list<string>
-  final prefix = tolower(arg_lead)
-  var words: dict<bool> = {}
-  for match in matchstrlist(getline(1, '$'), '\k\+')
-    final word = match.text
-    if stridx(tolower(word), prefix) == 0
-      words[word] = true
-    endif
-  endfor
-  return sort(keys(words))
-enddef
-
-final buffer_word_completion = 'customlist,' .. expand('<SID>') .. 'BufferWords'
-
-def PromptReplacement()
-  var replacement = ''
-  inputsave()
-  try
-    replacement = input('Replace with: ', '', buffer_word_completion)
-  finally
-    inputrestore()
-  endtry
-  execute '%s//' .. escape(replacement, '\/&~') .. '/gc'
-enddef
-
-# Replace the selected text throughout the file without changing registers.
-def ReplaceVisualSelection()
+# Put a literal Visual selection in the search register without changing any
+# registers. The mapping below then opens Vim's built-in :substitute command.
+def SetVisualSearch()
   execute "normal! \<Esc>"
   final selected_lines = getregion(getpos("'<"), getpos("'>"), {
     type: visualmode(),
@@ -183,7 +157,6 @@ def ReplaceVisualSelection()
   endif
   final escaped_lines = mapnew(selected_lines, (_, line) => escape(line, '\'))
   @/ = '\V' .. join(escaped_lines, '\n')
-  PromptReplacement()
 enddef
 
 # Open Lazygit at the current buffer's project root in a popup terminal.
@@ -199,8 +172,10 @@ def OpenLazygit()
   execute 'FloatermNew --name=lazygit --cwd=<buffer-root> --width=0.8 --height=0.8 --autoclose=smart lazygit'
 enddef
 
-nnoremap <leader>r *N<ScriptCmd>PromptReplacement()<CR>
-xnoremap <leader>r <ScriptCmd>ReplaceVisualSelection()<CR>
+# Rename matches in this buffer with :substitute's built-in confirmation UI.
+# Type the replacement, press Enter, then use y/n/a/q for each occurrence.
+nnoremap <leader>r *N:%s///gc<Left><Left><Left>
+xnoremap <leader>r <ScriptCmd>SetVisualSearch()<CR>:%s///gc<Left><Left><Left>
 nnoremap <leader>gg <ScriptCmd>OpenLazygit()<CR>
 nnoremap <silent> <Esc><Esc> <Cmd>nohlsearch<CR>
 nnoremap <silent> <F5> <Cmd>UndotreeToggle<CR>

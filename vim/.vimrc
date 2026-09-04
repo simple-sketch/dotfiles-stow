@@ -181,7 +181,7 @@ function! s:OpenLazygit() abort
     echohl None
     return
   endif
-  FloatermNew --name=lazygit --cwd=<buffer-root> --width=0.95 --height=0.95 --autoclose=smart lazygit
+  FloatermNew --name=lazygit --cwd=<buffer-root> --width=0.8 --height=0.8 --autoclose=smart lazygit
 endfunction
 
 nnoremap <leader>r *N:<C-u>call <SID>PromptReplacement()<CR>

@@ -110,6 +110,11 @@ if executable('rg')
 endif
 
 # Interface.
+# Distinguish Normal, Insert, and Replace modes by cursor shape.
+&t_EI = "\e[2 q" # Steady block in Normal mode.
+&t_SI = "\e[6 q" # Steady bar in Insert mode.
+&t_SR = "\e[4 q" # Steady underline in Replace mode.
+
 set number
 set relativenumber
 set signcolumn=yes

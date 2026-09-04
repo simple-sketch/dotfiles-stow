@@ -41,7 +41,7 @@ endif
 if filereadable(plug_path)
   plug#begin(vim_dir .. '/plugged')
 
-  Plug 'dracula/vim', { 'as': 'dracula' }
+  Plug 'joshdick/onedark.vim'
   Plug 'tpope/vim-repeat'
   Plug 'tpope/vim-surround'
   Plug 'wellle/targets.vim'
@@ -59,8 +59,8 @@ if filereadable(plug_path)
         execute 'PlugInstall --sync'
         # plug#end() loads newly installed plugins, but the colorscheme check
         # below has already run during startup, so apply it on the first run.
-        if !empty(globpath(&runtimepath, 'colors/dracula.vim'))
-          colorscheme dracula
+        if !empty(globpath(&runtimepath, 'colors/onedark.vim'))
+          colorscheme onedark
         endif
         return
       endif
@@ -121,8 +121,8 @@ if has('termguicolors')
 endif
 
 set background=dark
-if !empty(globpath(&runtimepath, 'colors/dracula.vim'))
-  colorscheme dracula
+if !empty(globpath(&runtimepath, 'colors/onedark.vim'))
+  colorscheme onedark
 endif
 
 # Keep recovery files out of project directories.

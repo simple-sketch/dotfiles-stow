@@ -163,8 +163,11 @@ bindsym $mod+Shift+g exec ~/.config/sway/scripts/arrange-outputs.sh --toggle ext
     # Toggle Noctalia bars and reserved space.
     bindsym $mod+Control+c exec noctalia msg bar-toggle
 
-    # Super+drag moves; Super+right-drag resizes (also tiled windows).
+    # Super+drag inside windows moves; Super+right-drag resizes (also tiled windows).
     floating_modifier $mod normal
+
+    # Super+left-hold on a Sway title bar: release over 1–9 to send the window.
+    include ~/.config/sway/workspace-drop.conf
 
     # Reload config.
     bindsym $mod+Shift+c reload

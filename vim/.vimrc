@@ -198,6 +198,12 @@ nnoremap <silent> <leader>ff <Cmd>Files<CR>
 nnoremap <silent> <leader>fg <Cmd>Rg<CR>
 nnoremap <silent> <leader>fl <Cmd>BLines<CR>
 nnoremap <silent> <leader>fb <Cmd>Buffers<CR>
+nnoremap <silent> <leader>fo <Cmd>History<CR>
+nnoremap <silent> <leader>fL <Cmd>Lines<CR>
+nnoremap <silent> <leader>fs <Cmd>GFiles?<CR>
+nnoremap <silent> <leader>fj <Cmd>Jumps<CR>
+nnoremap <silent> <leader>fc <Cmd>Changes<CR>
+nnoremap <silent> <leader>fC <Cmd>Commands<CR>
 
 # Vim otherwise sends Ctrl-Alt-X to terminal jobs as U+0098, which fzf ignores.
 tnoremap <silent> <C-M-x> <Esc><C-x>

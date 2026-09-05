@@ -89,8 +89,15 @@ alias xclean='sudo xbps-remove -Ooy' # drop orphans and cached packages
 # --- Sway / Wayland --------------------------------------------------------
 alias swayreload='swaymsg reload'
 alias swaytree='swaymsg -t get_tree | jq'
-alias swayoutputs='swaymsg -t get_outputs | jq -r ".[] | \"\(.name)  \(.make) \(.model)  \(.current_mode.width)x\(.current_mode.height)@\(.current_mode.refresh/1000)\""'
-alias swaylog='less +G "$XDG_STATE_HOME/sway.log"'
+# Disabled outputs have no current_mode, so label them instead of asking jq to
+# divide null by 1000. Remove the old alias when re-sourcing this file.
+unalias swayoutputs 2>/dev/null || :
+swayoutputs() {
+    local outputs
+    outputs=$(command swaymsg -t get_outputs) || return
+    command jq -r '.[] | "\(.name)  \(.make // "unknown") \(.model // "unknown")  \(if .current_mode then "\(.current_mode.width)x\(.current_mode.height)@\(.current_mode.refresh / 1000)" else "disabled" end)"' <<<"$outputs"
+}
+alias swaylog='less +G "${XDG_STATE_HOME:-$HOME/.local/state}/sway.log"'
 
 # --- Misc ------------------------------------------------------------------
 alias df='df -hT -x tmpfs -x devtmpfs'
@@ -199,10 +206,11 @@ if command -v fzf >/dev/null; then
         # index in field one, so Ctrl-Y must drop that field there only.
         FZF_DEFAULT_OPTS+="
         --bind='ctrl-y:execute-silent(printf %s {} | wl-copy)+abort'"
-        FZF_CTRL_R_OPTS="${FZF_CTRL_R_OPTS:+$FZF_CTRL_R_OPTS }"
+        # Assign rather than append: this exported variable is inherited by
+        # nested shells, so appending would duplicate the binding each time.
         # fzf, rather than Bash, parses these literal quotes.
         # shellcheck disable=SC2089
-        FZF_CTRL_R_OPTS+="--bind='ctrl-y:execute-silent(printf %s {2..} | wl-copy)+abort'"
+        FZF_CTRL_R_OPTS="--bind='ctrl-y:execute-silent(printf %s {2..} | wl-copy)+abort'"
         # shellcheck disable=SC2090
         export FZF_CTRL_R_OPTS
     fi
@@ -217,6 +225,28 @@ fi
 # without inspecting tracked or untracked files. The title escape gives
 # foot/ghostty the useful name shown in noctalia's window switcher; OSC 7 tells
 # the terminal the cwd so a new window opens here.
+__prompt_osc7() {
+    local LC_ALL=C
+    local path="$PWD" host="${HOSTNAME-}" encoded='' byte char
+    local i
+
+    # OSC 7 takes a file URI. Work byte-by-byte so spaces, URI delimiters and
+    # non-ASCII UTF-8 bytes are percent-encoded while path separators remain.
+    for ((i = 0; i < ${#path}; i++)); do
+        char=${path:i:1}
+        case "$char" in
+            [a-zA-Z0-9.~_/-]) encoded+="$char" ;;
+            *)
+                printf -v byte '%%%02X' "'$char"
+                encoded+="$byte"
+                ;;
+        esac
+    done
+
+    host=${host%%.*}
+    printf '\001\033]7;file://%s%s\033\\\002' "$host" "$encoded"
+}
+
 __prompt_git() {
     local branch
     branch=$(command git symbolic-ref --quiet --short HEAD 2>/dev/null) ||
@@ -235,8 +265,9 @@ __prompt() {
     local reset='\[\033[0m\]' blue='\[\033[1;34m\]' green='\[\033[0;32m\]'
     local red='\[\033[1;31m\]' dim='\[\033[2m\]'
     local title='\[\033]0;\u@\h: \w\007\]'
-    local osc7='\[\033]7;file://\h\w\033\\\]'
-    local mark
+    local osc7 mark
+
+    osc7=$(__prompt_osc7)
 
     if [ "$status" -eq 0 ]; then
         mark="${green}\$${reset}"

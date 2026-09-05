@@ -150,40 +150,6 @@ mkcd() {
     builtin cd -- "$1" || return
 }
 
-# Extract any archive without remembering the flags.
-extract() {
-    local archive
-    if [ "$#" -ne 1 ]; then
-        printf 'usage: extract ARCHIVE\n' >&2
-        return 2
-    fi
-    if [ ! -f "$1" ]; then
-        printf 'extract: not a file: %s\n' "$1" >&2
-        return 1
-    fi
-
-    archive=$1
-    [[ $archive == -* ]] && archive="./$archive"
-
-    case "$archive" in
-        *.tar.bz2 | *.tbz2) command tar -xjf "$archive" ;;
-        *.tar.gz | *.tgz) command tar -xzf "$archive" ;;
-        *.tar.xz | *.txz) command tar -xJf "$archive" ;;
-        *.tar.zst) command tar --zstd -xf "$archive" ;;
-        *.tar) command tar -xf "$archive" ;;
-        *.bz2) command bunzip2 -- "$archive" ;;
-        *.gz) command gunzip -- "$archive" ;;
-        *.xz) command unxz -- "$archive" ;;
-        *.zip) command unzip "$archive" ;;
-        *.7z) command 7z x -- "$archive" ;;
-        *.rar) command unrar x "$archive" ;;
-        *)
-            printf "extract: unsupported archive: %s\n" "$1" >&2
-            return 1
-            ;;
-    esac
-}
-
 # --- fzf -------------------------------------------------------------------
 if command -v fzf >/dev/null; then
     export FZF_DEFAULT_OPTS="

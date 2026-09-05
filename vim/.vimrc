@@ -98,7 +98,8 @@ set tabstop=4
 set hidden
 set linebreak
 set breakindent
-set smoothscroll
+# Avoid stale blank regions caused by terminal scrolling redraw glitches.
+set nosmoothscroll
 
 # Search and command-line completion.
 set ignorecase

@@ -213,32 +213,21 @@ if command -v fzf >/dev/null; then
 fi
 
 # --- Prompt ----------------------------------------------------------------
-# One Git status call supplies the branch and complete dirty state, including
-# untracked files. The title escape gives foot/ghostty the useful name shown in
-# noctalia's window switcher; OSC 7 tells the terminal the cwd so a new window
-# opens here.
+# Resolve only the current branch (or abbreviated commit for a detached HEAD),
+# without inspecting tracked or untracked files. The title escape gives
+# foot/ghostty the useful name shown in noctalia's window switcher; OSC 7 tells
+# the terminal the cwd so a new window opens here.
 __prompt_git() {
-    local output line oid branch dirty
-    output=$(command git status --porcelain=v2 --branch --untracked-files=normal 2>/dev/null) || return 0
-
-    while IFS= read -r line; do
-        case "$line" in
-            '# branch.oid '*) oid=${line#'# branch.oid '} ;;
-            '# branch.head '*) branch=${line#'# branch.head '} ;;
-            1\ * | 2\ * | u\ * | \?\ *) dirty='*' ;;
-        esac
-    done <<<"$output"
-
-    if [ "$branch" = '(detached)' ]; then
-        branch=${oid:0:7}
-    fi
-    [ -n "$branch" ] || return 0
+    local branch
+    branch=$(command git symbolic-ref --quiet --short HEAD 2>/dev/null) ||
+        branch=$(command git rev-parse --short HEAD 2>/dev/null) ||
+        return 0
 
     # promptvars expands PS1 again when Bash draws it. Quote characters that
     # could otherwise execute prompt syntax from an attacker-controlled branch.
     printf -v branch '%q' "$branch"
 
-    printf ' \001\033[0;33m\002(%s%s)\001\033[0m\002' "$branch" "$dirty"
+    printf ' \001\033[0;33m\002(%s)\001\033[0m\002' "$branch"
 }
 
 __prompt() {

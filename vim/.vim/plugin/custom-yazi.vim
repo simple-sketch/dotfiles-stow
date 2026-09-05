@@ -4,6 +4,13 @@ vim9script noclear
 if exists('g:loaded_simple_yazi')
   finish
 endif
+
+# Fall back to netrw when the external Yazi executable is unavailable.
+if !executable('yazi')
+  nnoremap <silent> <leader>e <Cmd>Explore<CR>
+  finish
+endif
+
 g:loaded_simple_yazi = 1
 
 def Error(message: string)

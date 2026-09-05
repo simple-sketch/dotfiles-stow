@@ -1,8 +1,10 @@
 vim9script
 
-# Yazi replaces Vim's bundled netrw file browser.
-g:loaded_netrw = 1
-g:loaded_netrwPlugin = 1
+# Disable netrw only when Yazi is available; otherwise keep Vim's browser.
+if executable('yazi')
+  g:loaded_netrw = 1
+  g:loaded_netrwPlugin = 1
+endif
 
 set nomodeline
 set confirm

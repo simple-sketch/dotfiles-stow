@@ -49,6 +49,7 @@ if filereadable(plug_path)
   plug#begin(vim_dir .. '/plugged')
 
   Plug 'joshdick/onedark.vim'
+  Plug 'cohama/lexima.vim'
   Plug 'tpope/vim-repeat'
   Plug 'tpope/vim-surround'
   Plug 'wellle/targets.vim'

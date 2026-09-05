@@ -1,10 +1,7 @@
 vim9script
 
-# Disable netrw only when Yazi is available; otherwise keep Vim's browser.
-if executable('yazi')
-  g:loaded_netrw = 1
-  g:loaded_netrwPlugin = 1
-endif
+# Tested with Vim 9.2; uses recent Vim9 features and bundled packages.
+# Keep netrw available for :edit DIRECTORY, remote files, and Yazi fallback.
 
 set nomodeline
 set confirm
@@ -41,10 +38,17 @@ enddef
 
 if !filereadable(plug_path) && executable('curl')
   mkdir(fnamemodify(plug_path, ':h'), 'p', 0o700)
-  system('curl -fsSLo ' .. shellescape(plug_path) .. ' ' .. shellescape(plug_url))
-  if v:shell_error != 0
-    delete(plug_path)
-  endif
+  # Download beside the destination so installation is an atomic rename.
+  final plug_tmp = plug_path .. '.' .. getpid() .. '.tmp'
+  try
+    system('curl --connect-timeout 5 --max-time 30 -fsSLo '
+      .. shellescape(plug_tmp) .. ' ' .. shellescape(plug_url))
+    if v:shell_error == 0 && rename(plug_tmp, plug_path) != 0
+      Error('Could not install vim-plug at ' .. plug_path)
+    endif
+  finally
+    delete(plug_tmp)
+  endtry
 endif
 
 if filereadable(plug_path)
@@ -56,6 +60,7 @@ if filereadable(plug_path)
   Plug 'tpope/vim-surround'
   Plug 'wellle/targets.vim'
   Plug 'justinmk/vim-sneak'
+  # Requires the system fzf package's Vim runtime as well as its executable.
   Plug 'junegunn/fzf.vim'
   Plug 'airblade/vim-gitgutter'
   Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
@@ -82,7 +87,7 @@ if filereadable(plug_path)
     autocmd VimEnter * InstallMissingPlugins()
   augroup END
 else
-  Error('vim-plug is unavailable; install curl and restart Vim')
+  Error('vim-plug is unavailable; check curl/network access and restart Vim')
 endif
 
 # vim-plug configures filetypes itself; load the remaining Vim defaults after
@@ -153,26 +158,39 @@ endfor
 &undodir = undo_dir .. '//'
 set undofile
 
-# Show absolute line numbers while inserting, relative numbers otherwise.
+# ModeChanged also handles leaving Insert mode with Ctrl-C.
+def UpdateRelativeNumbers()
+  if &l:buftype ==# '' && &l:number
+    &l:relativenumber = mode() !~# '^[iR]'
+  endif
+enddef
+
 augroup NumberToggle
   autocmd!
-  autocmd InsertEnter * setlocal norelativenumber
-  autocmd InsertLeave * setlocal relativenumber
+  autocmd ModeChanged *:[iR]*,[iR]*:* UpdateRelativeNumbers()
+  autocmd WinEnter,BufWinEnter * UpdateRelativeNumbers()
 augroup END
 
-# Put a literal Visual selection in the search register without changing any
-# registers. The mapping below then opens Vim's built-in :substitute command.
-def SetVisualSearch()
+# Search for literal selected text without touching yank/delete registers,
+# then open :substitute. A rectangular selection is not contiguous text.
+def RenameVisualSelection()
   execute "normal! \<Esc>"
+  if visualmode() ==# "\<C-v>"
+    Error('Blockwise rename is unsupported; select characters or whole lines')
+    return
+  endif
   final selected_lines = getregion(getpos("'<"), getpos("'>"), {
     type: visualmode(),
     exclusive: &selection ==# 'exclusive',
   })
-  if empty(selected_lines)
+  if empty(selected_lines) || selected_lines == ['']
+    Error('Cannot rename an empty selection')
     return
   endif
   final escaped_lines = mapnew(selected_lines, (_, line) => escape(line, '\'))
   @/ = '\V' .. join(escaped_lines, '\n')
+  # Prepend non-remappable keys before any replacement text already typed.
+  feedkeys(":%s///gc\<Left>\<Left>\<Left>", 'in')
 enddef
 
 # Open Lazygit at the current buffer's project root in a popup terminal.
@@ -191,12 +209,12 @@ enddef
 # Rename matches in this buffer with :substitute's built-in confirmation UI.
 # Type the replacement, press Enter, then use y/n/a/q for each occurrence.
 nnoremap <leader>r *N:%s///gc<Left><Left><Left>
-xnoremap <leader>r <ScriptCmd>SetVisualSearch()<CR>:%s///gc<Left><Left><Left>
+xnoremap <leader>r <ScriptCmd>RenameVisualSelection()<CR>
 nnoremap <leader>gg <ScriptCmd>OpenLazygit()<CR>
 nnoremap <silent> <Esc><Esc> <Cmd>nohlsearch<CR>
 nnoremap <silent> <F5> <Cmd>UndotreeToggle<CR>
 nnoremap <silent> <leader>ff <Cmd>Files<CR>
-nnoremap <silent> <leader>fg <Cmd>Rg<CR>
+nnoremap <silent> <leader>fg <Cmd>RG<CR>
 nnoremap <silent> <leader>fl <Cmd>BLines<CR>
 nnoremap <silent> <leader>fb <Cmd>Buffers<CR>
 nnoremap <silent> <leader>fo <Cmd>History<CR>

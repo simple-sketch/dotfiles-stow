@@ -20,16 +20,12 @@ def Error(message: string)
 enddef
 
 def InitialPath(argument: string): string
-  var path = empty(argument) ? expand('%:p') : expand(argument)
+  # :Yazi's file argument is already expanded by Vim; argv() is literal.
+  final path = empty(argument) ? expand('%:p') : argument
   if empty(path) || path =~# '^[[:alnum:].+-]\+://'
     return getcwd()
   endif
   return fnamemodify(path, ':p')
-enddef
-
-def ShellEscape(value: string): string
-  # Prevent :execute from expanding a literal bang as the previous command.
-  return escape(shellescape(value), '!')
 enddef
 
 def Open(argument: string)
@@ -37,19 +33,32 @@ def Open(argument: string)
     Error('Yazi executable not found in PATH')
     return
   endif
-  if exists(':FloatermNew') != 2
+  # The API does not trigger vim-plug's lazy :FloatermNew command stub.
+  if exists('*plug#load')
+    plug#load('vim-floaterm')
+  endif
+  if !get(g:, 'loaded_floaterm', false)
     Error('vim-floaterm is unavailable')
     return
   endif
 
-  final path = ShellEscape(InitialPath(argument))
-  execute 'FloatermNew --name=yazi --width=0.8 --height=0.8 --autoclose=always --opener=edit yazi ' .. path
+  # Pass the path through the job's environment, not Ex or shell source.
+  # This preserves %, #, !, quotes and whitespace through Floaterm's wrapper.
+  floaterm#new(false, 'yazi "$VIM_YAZI_PATH"', {
+    env: {VIM_YAZI_PATH: InitialPath(argument)},
+  }, {
+    name: 'yazi',
+    width: 0.8,
+    height: 0.8,
+    autoclose: 'always',
+    opener: 'edit',
+  })
 enddef
 
 command! -nargs=? -complete=file Yazi Open(<q-args>)
 nnoremap <silent> <leader>e <Cmd>Yazi<CR>
 
-# Replace Vim's disabled directory browser when started as `vim DIRECTORY`.
+# Prefer Yazi for `vim DIRECTORY`; netrw remains the fallback underneath.
 def OpenDirectoryArgument()
   if argc() == 1 && isdirectory(argv(0))
     Open(argv(0))

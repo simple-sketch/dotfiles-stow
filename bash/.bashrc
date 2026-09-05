@@ -30,7 +30,7 @@ __history_append() {
 # --- Shell options ---------------------------------------------------------
 # Kitty's Bash integration uses command substitution in PS0 to report the
 # current command. Keep prompt expansion enabled so that hook is not printed.
-# __prompt_git escapes branch-controlled prompt syntax before it reaches PS1.
+# Git branch text is expanded from a separate variable, never parsed as PS1.
 shopt -s promptvars
 
 shopt -s checkwinsize            # keep $LINES/$COLUMNS right after resize
@@ -167,19 +167,22 @@ if command -v fzf >/dev/null; then
     command -v eza >/dev/null &&
         export FZF_ALT_C_OPTS="--preview 'eza --tree --level=2 --icons=auto --color=always -- {}'"
 
+    # fzf's Shift-Delete rewrites HISTFILE from this shell's history, losing
+    # commands saved by other terminals. Override it even without wl-copy.
+    # Reset first so exported bindings never accumulate in nested shells.
+    FZF_CTRL_R_OPTS='--bind=shift-delete:ignore'
+
     if command -v wl-copy >/dev/null; then
         # Generic selections use the whole row. History rows have a numeric
         # index in field one, so Ctrl-Y must drop that field there only.
         FZF_DEFAULT_OPTS+="
         --bind='ctrl-y:execute-silent(printf %s {} | wl-copy)+abort'"
-        # Assign rather than append: this exported variable is inherited by
-        # nested shells, so appending would duplicate the binding each time.
         # fzf, rather than Bash, parses these literal quotes.
         # shellcheck disable=SC2089
-        FZF_CTRL_R_OPTS="--bind='ctrl-y:execute-silent(printf %s {2..} | wl-copy)+abort'"
-        # shellcheck disable=SC2090
-        export FZF_CTRL_R_OPTS
+        FZF_CTRL_R_OPTS+=" --bind='ctrl-y:execute-silent(printf %s {2..} | wl-copy)+abort'"
     fi
+    # shellcheck disable=SC2090
+    export FZF_CTRL_R_OPTS
 
     # Ctrl-T file, Ctrl-R history, Alt-C cd
     [ -r /usr/share/fzf/key-bindings.bash ] && . /usr/share/fzf/key-bindings.bash
@@ -219,9 +222,11 @@ __prompt_git() {
         branch=$(command git rev-parse --short HEAD 2>/dev/null) ||
         return 0
 
-    # promptvars expands PS1 again when Bash draws it. Quote characters that
-    # could otherwise execute prompt syntax from an attacker-controlled branch.
-    printf -v branch '%q' "$branch"
+    # Render non-printable bytes visibly, but leave ordinary branch names
+    # literal. This is display formatting, NOT a defense against PS1 expansion.
+    if [[ $branch == *[![:print:]]* ]]; then
+        printf -v branch '%q' "$branch"
+    fi
 
     printf ' \001\033[0;33m\002(%s)\001\033[0m\002' "$branch"
 }
@@ -234,6 +239,10 @@ __prompt() {
     local osc7 mark
 
     osc7=$(__prompt_osc7)
+    # Keep branch-controlled text out of PS1's source. Bash expands this global
+    # variable at render time without reinterpreting its contents as commands
+    # or prompt escapes. It must outlive this function, so do not make it local.
+    __prompt_git_segment=$(__prompt_git)
 
     if [ "$status" -eq 0 ]; then
         mark="${green}\$${reset}"
@@ -243,9 +252,9 @@ __prompt() {
 
     # root gets a red host so a stray sudo -i is obvious
     if [ "$EUID" -eq 0 ]; then
-        PS1="${title}${osc7}${red}\u@\h${reset}${dim}:${reset}${blue}\w${reset}$(__prompt_git)\n${mark} "
+        PS1="${title}${osc7}${red}\u@\h${reset}${dim}:${reset}${blue}\w${reset}\${__prompt_git_segment}\n${mark} "
     else
-        PS1="${title}${osc7}${green}\u@\h${reset}${dim}:${reset}${blue}\w${reset}$(__prompt_git)\n${mark} "
+        PS1="${title}${osc7}${green}\u@\h${reset}${dim}:${reset}${blue}\w${reset}\${__prompt_git_segment}\n${mark} "
     fi
 }
 

@@ -194,6 +194,7 @@ nnoremap <silent> <Esc><Esc> <Cmd>nohlsearch<CR>
 nnoremap <silent> <F5> <Cmd>UndotreeToggle<CR>
 nnoremap <silent> <leader>ff <Cmd>Files<CR>
 nnoremap <silent> <leader>fg <Cmd>Rg<CR>
+nnoremap <silent> <leader>fl <Cmd>BLines<CR>
 nnoremap <silent> <leader>fb <Cmd>Buffers<CR>
 
 # Vim otherwise sends Ctrl-Alt-X to terminal jobs as U+0098, which fzf ignores.

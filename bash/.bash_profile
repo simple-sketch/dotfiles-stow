@@ -27,9 +27,9 @@ export XDG_STATE_HOME="$HOME/.local/state"
 export XDG_CACHE_HOME="$HOME/.cache"
 
 # --- Preferred programs ----------------------------------------------------
-export EDITOR=nvim
-export VISUAL=nvim
-export SUDO_EDITOR=nvim # `sudo -e` / `sudoedit`
+export EDITOR=vim
+export VISUAL=vim
+export SUDO_EDITOR=vim # `sudo -e` / `sudoedit`
 export PAGER=less
 # Keep this command in sync with `set $browser` in the Sway config.
 export BROWSER=firefox

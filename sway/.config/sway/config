@@ -63,8 +63,9 @@ set $menu noctalia msg panel-toggle launcher
 # Browser; keep in sync with BROWSER in ~/.bash_profile.
 set $browser firefox
 
-# Leave new browser windows on the current workspace, including detached tabs.
-# browser.sh selects workspace 1 only when launching a browser with no windows.
+# Super+Y focuses/launches the browser on workspace 1; if already focused there,
+# it opens another window on workspace 1.
+# Keep placement in browser.sh so dragged-out tabs stay on their current workspace.
 
 # Floating Kitty terminal; the distinct app ID keeps regular Kitty windows tiled.
 set $floating_term kitty --single-instance --instance-group=sway-shortcuts --class kitty-floating
@@ -156,7 +157,7 @@ bindswitch --locked --reload lid:off exec $displays lid open
     # Launcher.
     bindsym $mod+d exec $menu
 
-    # Focus the browser, open another window, or launch it.
+    # Focus/launch on workspace 1; open another only when already focused there.
     set $browser_focus_or_new ~/.config/sway/scripts/browser.sh
     bindsym $mod+y fullscreen disable; exec $browser_focus_or_new $browser
 
@@ -359,4 +360,3 @@ bindsym Shift+Print exec noctalia msg screenshot-fullscreen
 #         inactive_workspace #32323200 #32323200 #5c5c5c
 #     }
 # }
-

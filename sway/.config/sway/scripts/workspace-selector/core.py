@@ -1,16 +1,16 @@
-"""Standard-library-only Sway IPC and workspace-drop geometry."""
+"""Standard-library-only Sway IPC and workspace-selector geometry."""
 
 from dataclasses import dataclass
 import json
 import socket
 import struct
 
-APP_ID = "sway-workspace-drop"
-MODE = "workspace-drop"
-BEGIN = 'focus; nop workspace-drop:begin; mode "workspace-drop"'
-SELECT = "nop workspace-drop:select"
-CANCEL = "nop workspace-drop:cancel"
-STOP = "workspace-drop:stop"
+APP_ID = "sway-workspace-selector"
+MODE = "workspace-selector"
+BEGIN = 'focus; nop workspace-selector:begin; mode "workspace-selector"'
+SELECT = "nop workspace-selector:select"
+CANCEL = "nop workspace-selector:cancel"
+STOP = "workspace-selector:stop"
 HEADER = struct.Struct("<6sII")
 MAX_PAYLOAD = 16 * 1024 * 1024
 WINDOW, BINDING, MODE_EVENT = 0x80000003, 0x80000005, 0x80000002

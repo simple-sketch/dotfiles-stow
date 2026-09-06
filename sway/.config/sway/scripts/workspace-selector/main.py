@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Resident, event-driven workspace picker. See README.md for installation."""
+"""Resident, event-driven workspace selector. See README.md for installation."""
 
 import argparse
 import fcntl
@@ -16,7 +16,7 @@ from core import (APP_ID, BEGIN, BINDING, CANCEL, Decoder, HEIGHT, IPC, MODE, MO
                   OUTPUT, SELECT, SHUTDOWN, STOP, TICK, WIDTH, WINDOW, WORKSPACE,
                   counts, find_target, is_window, move_command, walk)
 
-LOG = logging.getLogger("workspace-drop")
+LOG = logging.getLogger("workspace-selector")
 
 
 def load_gui():
@@ -33,7 +33,7 @@ class Picker:
     def __init__(self, path, timeout):
         self.GLib, GLibUnix, self.Gdk, self.Gtk, self.Dialog = load_gui()
         self.GLib.set_prgname(APP_ID)
-        self.GLib.set_application_name("Workspace drop")
+        self.GLib.set_application_name("Workspace selector")
         self.ipc = IPC(path)
         self.events = IPC(path)
         result = self.events.request(2, ["window", "binding", "mode", "workspace", "output", "shutdown", "tick"])
@@ -252,7 +252,7 @@ def main():
         parser.error("XDG_RUNTIME_DIR is not set")
     key = hashlib.sha256(path.encode()).hexdigest()[:16]
     # Scope the singleton to a compositor, so headless tests cannot affect the desktop.
-    lock = open(Path(runtime) / f"workspace-drop-{key}.lock", "a")
+    lock = open(Path(runtime) / f"workspace-selector-{key}.lock", "a")
     os.chmod(lock.name, 0o600)
     try:
         fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
@@ -260,7 +260,7 @@ def main():
         return 0
     state = Path(os.environ.get("XDG_STATE_HOME", str(Path.home() / ".local/state"))) / "sway"
     state.mkdir(mode=0o700, parents=True, exist_ok=True)
-    handler = RotatingFileHandler(state / "workspace-drop.log", maxBytes=512 * 1024, backupCount=1)
+    handler = RotatingFileHandler(state / "workspace-selector.log", maxBytes=512 * 1024, backupCount=1)
     handler.setFormatter(logging.Formatter("%(asctime)s %(levelname)s %(message)s"))
     LOG.setLevel(logging.INFO)
     LOG.addHandler(handler)
@@ -269,8 +269,8 @@ def main():
     try:
         Picker(path, args.timeout).run()
     except Exception:
-        LOG.exception("Workspace drop failed")
-        print(f"workspace-drop failed: see {state / 'workspace-drop.log'}", file=sys.stderr)
+        LOG.exception("Workspace selector failed")
+        print(f"workspace-selector failed: see {state / 'workspace-selector.log'}", file=sys.stderr)
         return 1
     finally:
         lock.close()

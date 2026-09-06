@@ -1,4 +1,4 @@
-# Sway workspace drop
+# Sway workspace selector
 
 A resident workspace selector for **Super + Shift + click on a Sway title bar**.
 The selector opens in the center of the source workspace. Click a number **1–9**
@@ -30,21 +30,21 @@ implementation**. `wtype` and `grim` are **test-only**.
 No pip dependencies, compositor patches, input-group membership, root daemon,
 raw `/dev/input` access, or synthetic input are used by the running helper.
 
-The source lives in `~/.config/sway/scripts/workspace-drop/`, with the launcher at
-`~/.config/sway/scripts/workspace-drop.sh` and bindings at
-`~/.config/sway/workspace-drop.conf`.
+The source lives in `~/.config/sway/scripts/workspace-selector/`, with the launcher at
+`~/.config/sway/scripts/workspace-selector.sh` and bindings at
+`~/.config/sway/workspace-selector.conf`.
 
 Place this after the general floating-window rules / `floating_modifier` in
 `~/.config/sway/config`:
 
 ```sway
-include ~/.config/sway/workspace-drop.conf
+include ~/.config/sway/workspace-selector.conf
 ```
 
 Then:
 
 ```sh
-~/.config/sway/scripts/workspace-drop.sh --check
+~/.config/sway/scripts/workspace-selector.sh --check
 sway --validate --config ~/.config/sway/config
 swaymsg reload
 ```
@@ -59,11 +59,11 @@ selection. No extra permanent bar or panel is installed.
 1. Sway's mouse bindings operate on the container **under the cursor**, and run
    before its built-in floating/tiling move operation. The title-bar-only opening
    binding focuses that container, emits a distinct `nop` binding event, and
-   enters the `workspace-drop` mode.
+   enters the `workspace-selector` mode.
 2. A single Sway IPC subscription receives the synchronous **focus event before
    the binding event**. The helper captures that ID, so later focus changes cannot
    redirect the move to another window. It never queries “whatever is focused” at
-   drop time.
+   selection time.
 3. The popup is an undecorated GTK floating surface, centered by Sway's
    `move position center` command.
 4. In the temporary mode, a `--whole-window` binding reports the selection press
@@ -71,7 +71,7 @@ selection. No extra permanent bar or panel is installed.
    hit-testing; queued motion/leave events are processed before selecting.
    The helper moves the source window and exits the mode. Mouse releases do
    nothing, so releasing the opening click leaves the selector open.
-5. A successful drop runs a numeric-ID-scoped command such as:
+5. A successful selection runs a numeric-ID-scoped command such as:
    `[con_id=123] move --no-auto-back-and-forth container to workspace number 3`.
    Window titles are plain text, never shell commands or Pango markup.
 6. A mark-based prototype was rejected: Sway's `mark` command also re-evaluates
@@ -112,19 +112,19 @@ Primary references:
 
 ```sh
 # Runtime dependency check
-~/.config/sway/scripts/workspace-drop.sh --check
+~/.config/sway/scripts/workspace-selector.sh --check
 
 # Stop this session's helper (does not affect separate headless test sessions)
-~/.config/sway/scripts/workspace-drop.sh --stop
+~/.config/sway/scripts/workspace-selector.sh --stop
 
 # After source changes, restart it without restarting Sway
-~/.config/sway/scripts/workspace-drop.sh --daemon --verbose
+~/.config/sway/scripts/workspace-selector.sh --daemon --verbose
 ```
 
 The daemon runs in the foreground when launched manually; Ctrl+C stops it. For a
 normal background restart, stop it, wait a moment, then run `swaymsg reload`.
 
-Logs: `~/.local/state/sway/workspace-drop.log` (rotates at 512 KiB, one backup).
+Logs: `~/.local/state/sway/workspace-selector.log` (rotates at 512 KiB, one backup).
 The singleton lock is under `$XDG_RUNTIME_DIR`, keyed to `$SWAYSOCK`. Only numeric
 window IDs, workspace labels and lifecycle/error messages are logged, not window
 titles or keyboard input.
@@ -136,15 +136,15 @@ To disable permanently, remove/comment the `include` line, run `--stop`, then
 
 ```sh
 python3 -m unittest discover \
-  -s ~/.config/sway/scripts/workspace-drop/tests -p 'test_*.py' -v
-python3 ~/.config/sway/scripts/workspace-drop/tests/integration.py
+  -s ~/.config/sway/scripts/workspace-selector/tests -p 'test_*.py' -v
+python3 ~/.config/sway/scripts/workspace-selector/tests/integration.py
 ```
 
 Integration dependencies: `sway`, `foot`, `wtype`, `grim`. The runner creates its
 own **headless Sway** with two outputs and asserts that its IPC socket and Wayland
 display differ from the desktop **before sending any test input**. No test input
 is sent to the live desktop. Only the tests use virtual pointer/keyboard input.
-Test logs and a screenshot are retained in `/tmp/workspace-drop-integration.*`.
+Test logs and a screenshot are retained in `/tmp/workspace-selector-integration.*`.
 
 The integration runner covers the previous hold-and-release gesture and needs
 adaptation before use with the click interaction.

@@ -2,7 +2,7 @@
 """Real pointer/keyboard tests in a NEW headless Sway, never the user's desktop.
 
 Requires sway, foot, wtype, grim and the helper's Python GUI dependencies.
-Artifacts are retained under /tmp/workspace-drop-integration.* for inspection.
+Artifacts are retained under /tmp/workspace-selector-integration.* for inspection.
 """
 import os
 from pathlib import Path
@@ -36,14 +36,14 @@ class HeadlessTests(unittest.TestCase):
         for tool in ("sway", "foot", "wtype", "grim"):
             if not shutil.which(tool):
                 raise unittest.SkipTest(f"Missing test tool: {tool}")
-        cls.tmp = Path(tempfile.mkdtemp(prefix="workspace-drop-integration."))
+        cls.tmp = Path(tempfile.mkdtemp(prefix="workspace-selector-integration."))
         print(f"\nHeadless test artifacts: {cls.tmp}", flush=True)
         cls.env = dict(os.environ, WLR_BACKENDS="headless", WLR_RENDERER="pixman",
                        WLR_HEADLESS_OUTPUTS="2", XDG_STATE_HOME=str(cls.tmp / "state"),
                        PYTHONDONTWRITEBYTECODE="1")
         cls.env.pop("SWAYSOCK", None)
         cls.env.pop("WAYLAND_DISPLAY", None)
-        config = (ROOT.parents[1] / "workspace-drop.conf").read_text()
+        config = (ROOT.parents[1] / "workspace-selector.conf").read_text()
         config = "\n".join(line for line in config.splitlines() if not line.startswith("exec_always"))
         cls.config = cls.tmp / "config"
         cls.config.write_text('''set $mod Mod4
@@ -128,7 +128,7 @@ for_window [floating] resize set width 45 ppt height 55 ppt, move position cente
         self.assertIsNone(self.helper.poll(), (self.tmp / "helper.stderr").read_text())
 
     def new_window(self, suffix):
-        app = f"workspace-drop-test-{suffix}"
+        app = f"workspace-selector-test-{suffix}"
         process = subprocess.Popen(["foot", "-c", "/dev/null", "-a", app, "-T", f"Test window {suffix}",
                                     "sleep", "3600"], env=self.env, stdout=subprocess.DEVNULL,
                                    stderr=subprocess.DEVNULL)
@@ -172,18 +172,18 @@ for_window [floating] resize set width 45 ppt height 55 ppt, move position cente
 
     def done(self):
         wait_for(lambda: self.dialog() is None and self.ipc.request(12)['name'] == 'default')
-        self.assertNotIn('__workspace_drop_target', self.ipc.request(5))
+        self.assertNotIn('__workspace_selector_target', self.ipc.request(5))
 
     def assert_workspace(self, number):
         self.assertEqual(find_target(self.ipc.request(4), self.source).number, number)
 
-    def drop(self, number):
+    def select_workspace(self, number):
         self.begin()
         self.hover(number)
         self.pointer.button(False)
         self.done()
 
-    def test_01_floating_drop_and_stay(self):
+    def test_01_floating_selection_and_stay(self):
         before = self.node(self.source)
         self.begin()
         self.hover(3)
@@ -196,17 +196,17 @@ for_window [floating] resize set width 45 ppt height 55 ppt, move position cente
         self.assertEqual(after['type'], before['type'])
         self.assertEqual(after['rect'], before['rect'])
 
-    def test_02_tiled_drop_stays_tiled(self):
+    def test_02_tiled_selection_stays_tiled(self):
         self.ipc.command(f'[con_id={self.source}] floating disable')
         self.wait_layout()
-        self.drop(9)
+        self.select_workspace(9)
         self.assert_workspace(9)
         self.assertEqual(self.node(self.source)['type'], 'con')
 
     def test_03_current_workspace_no_back_and_forth(self):
         self.ipc.command('workspace_auto_back_and_forth yes')
         try:
-            self.drop(1)
+            self.select_workspace(1)
             self.assert_workspace(1)
         finally:
             self.ipc.command('workspace_auto_back_and_forth no')
@@ -216,7 +216,7 @@ for_window [floating] resize set width 45 ppt height 55 ppt, move position cente
         # Empty invisible workspaces disappear, so hold it open with a second window.
         other = self.new_window('B')
         self.ipc.command(f'[con_id={other}] move container to workspace "3: named"')
-        self.drop(3)
+        self.select_workspace(3)
         self.assertEqual(find_target(self.ipc.request(4), self.source).workspace, '3: named')
 
     def test_05_release_outside(self):
@@ -243,7 +243,7 @@ for_window [floating] resize set width 45 ppt height 55 ppt, move position cente
         self.done()
         self.assert_workspace(1)
 
-    def test_08_super_released_first_still_drops_on_mouse_release(self):
+    def test_08_super_released_first_still_moves_on_mouse_release(self):
         _, keyboard = self.begin(super_release=True)
         self.hover(3)
         keyboard.wait(timeout=3)
@@ -267,7 +267,7 @@ for_window [floating] resize set width 45 ppt height 55 ppt, move position cente
 
     def test_11_existing_marks_preserved(self):
         self.ipc.command(f'[con_id={self.source}] mark --add user-mark')
-        self.drop(4)
+        self.select_workspace(4)
         self.assertEqual(self.node(self.source)['marks'], ['user-mark'])
 
     def test_12_inactive_tab_targets_clicked_window(self):
@@ -285,7 +285,7 @@ for_window [floating] resize set width 45 ppt height 55 ppt, move position cente
     def test_13_destination_on_another_output(self):
         other = self.new_window('B')
         self.ipc.command(f'[con_id={other}] move container to workspace number 2')
-        self.drop(2)
+        self.select_workspace(2)
         self.assert_workspace(2)
         self.assertEqual(next(w['num'] for w in self.ipc.request(1) if w['focused']), 1)
 
@@ -317,13 +317,13 @@ for_window [floating] resize set width 45 ppt height 55 ppt, move position cente
         self.wait_layout()
         self.ipc.command(f'[con_id={self.source}] resize set 500 300, move absolute position 100 45')
         self.wait_layout()
-        self.drop(6)
+        self.select_workspace(6)
         self.assert_workspace(6)
 
     def test_17_duplicate_daemon(self):
         result = subprocess.run([sys.executable, str(ROOT / 'main.py'), '--daemon'], env=self.env, timeout=3)
         self.assertEqual(result.returncode, 0)
-        self.drop(7)
+        self.select_workspace(7)
         self.assert_workspace(7)
 
     def test_18_quick_click_does_not_leave_mode(self):
@@ -369,7 +369,7 @@ for_window [floating] resize set width 45 ppt height 55 ppt, move position cente
     def test_23_second_keyboard_layout(self):
         self.ipc.command('input type:keyboard xkb_layout "us,lt"; input type:keyboard xkb_switch_layout 1')
         try:
-            self.drop(8)
+            self.select_workspace(8)
             self.assert_workspace(8)
         finally:
             self.ipc.command('input type:keyboard xkb_layout "us"')
@@ -378,7 +378,7 @@ for_window [floating] resize set width 45 ppt height 55 ppt, move position cente
         self.ipc.command(f'[con_id={self.source}] move container to workspace number 2; workspace number 2')
         self.ipc.command(f'[con_id={self.source}] move absolute position 1480 100')
         self.wait_layout()
-        self.drop(3)
+        self.select_workspace(3)
         self.assert_workspace(3)
         self.assertEqual(next(w['num'] for w in self.ipc.request(1) if w['focused']), 2)
 

@@ -56,7 +56,7 @@ class Dialog:
         self.cancel = cancel
         self.window = Gtk.Window(type=Gtk.WindowType.TOPLEVEL)
         self.window.set_title("Move window to workspace")
-        self.window.set_role("workspace-drop")
+        self.window.set_role("workspace-selector")
         self.window.set_decorated(False)
         self.window.set_resizable(False)
         self.window.set_default_size(WIDTH, HEIGHT)

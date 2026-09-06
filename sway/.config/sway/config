@@ -167,7 +167,7 @@ bindsym $mod+Shift+g exec ~/.config/sway/scripts/arrange-outputs.sh --toggle ext
     floating_modifier $mod normal
 
     # Super+Shift+click on a Sway title bar: click 1–9 to send the window.
-    include ~/.config/sway/workspace-drop.conf
+    include ~/.config/sway/workspace-selector.conf
 
     # Reload config.
     bindsym $mod+Shift+c reload

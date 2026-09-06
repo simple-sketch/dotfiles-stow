@@ -10,3 +10,6 @@
 /vim/.vim/undo/
 /vim/.vim/view/
 /vim/.viminfo
+
+# Downloaded Yazi plugins; restore with `ya pkg install`.
+/yazi/.config/yazi/plugins/

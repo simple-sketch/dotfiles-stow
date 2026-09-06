@@ -13,8 +13,8 @@ import signal
 import sys
 
 from core import (APP_ID, BEGIN, BINDING, CANCEL, Decoder, HEIGHT, IPC, MODE, MODE_EVENT,
-                  OUTPUT, RELEASE, SHUTDOWN, STOP, TICK, WIDTH, WINDOW, WORKSPACE,
-                  counts, find_target, is_window, move_command, popup_position, walk)
+                  OUTPUT, SELECT, SHUTDOWN, STOP, TICK, WIDTH, WINDOW, WORKSPACE,
+                  counts, find_target, is_window, move_command, walk)
 
 LOG = logging.getLogger("workspace-drop")
 
@@ -98,11 +98,11 @@ class Picker:
             command = event.get("binding", {}).get("command", "")
             if command == BEGIN:
                 self.begin(self.focused_id)
-            elif command.startswith(RELEASE + ";"):
+            elif command == SELECT:
                 # GDK and Sway IPC are separate sockets. Process queued GDK motion/leave
-                # before using the hover value; mode-exit cancellation has a grace period.
+                # before using the tile under the pointer at the selection click.
                 self.remove_timer("mode_source")
-                self.GLib.idle_add(self.release)
+                self.GLib.idle_add(self.select)
             elif command.startswith(CANCEL + ";"):
                 self.cancel("cancel binding")
         elif kind == MODE_EVENT and self.target and event.get("change") != MODE:
@@ -143,12 +143,11 @@ class Picker:
 
     def place_dialog(self, node_id):
         self.helper_id = node_id
-        x, y = popup_position(self.target)
         prefix = f"[con_id={node_id}]"
         workspace = json.dumps(self.target.workspace, ensure_ascii=False)
         self.ipc.command(
             f"{prefix} floating enable, border none, resize set {WIDTH} px {HEIGHT} px, "
-            f"move container to workspace {workspace}; {prefix} move absolute position {x} px {y} px")
+            f"move container to workspace {workspace}; {prefix} move position center")
         self.GLib.idle_add(self.dialog_positioned, node_id)
 
     def dialog_positioned(self, node_id):
@@ -156,7 +155,7 @@ class Picker:
             self.dialog.positioned()
         return False
 
-    def release(self):
+    def select(self):
         if not self.dialog:
             return False
         self.Gdk.Display.get_default().sync()
@@ -176,7 +175,7 @@ class Picker:
         except Exception:
             LOG.exception("Could not move window=%s", target.id)
         finally:
-            self.cancel("released" if number else "released outside grid")
+            self.cancel("selected" if number else "clicked outside grid")
         return False
 
     def expired(self):

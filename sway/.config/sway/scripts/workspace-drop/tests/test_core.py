@@ -4,7 +4,7 @@ import sys
 import unittest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from core import (APP_ID, Decoder, HEADER, HEIGHT, MAX_PAYLOAD, Target, WIDTH,
+from core import (APP_ID, Decoder, HEADER, HEIGHT, MAX_PAYLOAD, WIDTH,
                   cell_rect, counts, find_target, hit_test, move_command, packet)
 
 
@@ -65,19 +65,6 @@ class CoreTests(unittest.TestCase):
         result = counts(tree())
         self.assertEqual(result[3], 2)
         self.assertEqual(sum(result.values()), 2)
-
-    def test_clamp_negative_offset_and_small_areas(self):
-        from core import popup_position
-        for area in ({"x": -1280, "y": 30, "width": 1280, "height": 690},
-                     {"x": 2560, "y": -900, "width": 900, "height": 1400}):
-            for x, y in [(area['x'] - 800, area['y'] - 300),
-                         (area['x'] + area['width'] + 500, area['y'] + area['height'])]:
-                t = Target(1, "", "1", 1, {"x": x, "y": y, "width": 600, "height": 400}, area)
-                px, py = popup_position(t)
-                self.assertGreaterEqual(px, area['x'])
-                self.assertGreaterEqual(py, area['y'])
-                self.assertLessEqual(px + WIDTH, area['x'] + area['width'])
-                self.assertLessEqual(py + HEIGHT, area['y'] + area['height'])
 
     def test_numeric_commands_no_auto_back_and_forth(self):
         self.assertEqual(move_command(123, 3),

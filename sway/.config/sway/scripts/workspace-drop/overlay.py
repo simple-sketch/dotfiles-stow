@@ -1,8 +1,4 @@
-"""A normal floating GTK surface: Sway bindings, not Wayland, report the drop.
-
-A layer-shell surface cannot be used here: Sway excludes it from mouse bindings,
-and wlroots suppresses a release whose press was consumed by the opening binding.
-"""
+"""A floating GTK selector: Sway reports clicks and GTK tracks the hovered tile."""
 
 import math
 import cairo
@@ -77,7 +73,7 @@ class Dialog:
         self.window.connect("motion-notify-event", self.motion)
         self.window.connect("enter-notify-event", self.motion)
         self.window.connect("leave-notify-event", self.leave)
-        self.window.connect("button-press-event", lambda *_: self.cancel("new click") or True)
+        self.window.connect("button-press-event", self.click)
         self.window.connect("delete-event", lambda *_: self.cancel("dialog closed") or True)
         self.window.connect("key-press-event", self.key)
         self.window.show_all()
@@ -93,6 +89,13 @@ class Dialog:
             if hover != self.hover:
                 self.hover = hover
                 self.area.queue_draw()
+        return True
+
+    def click(self, widget, event):
+        if event.button == 3:
+            self.cancel("right click")
+        elif event.button == 1:
+            self.motion(widget, event)
         return True
 
     def leave(self, *_):
@@ -137,7 +140,7 @@ class Dialog:
             count = self.counts[number]
             label = "current" if current else "empty" if not count else f"{count} window{'s' if count != 1 else ''}"
             text(ctx, label, x, y + 43, 10, "#423451" if active else "#a5acc2", width=w, center=True)
-        hint = f"Release → workspace {self.hover}" if self.hover else "Hold left button · point at a number"
+        hint = f"Click → workspace {self.hover}" if self.hover else "Click a workspace number"
         text(ctx, hint, 18, 318, 12, "#d5c5ff", width=WIDTH - 36, center=True)
         text(ctx, "Esc / right-click to cancel · stay here", 18, 340, 10, "#8992aa",
              width=WIDTH - 36, center=True)

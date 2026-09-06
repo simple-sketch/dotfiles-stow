@@ -29,9 +29,10 @@ exec "dbus-update-activation-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CU
 # Recovery: ~/.config/sway/scripts/start-audio.sh &
 exec ~/.config/sway/scripts/start-audio.sh
 
-# Preload Kitty's GPU and font state. Kitty launchers join this instance group,
-# makes faster startup.
-exec "exec kitty --detach --detached-log=$HOME/.local/state/kitty-sway-server.log --single-instance --instance-group=sway-shortcuts --start-as=hidden /usr/bin/sleep infinity"
+# Preload Kitty at login and on reload so even the first shortcut is fast.
+# The lock prevents duplicate hidden windows; waiting keeps it held even when
+# the preload joins a Kitty instance that was opened before the reload.
+exec_always "exec flock --nonblock --close $XDG_RUNTIME_DIR/kitty-sway-server.lock kitty --single-instance --instance-group=sway-shortcuts --wait-for-single-instance-window-close --start-as=hidden /usr/bin/sleep infinity >>$HOME/.local/state/kitty-sway-server.log 2>&1"
 
 # Pointer focus: yes, no, or always.
 focus_follows_mouse yes

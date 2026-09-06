@@ -118,6 +118,22 @@ if executable('rg')
   set grepformat=%f:%l:%c:%m
 endif
 
+# Show the current search match and total while matches are highlighted.
+def g:SearchMatchCount(): string
+  if !v:hlsearch || empty(@/)
+    return ''
+  endif
+  # Count beyond Vim's default limit, but keep status-line redraws responsive.
+  final result = searchcount({maxcount: 0, timeout: 20})
+  if empty(result)
+    return ''
+  endif
+  if result.incomplete != 0
+    return '[?/?] '
+  endif
+  return printf('[%d/%d] ', result.current, result.total)
+enddef
+
 # Interface.
 # Distinguish Normal, Insert, and Replace modes by cursor shape.
 &t_EI = "\e[2 q" # Steady block in Normal mode.
@@ -128,7 +144,7 @@ set number
 set relativenumber
 set signcolumn=yes
 set laststatus=2
-set statusline=%<%f\ %h%m%r%=%y\ %l:%c\ %P
+set statusline=%<%f\ %h%m%r%=%{g:SearchMatchCount()}%y\ %l:%c\ %P
 set splitbelow
 set splitright
 set updatetime=250

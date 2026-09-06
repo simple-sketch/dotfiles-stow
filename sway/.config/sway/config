@@ -93,17 +93,31 @@ set $window_switcher_overview noctalia msg window-switcher
 
 ### Displays (Shikane)
 
-# Restart Shikane; profiles select docked or undocked layouts.
-exec_always "pkill -x shikane; shikane"
+# Start once: reloading Sway must preserve the selected display profile.
+exec shikane
+set $displays python3 ~/.config/sway/scripts/monitor-profiles.py
+# Sway resets runtime output settings on reload; restore the last verified layout.
+exec_always $displays reapply
 
 # Portrait dual-screen; repeat to swap left and right.
-bindsym $mod+Shift+v exec ~/.config/sway/scripts/arrange-outputs.sh --toggle portrait
+bindsym --no-repeat $mod+Shift+v exec $displays toggle portrait
 
 # External-only landscape.
-bindsym $mod+Shift+b exec shikanectl switch docked
+bindsym --no-repeat $mod+Shift+b exec $displays switch docked
 
 # Landscape dual-screen; repeat to swap left and right.
-bindsym $mod+Shift+g exec ~/.config/sway/scripts/arrange-outputs.sh --toggle extend
+bindsym --no-repeat $mod+Shift+g exec $displays toggle extend
+
+# Laptop only, including when an external monitor is still connected.
+bindsym --no-repeat $mod+Shift+i exec $displays switch laptop
+
+# Available profiles, with the current selection marked.
+bindsym --no-repeat $mod+p exec $displays pick
+
+# Save the open-lid layout and workspaces, then restore them on reopening.
+# Reload events are idempotent; closing without an external leaves suspend to the system.
+bindswitch --locked --reload lid:on exec $displays lid closed
+bindswitch --locked --reload lid:off exec $displays lid open
 
 
 ### Input

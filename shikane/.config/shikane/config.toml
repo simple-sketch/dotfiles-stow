@@ -6,7 +6,7 @@
 # makes "docked" vs "undocked" automatic - no priority list needed.
 #
 # Ranking: "docked" confirms the built-in connector against both its name and
-# description, while the two manual layouts use the name alone. This makes
+# description, while the manual layouts use the name alone. This makes
 # "docked" win automatically without tying the config to display hardware;
 # use shikanectl switch to select a manual layout.
 # Search arrays are conjunctive: EVERY entry must match the same display. They
@@ -14,11 +14,10 @@
 #
 # Modes use each display's EDID-preferred resolution and refresh rate. shikane
 # cannot express relative positions (upstream issue #34), so dual-screen
-# profiles run arrange-outputs.sh after apply. It reads Sway's final logical
-# dimensions (including transform and scale), places the requested output on
-# the left and vertically centers the other output. Sway calls the same helper
-# with --toggle and a profile name to select that mode, then reverse the current
-# side-by-side order on subsequent key presses without saved state.
+# profiles call monitor-profiles.py after apply. The controller shares a lock
+# with the Sway shortcuts, verifies the active profile, arranges logical output
+# rectangles, restores workspaces and reports the result. Delayed hooks cannot
+# undo a completed swap or apply a different profile's layout.
 
 # Connector classes. The external expression covers common direct, USB-C dock
 # and DisplayPort-MST names without mistaking the built-in eDP panel for one.
@@ -28,6 +27,7 @@
 # External monitor connected -> built-in panel off, external in landscape.
 [[profile]]
 name = "docked"
+exec = ['python3 "$HOME/.config/sway/scripts/monitor-profiles.py" applied "$SHIKANE_PROFILE_NAME"']
     [[profile.output]]
     # AND: the internal connector must match both the canonical output name and
     # the compositor description. Two matching attributes also rank this
@@ -45,9 +45,10 @@ name = "docked"
 # External rotated 90 degrees, laptop panel initially stays on its right. The
 # helper derives both output names, the right-hand position and vertical
 # centering. Mod+Shift+V selects this mode, then toggles which output is left.
-# Manual only: shikanectl switch portrait
+# Manual only: use the profile picker or Mod+Shift+V.
 [[profile]]
 name = "portrait"
+exec = ['python3 "$HOME/.config/sway/scripts/monitor-profiles.py" applied "$SHIKANE_PROFILE_NAME"']
     [[profile.output]]
     search = "n/^(eDP|LVDS)-[0-9]+$"
     enable = true
@@ -57,7 +58,6 @@ name = "portrait"
     [[profile.output]]
     search = "n/^(DP|HDMI-[AB]|DVI-[ADI]|VGA|USB-C)-[0-9]+(-[0-9]+)*$"
     enable = true
-    exec = ["$HOME/.config/sway/scripts/arrange-outputs.sh \"$SHIKANE_OUTPUT_NAME\""]
     mode = "preferred"
     position = "0,0"
     transform = "90"
@@ -66,13 +66,13 @@ name = "portrait"
 # its right. The helper derives both output names and their positions. Sway's
 # Mod+Shift+G binding selects this mode, then toggles which one is on the left.
 # Manual only (regex searches keep it ranked below "docked"):
-#     shikanectl switch extend
+#     use the profile picker or Mod+Shift+G.
 [[profile]]
 name = "extend"
+exec = ['python3 "$HOME/.config/sway/scripts/monitor-profiles.py" applied "$SHIKANE_PROFILE_NAME"']
     [[profile.output]]
     search = "n/^(DP|HDMI-[AB]|DVI-[ADI]|VGA|USB-C)-[0-9]+(-[0-9]+)*$"
     enable = true
-    exec = ["$HOME/.config/sway/scripts/arrange-outputs.sh \"$SHIKANE_OUTPUT_NAME\""]
     mode = "preferred"
     position = "0,0"
     transform = "normal"
@@ -83,12 +83,29 @@ name = "extend"
     mode = "preferred"
     transform = "normal"
 
+# Laptop only while the cable remains connected. Manual: Mod+Shift+I.
+[[profile]]
+name = "laptop"
+exec = ['python3 "$HOME/.config/sway/scripts/monitor-profiles.py" applied "$SHIKANE_PROFILE_NAME"']
+    [[profile.output]]
+    search = "n/^(eDP|LVDS)-[0-9]+$"
+    enable = true
+    mode = "preferred"
+    position = "0,0"
+    transform = "normal"
+
+    [[profile.output]]
+    search = "n/^(DP|HDMI-[AB]|DVI-[ADI]|VGA|USB-C)-[0-9]+(-[0-9]+)*$"
+    enable = false
+
 # Nothing else connected -> built-in panel on.
 [[profile]]
 name = "undocked"
+exec = ['python3 "$HOME/.config/sway/scripts/monitor-profiles.py" applied "$SHIKANE_PROFILE_NAME"']
     [[profile.output]]
     # Same vendor-neutral connector checks as the automatic docked profile.
     search = ["n/^(eDP|LVDS)-[0-9]+$", "d/(eDP|LVDS)-[0-9]+"]
     enable = true
     mode = "preferred"
     position = "0,0"
+    transform = "normal"

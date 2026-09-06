@@ -17,10 +17,10 @@ seat * xcursor_theme Bibata-Modern-Ice 24
 
 # Export session variables so D-Bus services inherit them.
 #exec dbus-update-activation-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP XDG_SESSION_TYPE XDG_SESSION_DESKTOP QT_QPA_PLATFORM
-                           |
-                           |
-                          \ /
-                           v
+
+# ↑ Above: non-Noctalia configuration
+# ↓ Below: Noctalia-specific configuration
+
 # Export session variables before Noctalia so D-Bus services inherit them.
 exec "dbus-update-activation-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP XDG_SESSION_TYPE XDG_SESSION_DESKTOP QT_QPA_PLATFORM; exec noctalia"
 
@@ -95,10 +95,10 @@ for_window [app_id="(?i)^vlc$"] move container to workspace number 5, workspace 
 
 # Window switcher for wmenu.
 #set $window_switcher_overview python3 ~/.config/sway/scripts/window-switcher.py
-                           |
-                           |
-                          \ /
-                           v
+
+# ↑ Above: non-Noctalia configuration
+# ↓ Below: Noctalia-specific configuration
+
 # Window switcher.
 set $window_switcher_overview noctalia msg window-switcher
 
@@ -124,10 +124,10 @@ bindsym --no-repeat $mod+Shift+i exec $displays switch laptop
 
 # Available profiles, with the current selection marked. For wmenu
 #bindsym --no-repeat $mod+p exec $displays pick --menu wmenu
-                           |
-                           |
-                          \ /
-                           v
+
+# ↑ Above: non-Noctalia configuration
+# ↓ Below: Noctalia-specific configuration
+
 # Available profiles, with the current selection marked. works on noctalia
 bindsym --no-repeat $mod+p exec $displays pick
 
@@ -157,10 +157,10 @@ bindswitch --locked --reload lid:off exec $displays lid open
 
     # Super+\ cycles layouts.
     #bindsym --to-code $mod+backslash input "type:keyboard" xkb_switch_layout next
-                           |
-                           |
-                          \ /
-                           v
+
+    # ↑ Above: non-Noctalia configuration
+    # ↓ Below: Noctalia-specific configuration
+
     # Super+\ cycles layouts through Noctalia.
     bindsym --to-code $mod+backslash exec noctalia msg keyboard-layout-cycle
 
@@ -211,10 +211,10 @@ bindswitch --locked --reload lid:off exec $displays lid open
 
     # End the Wayland session.
     #bindsym $mod+Shift+e exec swaynag -t warning -m 'Do you really want to exit Sway? This will end your Wayland session.' -B 'Exit Sway' 'swaymsg exit'
-                           |
-                           |
-                          \ /
-                           v
+
+    # ↑ Above: non-Noctalia configuration
+    # ↓ Below: Noctalia-specific configuration
+
     # End the Wayland session. noctalia specific
     # bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -B 'Yes, exit sway' 'swaymsg exit'
     bindsym $mod+Shift+e exec noctalia msg panel-toggle session
@@ -335,10 +335,10 @@ bindsym $mod+r mode "resize"
 # Direct brightnessctl alternative:
 # bindsym --locked XF86MonBrightnessDown exec brightnessctl set 5%-
 # bindsym --locked XF86MonBrightnessUp exec brightnessctl set 5%+
-                           |
-                           |
-                          \ /
-                           v
+
+# ↑ Above: non-Noctalia configuration
+# ↓ Below: Noctalia-specific configuration
+
 # Brightness with Noctalia OSD.
 bindsym --locked XF86MonBrightnessDown exec noctalia msg brightness-down
 bindsym --locked XF86MonBrightnessUp exec noctalia msg brightness-up
@@ -348,10 +348,10 @@ bindsym --locked XF86MonBrightnessUp exec noctalia msg brightness-up
 # bindsym --locked XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -5%
 # bindsym --locked XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5%
 # bindsym --locked XF86AudioMicMute exec pactl set-source-mute @DEFAULT_SOURCE@ toggle
-                           |
-                           |
-                          \ /
-                           v
+
+# ↑ Above: non-Noctalia configuration
+# ↓ Below: Noctalia-specific configuration
+
 # Volume with Noctalia OSD.
 bindsym --locked XF86AudioMute exec noctalia msg volume-mute
 bindsym --locked XF86AudioLowerVolume exec noctalia msg volume-down
@@ -364,10 +364,10 @@ bindsym --locked XF86AudioMicMute exec noctalia msg mic-mute
 # bindsym --locked XF86AudioPrev exec playerctl previous
 # bindsym --locked XF86AudioNext exec playerctl next
 # bindsym --locked XF86AudioStop exec playerctl stop
-                           |
-                           |
-                          \ /
-                           v
+
+# ↑ Above: non-Noctalia configuration
+# ↓ Below: Noctalia-specific configuration
+
 # Playback through Noctalia's MPRIS service.
 bindsym --locked XF86AudioPlay exec noctalia msg media toggle
 bindsym --locked XF86AudioPause exec noctalia msg media toggle

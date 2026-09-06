@@ -17,7 +17,7 @@ g:mapleader = ' '
 g:maplocalleader = ' '
 
 # Briefly show the region copied by a yank.
-g:hlyank_duration = 400
+g:hlyank_duration = 200
 
 # Useful packages bundled with Vim 9.
 packadd! comment

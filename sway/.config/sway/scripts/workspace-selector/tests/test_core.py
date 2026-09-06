@@ -4,8 +4,8 @@ import sys
 import unittest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from core import (APP_ID, Decoder, HEADER, HEIGHT, MAX_PAYLOAD, WIDTH,
-                  cell_rect, counts, find_target, hit_test, move_command, packet)
+from core import (APP_ID, Decoder, HEADER, HEIGHT, MAX_PAYLOAD, Target, WIDTH,
+                  cell_rect, counts, find_target, hit_test, move_command, packet, popup_position)
 
 
 def tree():
@@ -72,6 +72,22 @@ class CoreTests(unittest.TestCase):
         for node, number in [("1] kill", 3), (1, "3; exit"), (1, 10), (0, 3), (1, True)]:
             with self.assertRaises(ValueError):
                 move_command(node, number)
+
+    def test_popup_below_source_titlebar(self):
+        # The source is off-center on a monitor left of the primary output.
+        self.assertEqual(popup_position(find_target(tree(), 11)), (-1018, 79))
+
+    def test_clamp_negative_offset_and_small_areas(self):
+        for area in ({"x": -1280, "y": 30, "width": 1280, "height": 690},
+                     {"x": 2560, "y": -900, "width": 900, "height": 1400}):
+            for x, y in [(area['x'] - 800, area['y'] - 300),
+                         (area['x'] + area['width'] + 500, area['y'] + area['height'])]:
+                t = Target(1, "", "1", 1, {"x": x, "y": y, "width": 600, "height": 400}, area)
+                px, py = popup_position(t)
+                self.assertGreaterEqual(px, area['x'])
+                self.assertGreaterEqual(py, area['y'])
+                self.assertLessEqual(px + WIDTH, area['x'] + area['width'])
+                self.assertLessEqual(py + HEIGHT, area['y'] + area['height'])
 
 
 if __name__ == "__main__":

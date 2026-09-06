@@ -1,7 +1,8 @@
 # Sway workspace selector
 
 A resident workspace selector for **Super + Shift + click on a Sway title bar**.
-The selector opens in the center of the source workspace. Click a number **1–9**
+The selector opens horizontally centered below the source window's title bar.
+It stays inside the workspace's usable area. Click a number **1–9**
 to move the original window there while staying on the source workspace.
 Works with tiled and floating windows, including inactive tabs.
 
@@ -64,8 +65,10 @@ selection. No extra permanent bar or panel is installed.
    the binding event**. The helper captures that ID, so later focus changes cannot
    redirect the move to another window. It never queries “whatever is focused” at
    selection time.
-3. The popup is an undecorated GTK floating surface, centered by Sway's
-   `move position center` command.
+3. The popup is an undecorated GTK floating surface, positioned below the source
+   title bar with `move absolute position` and clamped to the workspace's usable
+   area. It maps fully transparent and draws its contents only after placement,
+   preventing a visible flash at Sway's initial center position.
 4. In the temporary mode, a `--whole-window` binding reports the selection press
    through IPC, including when Super or Shift remains held. GTK supplies tile
    hit-testing; queued motion/leave events are processed before selecting.

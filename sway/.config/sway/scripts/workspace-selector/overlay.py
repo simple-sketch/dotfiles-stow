@@ -116,6 +116,10 @@ class Dialog:
         ctx.set_operator(cairo.OPERATOR_SOURCE)
         ctx.set_source_rgba(0, 0, 0, 0)
         ctx.paint()
+        # Map a transparent surface so Sway can place it before the first visible
+        # frame. Drawing immediately would flash at Sway's initial center position.
+        if not self.ready:
+            return True
         ctx.set_operator(cairo.OPERATOR_OVER)
         rounded(ctx, 1, 1, WIDTH - 2, HEIGHT - 2, 14)
         color(ctx, "#1b1e28")

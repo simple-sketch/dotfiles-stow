@@ -14,7 +14,7 @@ import sys
 
 from core import (APP_ID, BEGIN, BINDING, CANCEL, Decoder, HEIGHT, IPC, MODE, MODE_EVENT,
                   OUTPUT, SELECT, SHUTDOWN, STOP, TICK, WIDTH, WINDOW, WORKSPACE,
-                  counts, find_target, is_window, move_command, walk)
+                  counts, find_target, is_window, move_command, popup_position, walk)
 
 LOG = logging.getLogger("workspace-selector")
 
@@ -143,11 +143,12 @@ class Picker:
 
     def place_dialog(self, node_id):
         self.helper_id = node_id
+        x, y = popup_position(self.target)
         prefix = f"[con_id={node_id}]"
         workspace = json.dumps(self.target.workspace, ensure_ascii=False)
         self.ipc.command(
             f"{prefix} floating enable, border none, resize set {WIDTH} px {HEIGHT} px, "
-            f"move container to workspace {workspace}; {prefix} move position center")
+            f"move container to workspace {workspace}; {prefix} move absolute position {x} px {y} px")
         self.GLib.idle_add(self.dialog_positioned, node_id)
 
     def dialog_positioned(self, node_id):

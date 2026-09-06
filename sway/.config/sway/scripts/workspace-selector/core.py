@@ -135,6 +135,18 @@ def hit_test(x, y):
     return None
 
 
+def popup_position(target):
+    """Below the source title bar, clamped to the source workspace's usable area."""
+    area, rect = target.area, target.rect
+    x = rect["x"] + (rect["width"] - WIDTH) // 2
+    y = rect["y"] + 24
+    if y + HEIGHT + 12 > area["y"] + area["height"]:
+        y = rect["y"] - HEIGHT - 40
+    max_x = max(area["x"], area["x"] + area["width"] - WIDTH)
+    max_y = max(area["y"], area["y"] + area["height"] - HEIGHT)
+    return max(area["x"], min(x, max_x)), max(area["y"], min(y, max_y))
+
+
 def move_command(node_id, number):
     # Never interpolate a window title or an unvalidated workspace label into IPC.
     if type(node_id) is not int or node_id <= 0 or type(number) is not int or number not in range(1, 10):

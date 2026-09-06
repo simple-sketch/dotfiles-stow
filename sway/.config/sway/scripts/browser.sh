@@ -4,7 +4,7 @@
 #
 #   focused window is the app  -> open a second window
 #   app has a window elsewhere -> focus it (sway follows to that workspace)
-#   app has no window at all   -> launch it
+#   app has no window at all   -> launch it on workspace 1
 #
 # Usage: browser.sh <command> [args...]
 #
@@ -33,8 +33,7 @@
 #   "com.brave.Browser". app_id covers Wayland windows, class covers XWayland
 #   ones -- criteria have no OR, so each is a separate probe.
 #
-#   Two browsers need a hand-written pattern in BROWSER_ID, and the for_window
-#   rules in the sway config need the same widening:
+#   Two browsers need a hand-written pattern in BROWSER_ID:
 #     - one whose app_id does not contain the command name: google-chrome-stable
 #       opens windows called "google-chrome", so BROWSER_ID='(?i)google-chrome'
 #     - one short enough to collide: "zen" also matches a stray zenity dialog,
@@ -70,7 +69,7 @@ do
     swaymsg -q "[$criteria] focus" && exit 0
 done
 
-# Not running -> launch it. The for_window rules in the sway config put it on
-# workspace 1; doing that here instead would only cover windows this script
-# launched, and miss every browser window opened by anything else.
+# No windows -> launch on workspace 1. Keep this in the launcher so detached
+# tabs and additional browser windows can stay on their current workspace.
+swaymsg -q 'workspace number 1' || die 'cannot switch to workspace 1'
 exec "$@"

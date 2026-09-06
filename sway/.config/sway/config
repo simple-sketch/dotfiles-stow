@@ -63,10 +63,8 @@ set $menu noctalia msg panel-toggle launcher
 # Browser; keep in sync with BROWSER in ~/.bash_profile.
 set $browser firefox
 
-# Send browser windows to workspace 1 (Wayland app_id and XWayland class).
-# Matching is case-insensitive and unanchored. For unusual IDs, update these
-# patterns and browser.sh's BROWSER_ID. Inspect: swaymsg -t get_tree | grep app_id
-for_window [app_id="(?i)$browser"] move container to workspace number 1, workspace number 1
+# Leave new browser windows on the current workspace, including detached tabs.
+# browser.sh selects workspace 1 only when launching a browser with no windows.
 
 # Floating Kitty terminal; the distinct app ID keeps regular Kitty windows tiled.
 set $floating_term kitty --single-instance --instance-group=sway-shortcuts --class kitty-floating

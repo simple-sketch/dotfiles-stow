@@ -59,7 +59,6 @@ if filereadable(plug_path)
   Plug 'tpope/vim-repeat'
   Plug 'tpope/vim-surround'
   Plug 'wellle/targets.vim'
-  Plug 'justinmk/vim-sneak'
   # Requires the system fzf package's Vim runtime as well as its executable.
   Plug 'junegunn/fzf.vim'
   Plug 'airblade/vim-gitgutter'

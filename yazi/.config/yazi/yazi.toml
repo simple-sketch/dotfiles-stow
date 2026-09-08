@@ -11,9 +11,14 @@ edit = [
 swayimg = [
     { run = "swayimg %s1", orphan = true, desc = "Swayimg", for = "linux" }
 ]
+appimage = [
+    { run = 'chmod u+x -- %s1 && %s1', orphan = true, desc = "Run AppImage", for = "linux" }
+]
 
 [open]
 prepend_rules = [
+    # URL matching is case-insensitive, covering .AppImage and .appimage.
+    { url = "*.AppImage", use = "appimage" },
     # Add Swayimg to the interactive opener list for directories. Passing the
     # directory path makes Swayimg load every supported image inside it.
     { url = "*/", use = [ "edit", "swayimg", "open", "reveal" ] },

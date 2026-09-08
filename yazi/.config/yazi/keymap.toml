@@ -1,5 +1,7 @@
 [mgr]
 prepend_keymap = [
+	{ on = "A", run = "create --dir", desc = "Create a directory" },
+
 	# Vim-like directory history. If <C-i> conflicts with <Tab> because CSI-u
 	# is unsupported, use Yazi's built-in keys: H = previous and L = next.
 	{ on = "<C-o>", run = "back",    desc = "Previous directory" },

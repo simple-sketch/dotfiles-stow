@@ -89,6 +89,11 @@ else
   Error('vim-plug is unavailable; check curl/network access and restart Vim')
 endif
 
+# Use bat's normal preview with the Dracula theme.
+# Clear the custom preview command when reloading this file, too.
+$FZF_PREVIEW_COMMAND = ''
+$BAT_THEME = 'Dracula'
+
 # vim-plug configures filetypes itself; load the remaining Vim defaults after
 # it so that filetype detection is not needlessly rebuilt during startup.
 source $VIMRUNTIME/defaults.vim

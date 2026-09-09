@@ -21,8 +21,8 @@ seat * xcursor_theme Bibata-Modern-Ice 24
 # ↑ Above: non-Noctalia configuration
 # ↓ Below: Noctalia-specific configuration
 
-# Export session variables before Noctalia so D-Bus services inherit them.
-exec "dbus-update-activation-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP XDG_SESSION_TYPE XDG_SESSION_DESKTOP QT_QPA_PLATFORM; exec noctalia"
+# Export session variables and initialize the keyring unlocked by PAM before Noctalia.
+exec "dbus-update-activation-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP XDG_SESSION_TYPE XDG_SESSION_DESKTOP QT_QPA_PLATFORM; gnome-keyring-daemon --start --components=secrets; exec noctalia"
 
 
 # Start PipeWire after removing stale sessions that can break Bluetooth audio.

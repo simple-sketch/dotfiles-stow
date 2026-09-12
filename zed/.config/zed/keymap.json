@@ -1,0 +1,106 @@
+[
+  {
+    // Remove built-in Space bindings before defining leader sequences.
+    // Keep this separate and earlier so it does not disable our sequences.
+    "context": "((Editor && mode == full && (vim_mode == normal || vim_mode == visual)) || EmptyPane || (ProjectPanel && not_editing)) && !menu",
+    "bindings": {
+      "space": null
+    }
+  },
+  {
+    "context": "Editor && mode == full && (vim_mode == normal || vim_mode == visual) && !menu",
+    "bindings": {
+      // Find: retain the existing Vim package's ff / fg / fb vocabulary.
+      "space f f": "file_finder::Toggle",
+      "space f g": "pane::DeploySearch",
+      "space f b": "tab_switcher::ToggleAll",
+      "space f s": "outline::Toggle",
+      "space f shift-s": "project_symbols::Toggle",
+      "space f p": "projects::OpenRecent",
+      "space e": "project_panel::ToggleFocus",
+      "space r": "buffer_search::DeployReplace",
+
+      // Code, Git, and tasks. LSP rename is separate from text replacement.
+      "space c a": "editor::ToggleCodeActions",
+      "space c r": "editor::Rename",
+      "space c f": "editor::Format",
+      "space x x": "diagnostics::Deploy",
+      "space g g": "git_panel::ToggleFocus",
+      "space g d": "editor::ToggleSelectedDiffHunks",
+      "space t t": "terminal_panel::Toggle",
+      "space t r": "task::Spawn",
+      "space t shift-r": "task::Rerun",
+
+      // Save and windows. Closing a modified file uses Zed's normal prompt.
+      "space w w": "workspace::Save",
+      "space w shift-w": "workspace::SaveAll",
+      "space w v": "pane::SplitRight",
+      "space w s": "pane::SplitDown",
+      "space w q": "pane::CloseActiveItem",
+      "space u i": "editor::ToggleInlayHints",
+      "space u w": "editor::ToggleSoftWrap",
+      "space u z": "workspace::ToggleZoom",
+      "space ,": "zed::OpenSettingsFile",
+      "space ?": "zed::OpenKeymap",
+
+      // Small Helix-inspired additions; use Vim-aware syntax selections.
+      "space /": "pane::DeploySearch",
+      "space b": "tab_switcher::ToggleAll",
+      "space a": "editor::ToggleCodeActions",
+      "space k": "editor::Hover",
+      "space .": "vim::HelixJumpToWord",
+      "alt-o": "vim::SelectLargerSyntaxNode",
+      "alt-i": "vim::SelectSmallerSyntaxNode"
+    }
+  },
+  {
+    // Restrict split navigation to Normal mode; Insert keeps Ctrl-H/J/K/L.
+    "context": "Editor && mode == full && vim_mode == normal && !menu",
+    "bindings": {
+      "ctrl-h": "workspace::ActivatePaneLeft",
+      "ctrl-j": "workspace::ActivatePaneDown",
+      "ctrl-k": "workspace::ActivatePaneUp",
+      "ctrl-l": "workspace::ActivatePaneRight",
+      // Helix uses [g / ]g for changes. Vim's [c / ]c also remain available.
+      "[ g": "editor::GoToPreviousHunk",
+      "] g": "editor::GoToHunk"
+    }
+  },
+  {
+    // Extra motions also work after operators: c Alt-E changes a subword.
+    "context": "Editor && mode == full && VimControl && !menu",
+    "bindings": {
+      "alt-w": "vim::NextSubwordStart",
+      "alt-b": "vim::PreviousSubwordStart",
+      "alt-e": "vim::NextSubwordEnd"
+    }
+  },
+  {
+    "context": "Editor && mode == full && vim_mode == visual && !menu",
+    "bindings": {
+      "shift-s": "vim::PushAddSurrounds",
+      // Helix-style previous/next syntax sibling and one selection per line.
+      "alt-p": "editor::SelectPreviousSyntaxNode",
+      "alt-n": "editor::SelectNextSyntaxNode",
+      "alt-s": ["editor::SplitSelectionIntoLines", { "keep_selections": true }]
+    }
+  },
+  {
+    // Make the essential pickers reachable after closing the last file.
+    // not_editing keeps these out of project-panel rename/new-file inputs.
+    "context": "EmptyPane || (ProjectPanel && not_editing)",
+    "bindings": {
+      "space f f": "file_finder::Toggle",
+      "space f g": "pane::DeploySearch",
+      "space f b": "tab_switcher::ToggleAll",
+      "space f p": "projects::OpenRecent",
+      "space /": "pane::DeploySearch",
+      "space b": "tab_switcher::ToggleAll",
+      "space e": "project_panel::ToggleFocus",
+      "ctrl-h": "workspace::ActivatePaneLeft",
+      "ctrl-j": "workspace::ActivatePaneDown",
+      "ctrl-k": "workspace::ActivatePaneUp",
+      "ctrl-l": "workspace::ActivatePaneRight"
+    }
+  }
+]

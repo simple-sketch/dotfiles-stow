@@ -1,0 +1,2 @@
+# Documentation belongs in the repository, not in the home directory.
+^/README\.md$

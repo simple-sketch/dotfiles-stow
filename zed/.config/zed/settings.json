@@ -1,0 +1,49 @@
+{
+  // Vim editing, with a small Space-leader keymap in keymap.json.
+  "vim_mode": true,
+  "helix_mode": false,
+  "base_keymap": "Zed",
+  "vim": {
+    "default_mode": "normal",
+    "toggle_relative_line_numbers": true,
+    "use_system_clipboard": "always",
+    "highlight_on_yank_duration": 200
+  },
+  "which_key": {
+    "enabled": true,
+    "delay_ms": 500
+  },
+
+  // Match the quiet editing style of the Vim/Neovim packages.
+  // Use Space c f to format explicitly; projects can override these defaults.
+  "format_on_save": "off",
+  "autosave": "off",
+  "use_smartcase_search": true,
+  "cursor_blink": false,
+  "reduce_motion": "on",
+  "vertical_scroll_margin": 5,
+  "scroll_beyond_last_line": "off",
+
+  // Built-in theme and fonts: no appearance extensions required.
+  "theme": "One Dark",
+  "show_whitespaces": "selection",
+  "soft_wrap": "none",
+  "minimap": { "show": "never" },
+  "toolbar": {
+    "breadcrumbs": true,
+    "quick_actions": false,
+    "selections_menu": false
+  },
+  "inlay_hints": { "enabled": false },
+  "diagnostics": { "inline": { "enabled": false } },
+  "git": { "inline_blame": { "enabled": false } },
+
+  // Wrap prose visually without rewriting paragraphs or Markdown hard breaks.
+  "languages": {
+    "Markdown": {
+      "soft_wrap": "editor_width",
+      "remove_trailing_whitespace_on_save": false
+    },
+    "Plain Text": { "soft_wrap": "editor_width" }
+  }
+}

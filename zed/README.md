@@ -49,10 +49,14 @@ Insert mode, search fields, menus, and terminal input retain their usual binding
 | `Space f f` | Find file |
 | `Space f g` or `Space /` | Search project |
 | `Space f b` or `Space b` | Pick an open buffer across panes |
+| `Space f l` | Search in the current buffer |
+| `Space f o` | Open Git file history |
+| `Space f j` / `Space f c` | Navigate backward / forward in navigation history |
 | `Space f s` / `Space f S` | Find symbol in file / project |
 | `Space f p` | Open recent project |
 | `Space e` | Toggle project panel focus |
 | `Space r` | Open text replacement, seeded from cursor/selection |
+| `n` / `Shift-n` | Next / previous search match in Vim Normal mode |
 | `Space c r` | Rename symbol through the language server |
 | `Space c a` or `Space a` | Code actions |
 | `Space c f` | Format |
@@ -64,6 +68,8 @@ Insert mode, search fields, menus, and terminal input retain their usual binding
 | `Space t t` | Toggle terminal panel |
 | `Space t r` / `Space t R` | Pick task / rerun last task |
 | `Space w w` / `Space w W` | Save file / all files |
+| `Ctrl-s` | Save the current file from any editor mode |
+| `Space h p` / `Space d p` | Open file diff / restore selected Git hunks |
 | `Space w v` / `Space w s` | Split right / below |
 | `Ctrl-h/j/k/l` | Focus pane left / down / up / right |
 | `Space w q` | Close active tab, with normal save prompts |
@@ -86,6 +92,7 @@ install a language extension from Zed when the language is not bundled.
 | `Alt-s` in Visual mode | Split selection into a selection per line |
 | `Alt-w` / `Alt-b` / `Alt-e` | Next subword start / previous start / next end |
 | `S` in Visual mode, then a delimiter | Surround selection |
+| `Shift-X` in Visual mode | Exchange the selected block with another selection |
 
 For example, put the cursor inside a function argument and press `Alt-o` repeatedly
 to select progressively larger syntax nodes; press `Alt-i` to shrink again. Then

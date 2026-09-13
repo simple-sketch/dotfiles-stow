@@ -14,6 +14,10 @@
       "space f f": "file_finder::Toggle",
       "space f g": "pane::DeploySearch",
       "space f b": "tab_switcher::ToggleAll",
+      "space f l": "buffer_search::Deploy",
+      "space f o": "git::FileHistory",
+      "space f j": "pane::GoBack",
+      "space f c": "pane::GoForward",
       "space f s": "outline::Toggle",
       "space f shift-s": "project_symbols::Toggle",
       "space f p": "projects::OpenRecent",
@@ -54,6 +58,13 @@
     }
   },
   {
+    // Keep the usual save muscle memory available in every editor mode.
+    "context": "Editor && !menu",
+    "bindings": {
+      "ctrl-s": "workspace::Save"
+    }
+  },
+  {
     // Restrict split navigation to Normal mode; Insert keeps Ctrl-H/J/K/L.
     "context": "Editor && mode == full && vim_mode == normal && !menu",
     "bindings": {
@@ -76,9 +87,18 @@
     }
   },
   {
+    // Diff actions for the file/hunk under the cursor.
+    "context": "Editor && mode == full && vim_mode == normal && !menu",
+    "bindings": {
+      "space h p": "git::OpenFileDiff",
+      "space d p": "git::Restore"
+    }
+  },
+  {
     "context": "Editor && mode == full && vim_mode == visual && !menu",
     "bindings": {
       "shift-s": "vim::PushAddSurrounds",
+      "shift-x": "vim::Exchange",
       // Helix-style previous/next syntax sibling and one selection per line.
       "alt-p": "editor::SelectPreviousSyntaxNode",
       "alt-n": "editor::SelectNextSyntaxNode",

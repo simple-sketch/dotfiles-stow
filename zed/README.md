@@ -78,6 +78,25 @@ Insert mode, search fields, menus, and terminal input retain their usual binding
 | `Space u z` | Toggle focused pane zoom |
 | `Space ,` / `Space ?` | Open settings file / keymap editor |
 
+### Yazi-style project panel
+
+When the Project Panel has focus, its file operations use familiar Yazi keys:
+
+| Keys | Action |
+| --- | --- |
+| `j` / `k` | Move down / up |
+| `h` / `l` | Collapse / expand directory |
+| `Enter` / `o` | Open permanently / preview |
+| `y` / `x` / `p` | Copy / cut / paste |
+| `d` / `D` | Move to trash / permanently delete |
+| `a` / `A` | Create file / directory |
+| `r` / `.` | Rename / toggle hidden files |
+| `Backspace` / `q` | Select parent / leave panel focus |
+
+`A` is written as `Shift-A` in Zed's keymap syntax. Mark multiple entries with
+`Shift-Up` / `Shift-Down`, which is the Project Panel's native equivalent of
+Yazi's selection mode.
+
 Task commands use tasks supplied by the project or language support. Language
 server actions require the appropriate language support and a running server;
 install a language extension from Zed when the language is not bundled.

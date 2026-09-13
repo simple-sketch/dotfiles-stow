@@ -5,6 +5,9 @@
     "git_status_indicator": true,
   },
   "agent_servers": {
+    "pi-acp": {
+      "type": "registry"
+    },
     "codex-acp": {
       "type": "registry",
     },

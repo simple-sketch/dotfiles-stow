@@ -28,7 +28,7 @@
   // A heavier programming font with Nerd Font symbols.
   "buffer_font_family": "JetBrainsMono Nerd Font",
   "buffer_font_size": 17,
-  "buffer_font_weight": 600,
+  "buffer_font_weight": 550,
   "buffer_line_height": { "custom": 1.35 },
   "ui_font_size": 16,
   "ui_font_weight": 500,

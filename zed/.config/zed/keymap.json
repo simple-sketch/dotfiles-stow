@@ -1,5 +1,13 @@
 [
   {
+    // Return to the active center pane from panels or any Vim mode.
+    // Ctrl-1 already has built-in actions in several panels and views.
+    "context": "Workspace",
+    "bindings": {
+      "ctrl-alt-1": "workspace::FocusCenterPane"
+    }
+  },
+  {
     // Remove built-in Space bindings before defining leader sequences.
     // Keep this separate and earlier so it does not disable our sequences.
     "context": "((Editor && mode == full && (vim_mode == normal || vim_mode == visual)) || EmptyPane || (ProjectPanel && not_editing)) && !menu",

@@ -57,6 +57,10 @@ diff and hunk restore, which are Normal-mode only. Split navigation
 with Ctrl-H/J/K/L works in Normal mode, the project panel, and empty panes.
 Insert mode, search fields, menus, and terminal input retain their usual bindings.
 
+`Ctrl-Alt-1` returns focus to the active center pane from panels, including the
+terminal, and is available in every Vim mode. It avoids `Ctrl-1`, which Zed uses
+in the Git panel, settings, welcome screen, and image viewer.
+
 | Keys | Action |
 | --- | --- |
 | `Space f f` | Find file |
@@ -86,6 +90,7 @@ Insert mode, search fields, menus, and terminal input retain their usual binding
 | `Ctrl-s` | Save the current file from any editor mode |
 | `Space w v` / `Space w s` | Split right / below |
 | `Ctrl-h/j/k/l` | Focus pane left / down / up / right |
+| `Ctrl-Alt-1` | Focus the active center pane (all Vim modes and panels) |
 | `Space w q` | Close active tab, with normal save prompts |
 | `Space u i` | Toggle inlay hints |
 | `Space u w` | Toggle line wrapping |

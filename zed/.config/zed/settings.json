@@ -1,6 +1,8 @@
 {
   "project_panel": {
     "hide_hidden": false,
+    "git_status": true,
+    "git_status_indicator": true,
   },
   "agent_servers": {
     "codex-acp": {
@@ -74,6 +76,7 @@
   "soft_wrap": "bounded",
   "preferred_line_length": 100,
   "minimap": { "show": "never" },
+  "tabs": { "git_status": true },
   "toolbar": {
     "breadcrumbs": true,
     "quick_actions": false,

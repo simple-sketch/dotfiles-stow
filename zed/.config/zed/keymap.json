@@ -20,7 +20,7 @@
       "space f s": "outline::Toggle",
       "space f shift-s": "project_symbols::Toggle",
       "space f p": "projects::OpenRecent",
-      "space e": "project_panel::ToggleFocus",
+      "space e": "project_panel::Toggle",
       "space r": "buffer_search::DeployReplace",
 
       // Code. LSP rename is separate from text replacement.
@@ -120,7 +120,7 @@
       "space f p": "projects::OpenRecent",
       "space /": "pane::DeploySearch",
       "space b": "tab_switcher::ToggleAll",
-      "space e": "project_panel::ToggleFocus",
+      "space e": "project_panel::Toggle",
       "ctrl-h": "workspace::ActivatePaneLeft",
       "ctrl-j": "workspace::ActivatePaneDown",
       "ctrl-k": "workspace::ActivatePaneUp",

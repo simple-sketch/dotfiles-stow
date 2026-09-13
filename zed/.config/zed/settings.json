@@ -1,5 +1,8 @@
 {
   // Vim editing, with a small Space-leader keymap in keymap.json.
+  "agent": {
+    "commit_message_instructions": "Use Conventional Commits format: <type>(<scope>): <description>. Keep the subject imperative, concise, and under 72 characters. Add a short body only when it provides useful context. Return only the commit message, with no quotes or Markdown."
+  },
   "cli_default_open_behavior": "existing_window",
   "vim_mode": true,
   "helix_mode": false,

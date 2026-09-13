@@ -122,5 +122,43 @@
       "ctrl-k": "workspace::ActivatePaneUp",
       "ctrl-l": "workspace::ActivatePaneRight"
     }
+  },
+  {
+    // Yazi-style navigation and file operations in the project panel.
+    // Zed's native marked-entry behavior remains on shift-up/shift-down.
+    "context": "ProjectPanel && not_editing",
+    "bindings": {
+      "q": "project_panel::ToggleFocus",
+      "h": "project_panel::CollapseSelectedEntry",
+      "j": "menu::SelectNext",
+      "k": "menu::SelectPrevious",
+      "l": "project_panel::ExpandSelectedEntry",
+      "g g": "menu::SelectFirst",
+      "shift-g": "menu::SelectLast",
+      "backspace": "project_panel::SelectParent",
+
+      "enter": "project_panel::OpenPermanent",
+      "shift-enter": "workspace::OpenWithSystem",
+      "o": "project_panel::Open",
+      "shift-o": "workspace::OpenWithSystem",
+
+      "y": "project_panel::Copy",
+      "x": "project_panel::Cut",
+      "p": "project_panel::Paste",
+      "d": ["project_panel::Trash", { "skip_prompt": false }],
+      "shift-d": ["project_panel::Delete", { "skip_prompt": false }],
+      "a": "project_panel::NewFile",
+      "shift-a": "project_panel::NewDirectory",
+      "r": "project_panel::Rename",
+      ".": "project_panel::ToggleHideHidden",
+
+      "/": "project_panel::NewSearchInDirectory",
+      "c c": "workspace::CopyPath",
+      "c r": "workspace::CopyRelativePath",
+      "u": "project_panel::Undo",
+      "ctrl-r": "project_panel::Redo",
+      "ctrl-u": "project_panel::ScrollUp",
+      "ctrl-d": "project_panel::ScrollDown"
+    }
   }
 ]

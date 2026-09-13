@@ -40,7 +40,8 @@ stow --delete --target="$HOME" zed
 ## Custom shortcuts
 
 Keys separated by spaces are pressed in sequence. Uppercase letters mean Shift.
-Leader shortcuts work in Normal and Visual mode in full editors. Split navigation
+Leader shortcuts work in Normal and Visual mode in full editors, except Git file
+diff and hunk restore, which are Normal-mode only. Split navigation
 with Ctrl-H/J/K/L works in Normal mode, the project panel, and empty panes.
 Insert mode, search fields, menus, and terminal input retain their usual bindings.
 
@@ -50,7 +51,6 @@ Insert mode, search fields, menus, and terminal input retain their usual binding
 | `Space f g` or `Space /` | Search project |
 | `Space f b` or `Space b` | Pick an open buffer across panes |
 | `Space f l` | Search in the current buffer |
-| `Space f o` | Open Git file history |
 | `Space f j` / `Space f c` | Navigate backward / forward in navigation history |
 | `Space f s` / `Space f S` | Find symbol in file / project |
 | `Space f p` | Open recent project |
@@ -63,13 +63,15 @@ Insert mode, search fields, menus, and terminal input retain their usual binding
 | `Space k` | Hover documentation |
 | `Space x x` | Project diagnostics |
 | `Space g g` | Toggle Git panel focus |
+| `Space g f` | Open file diff (Normal mode) |
 | `Space g d` | Expand/collapse selected Git hunks |
-| `[g` / `]g` | Previous / next Git change (Helix aliases) |
+| `Space g r` | Restore selected Git hunks (Normal mode; discards changes) |
+| `Space g h` | Open Git file history |
+| `[ g` / `] g` | Previous / next Git change (Helix aliases) |
 | `Space t t` | Toggle terminal panel |
 | `Space t r` / `Space t R` | Pick task / rerun last task |
 | `Space w w` / `Space w W` | Save file / all files |
 | `Ctrl-s` | Save the current file from any editor mode |
-| `Space h p` / `Space d p` | Open file diff / restore selected Git hunks |
 | `Space w v` / `Space w s` | Split right / below |
 | `Ctrl-h/j/k/l` | Focus pane left / down / up / right |
 | `Space w q` | Close active tab, with normal save prompts |

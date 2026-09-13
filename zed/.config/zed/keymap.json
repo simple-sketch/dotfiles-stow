@@ -15,7 +15,6 @@
       "space f g": "pane::DeploySearch",
       "space f b": "tab_switcher::Toggle",
       "space f l": "buffer_search::Deploy",
-      "space f o": "git::FileHistory",
       "space f j": "pane::GoBack",
       "space f c": "pane::GoForward",
       "space f s": "outline::Toggle",
@@ -24,13 +23,18 @@
       "space e": "project_panel::ToggleFocus",
       "space r": "buffer_search::DeployReplace",
 
-      // Code, Git, and tasks. LSP rename is separate from text replacement.
+      // Code. LSP rename is separate from text replacement.
       "space c a": "editor::ToggleCodeActions",
       "space c r": "editor::Rename",
       "space c f": "editor::Format",
       "space x x": "diagnostics::Deploy",
+
+      // Git: panel, diff hunks, and file history.
       "space g g": "git_panel::ToggleFocus",
       "space g d": "editor::ToggleSelectedDiffHunks",
+      "space g h": "git::FileHistory",
+
+      // Terminal and tasks.
       "space t t": "terminal_panel::Toggle",
       "space t r": "task::Spawn",
       "space t shift-r": "task::Rerun",
@@ -87,11 +91,11 @@
     }
   },
   {
-    // Diff actions for the file/hunk under the cursor.
+    // Git file diff and hunk restore retain their Normal-mode scope.
     "context": "Editor && mode == full && vim_mode == normal && !menu",
     "bindings": {
-      "space h p": "git::OpenFileDiff",
-      "space d p": "git::Restore"
+      "space g f": "git::OpenFileDiff",
+      "space g r": "git::Restore"
     }
   },
   {

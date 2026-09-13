@@ -1,15 +1,15 @@
 {
   "project_panel": {
-    "hide_hidden": false
+    "hide_hidden": false,
   },
   "agent_servers": {
     "codex-acp": {
-      "type": "registry"
-    }
+      "type": "registry",
+    },
   },
   // Vim editing, with a small Space-leader keymap in keymap.json.
   "agent": {
-    "commit_message_instructions": "Use Conventional Commits format: <type>(<scope>): <description>. Keep the subject imperative, concise, and under 72 characters. Add a short body only when it provides useful context. Return only the commit message, with no quotes or Markdown."
+    "commit_message_instructions": "Use Conventional Commits format: <type>(<scope>): <description>. Keep the subject imperative, concise, and under 72 characters. Add a short body only when it provides useful context. Return only the commit message, with no quotes or Markdown.",
   },
   "cli_default_open_behavior": "existing_window",
   "vim_mode": true,
@@ -19,11 +19,11 @@
     "default_mode": "normal",
     "toggle_relative_line_numbers": true,
     "use_system_clipboard": "always",
-    "highlight_on_yank_duration": 200
+    "highlight_on_yank_duration": 200,
   },
   "which_key": {
     "enabled": true,
-    "delay_ms": 500
+    "delay_ms": 500,
   },
 
   // Wide picker defaults; preview layouts and resized widths are saved by Zed.
@@ -50,13 +50,13 @@
   "terminal": {
     "font_family": "JetBrainsMono Nerd Font Mono",
     "font_weight": 600,
-    "blinking": "off"
+    "blinking": "off",
   },
 
   // Keep the local cursor white across themes.
   "experimental.theme_overrides": {
     "players": [{ "cursor": "#FFFFFF" }],
-    "vim.helix_jump_label.foreground": "#FFD75F"
+    "vim.helix_jump_label.foreground": "#FFD75F",
   },
 
   // Built-in theme: no appearance extensions required.
@@ -68,7 +68,7 @@
     "line_width": 1,
     "active_line_width": 2,
     "coloring": "fixed",
-    "background_coloring": "disabled"
+    "background_coloring": "disabled",
   },
   "show_whitespaces": "selection",
   "soft_wrap": "none",
@@ -76,7 +76,7 @@
   "toolbar": {
     "breadcrumbs": true,
     "quick_actions": false,
-    "selections_menu": false
+    "selections_menu": false,
   },
   "inlay_hints": { "enabled": false },
   "diagnostics": { "inline": { "enabled": false } },
@@ -92,10 +92,5 @@
     "TSX": { "tab_size": 2 },
     // Wrap prose visually without rewriting paragraphs or Markdown hard breaks.
     "JSON": { "soft_wrap": "editor_width" },
-    "Markdown": {
-      "soft_wrap": "editor_width",
-      "remove_trailing_whitespace_on_save": false
-    },
-    "Plain Text": { "soft_wrap": "editor_width" }
-  }
+  },
 }

@@ -15,6 +15,10 @@
     "delay_ms": 500
   },
 
+  // Wide picker defaults; preview layouts and resized widths are saved by Zed.
+  "file_finder": { "modal_max_width": "xlarge" },
+  "call_hierarchy": { "modal_max_width": "xlarge" },
+
   // Match the quiet editing style of the Vim/Neovim packages.
   // Use Space c f to format explicitly; projects can override these defaults.
   "format_on_save": "off",

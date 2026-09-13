@@ -63,7 +63,7 @@
 
   // Built-in theme: no appearance extensions required.
   "theme": "One Dark",
-  "colorize_brackets": true,
+  "colorize_brackets": false,
   "current_line_highlight": "all",
   "indent_guides": {
     "enabled": true,

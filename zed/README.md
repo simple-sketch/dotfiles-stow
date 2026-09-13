@@ -28,14 +28,26 @@ stow --delete --target="$HOME" zed
   numbers in Insert mode. Yanks use the system clipboard and briefly highlight.
 - Space is the leader. Pause for 500 ms to see the available key continuations.
 - Smart-case search: lowercase queries ignore case; uppercase makes it exact.
-- Manual save and formatting, matching this repository's Neovim preference.
-  Use `Space c f` to format. Project settings can override user defaults.
+- Manual save and formatting. Use `:w`, `Ctrl-s`, or `Space w w` to save, and
+  `Space c f` to format on demand. Formatting on save is disabled; project
+  settings can override user defaults.
+- Automatic indentation, indentation on paste, LSP formatting on supported
+  trigger characters, and whitespace cleanup use Zed's built-in defaults.
+  Java and Python inherit four-space indentation; JS/TS/TSX override it to two.
+- Java keeps JDTLS formatting. It requires the Java extension and a working JDK;
+  see [Zed's Java documentation](https://zed.dev/docs/languages/java).
+- JavaScript, TypeScript, and TSX use Zed's default Prettier integration and honor
+  project Prettier settings. JSX is covered by JavaScript settings; see
+  [Zed's JavaScript documentation](https://zed.dev/docs/languages/javascript) and
+  [TypeScript documentation](https://zed.dev/docs/languages/typescript).
+- Python uses Zed's default Ruff formatter; see
+  [Zed's Python documentation](https://zed.dev/docs/languages/python).
 - Built-in One Dark theme, steady cursor, reduced UI motion, no minimap or inline
   blame, and inlay hints off until requested. Inline diagnostic text is hidden;
   diagnostic navigation and the diagnostics view are still available.
 - Code stays unwrapped; Markdown and plain text wrap at the editor width.
   Markdown trailing spaces are preserved because they can mean hard line breaks.
-  Indentation and language tools use Zed/project defaults and `.editorconfig`.
+  Other indentation and language tools use Zed/project defaults and `.editorconfig`.
 
 ## Custom shortcuts
 

@@ -13,7 +13,7 @@
       // Find: retain the existing Vim package's ff / fg / fb vocabulary.
       "space f f": "file_finder::Toggle",
       "space f g": "pane::DeploySearch",
-      "space f b": "tab_switcher::ToggleAll",
+      "space f b": "tab_switcher::Toggle",
       "space f l": "buffer_search::Deploy",
       "space f o": "git::FileHistory",
       "space f j": "pane::GoBack",
@@ -112,7 +112,7 @@
     "bindings": {
       "space f f": "file_finder::Toggle",
       "space f g": "pane::DeploySearch",
-      "space f b": "tab_switcher::ToggleAll",
+      "space f b": "tab_switcher::Toggle",
       "space f p": "projects::OpenRecent",
       "space /": "pane::DeploySearch",
       "space b": "tab_switcher::ToggleAll",

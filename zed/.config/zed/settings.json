@@ -1,4 +1,9 @@
 {
+  "agent_servers": {
+    "codex-acp": {
+      "type": "registry"
+    }
+  },
   // Vim editing, with a small Space-leader keymap in keymap.json.
   "agent": {
     "commit_message_instructions": "Use Conventional Commits format: <type>(<scope>): <description>. Keep the subject imperative, concise, and under 72 characters. Add a short body only when it provides useful context. Return only the commit message, with no quotes or Markdown."
@@ -75,6 +80,7 @@
 
   // Wrap prose visually without rewriting paragraphs or Markdown hard breaks.
   "languages": {
+    "JSON": { "soft_wrap": "editor_width" },
     "Markdown": {
       "soft_wrap": "editor_width",
       "remove_trailing_whitespace_on_save": false

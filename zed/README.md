@@ -26,6 +26,8 @@ stow --delete --target="$HOME" zed
 
 - Vim Normal mode on startup; relative line numbers in Normal mode and absolute
   numbers in Insert mode. Yanks use the system clipboard and briefly highlight.
+  Deletes and changes preserve the system clipboard; use `"+p` to paste from it
+  explicitly after a deletion.
 - Space is the leader. Pause for 500 ms to see the available key continuations.
 - Smart-case search: lowercase queries ignore case; uppercase makes it exact.
 - Manual save and formatting. Use `:w`, `Ctrl-s`, or `Space w w` to save, and

@@ -20,7 +20,7 @@
   "vim": {
     "default_mode": "normal",
     "toggle_relative_line_numbers": true,
-    "use_system_clipboard": "always",
+    "use_system_clipboard": "on_yank",
     "highlight_on_yank_duration": 200,
   },
   "which_key": {

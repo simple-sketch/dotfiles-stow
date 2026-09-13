@@ -25,3 +25,4 @@ image/x-targa=swayimg.desktop
 image/x-tga=swayimg.desktop
 inode/directory=yazi.desktop
 video/mp4=vlc.desktop;
+x-scheme-handler/jetbrains=jetbrainsd.desktop

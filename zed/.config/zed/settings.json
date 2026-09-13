@@ -71,7 +71,8 @@
     "background_coloring": "disabled",
   },
   "show_whitespaces": "selection",
-  "soft_wrap": "none",
+  "soft_wrap": "bounded",
+  "preferred_line_length": 80,
   "minimap": { "show": "never" },
   "toolbar": {
     "breadcrumbs": true,
@@ -90,7 +91,5 @@
     "JavaScript": { "tab_size": 2 },
     "TypeScript": { "tab_size": 2 },
     "TSX": { "tab_size": 2 },
-    // Wrap prose visually without rewriting paragraphs or Markdown hard breaks.
-    "JSON": { "soft_wrap": "editor_width" },
   },
 }

@@ -1,0 +1,12 @@
+[
+  {
+    "label": "Run Java file: $ZED_FILENAME",
+    "command": "java",
+    "args": ["$ZED_FILE"],
+    "cwd": "$ZED_DIRNAME",
+    "tags": ["java-main"],
+    "save": "current",
+    "use_new_terminal": false,
+    "reveal": "always"
+  }
+]

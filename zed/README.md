@@ -14,7 +14,7 @@ stow --simulate --verbose --target="$HOME" zed
 stow --target="$HOME" zed
 ```
 
-This links `settings.json` and `keymap.json` into `~/.config/zed/`. Stow reports a
+This links `settings.json`, `keymap.json`, and `tasks.json` into `~/.config/zed/`. Stow reports a
 conflict if an existing file would be replaced; move that file to a backup before
 retrying. Zed reloads these files automatically. To unlink the package:
 
@@ -99,9 +99,20 @@ When the Project Panel has focus, its file operations use familiar Yazi keys:
 `Shift-Up` / `Shift-Down`, which is the Project Panel's native equivalent of
 Yazi's selection mode.
 
-Task commands use tasks supplied by the project or language support. Language
-server actions require the appropriate language support and a running server;
-install a language extension from Zed when the language is not bundled.
+The Java run indicator uses `Run Java file: <filename>` from `tasks.json`. It saves
+the active file and runs `java <file>` from that file's directory. This is intended
+for standalone programs and avoids the Java extension's recursive compilation,
+which can include unrelated files and the `~/.java` directory. It is also available
+through `Space t r`. A JDK is required; use Java 25+ for `IO.println` and instance
+`void main()` without preview flags.
+
+For Maven or Gradle applications, define the appropriate build command in the
+project's `.zed/tasks.json` with the `java-main` tag; project tasks take precedence
+over this global standalone-file task. See [Zed's task documentation](https://zed.dev/docs/tasks#binding-runnable-tags-to-task-templates).
+
+Other task commands use tasks supplied by the project or language support.
+Language server actions require the appropriate language support and a running
+server; install a language extension from Zed when the language is not bundled.
 
 ## Helix-inspired selection and identifier editing
 

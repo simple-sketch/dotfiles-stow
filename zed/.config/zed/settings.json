@@ -1,4 +1,7 @@
 {
+  "project_panel": {
+    "hide_hidden": false
+  },
   "agent_servers": {
     "codex-acp": {
       "type": "registry"
@@ -39,10 +42,10 @@
 
   // A heavier programming font with Nerd Font symbols.
   "buffer_font_family": "JetBrainsMono Nerd Font",
-  "buffer_font_size": 17,
-  "buffer_font_weight": 550,
+  "buffer_font_size": 15,
+  "buffer_font_weight": 500,
   "buffer_line_height": { "custom": 1.35 },
-  "ui_font_size": 16,
+  "ui_font_size": 15,
   "ui_font_weight": 500,
   "terminal": {
     "font_family": "JetBrainsMono Nerd Font Mono",
@@ -58,6 +61,7 @@
 
   // Built-in theme: no appearance extensions required.
   "theme": "One Dark",
+  "colorize_brackets": true,
   "current_line_highlight": "all",
   "indent_guides": {
     "enabled": true,

@@ -38,7 +38,9 @@
   // Match the quiet editing style of the Vim/Neovim packages.
   // Use Space c f to format on demand; projects can override these defaults.
   "format_on_save": "off",
+  "use_on_type_format": false,
   "autosave": "off",
+  "show_edit_predictions": false,
   "use_smartcase_search": true,
   "cursor_blink": false,
   "reduce_motion": "on",

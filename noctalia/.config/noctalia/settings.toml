@@ -1,65 +1,26 @@
-config_version = 13
+config_version = 14
 
 [bar.default]
-center = [ "clock", "group:g1" ]
-end = [ "tray", "group:g3", "group:g4", "group:g5" ]
-start = [ "group:g2", "workspaces" ]
+center = [ "clock", "control-center", "theme_mode" ]
+end = [
+    "media",
+    "tray",
+    "notifications",
+    "screenshot",
+    "clipboard",
+    "network",
+    "bluetooth",
+    "volume",
+    "brightness",
+    "battery",
+    "session"
+]
 
-    [[bar.default.capsule_group]]
-    accordion = false
-    accordion_direction = "end"
-    enabled = true
-    fill = "surface_variant"
-    id = "g1"
-    members = [ "control-center", "theme_mode", "privacy" ]
-    opacity = 1.0
-    padding = 6.0
-
-    [[bar.default.capsule_group]]
-    accordion = false
-    accordion_direction = "end"
-    enabled = true
-    fill = "surface_variant"
-    id = "g2"
-    members = [ "launcher", "wallpaper" ]
-    opacity = 1.0
-    padding = 6.0
-
-    [[bar.default.capsule_group]]
-    accordion = false
-    accordion_direction = "end"
-    enabled = true
-    fill = "surface_variant"
-    id = "g3"
-    members = [ "notifications", "screenshot", "clipboard" ]
-    opacity = 1.0
-    padding = 6.0
-
-    [[bar.default.capsule_group]]
-    accordion = false
-    accordion_direction = "end"
-    enabled = true
-    fill = "surface_variant"
-    id = "g4"
-    members = [ "keyboard_layout", "bluetooth", "volume", "brightness" ]
-    opacity = 1.0
-    padding = 6.0
-
-    [[bar.default.capsule_group]]
-    accordion = false
-    accordion_direction = "end"
-    enabled = true
-    fill = "surface_variant"
-    id = "g5"
-    members = [ "battery", "network", "session" ]
-    opacity = 1.0
-    padding = 6.0
+[battery]
+warning_threshold = 15
 
 [brightness]
 enable_ddcutil = true
-
-[control_center]
-hidden_tabs = [ "weather" ]
 
 [idle]
 behavior_order = [ "lock", "screen-off", "lock-and-suspend" ]
@@ -67,22 +28,25 @@ behavior_order = [ "lock", "screen-off", "lock-and-suspend" ]
     [idle.behavior.lock]
     action = "lock"
     enabled = true
-    timeout = 600.0
+    timeout = 300.0
 
     [idle.behavior.lock-and-suspend]
     action = "lock_and_suspend"
     enabled = true
-    timeout = 900.0
+    timeout = 450.0
 
     [idle.behavior.screen-off]
     action = "screen_off"
     enabled = true
-    timeout = 660.0
+    timeout = 330.0
+
+[lockscreen]
+fingerprint = false
 
 [lockscreen_widgets]
 enabled = false
 schema_version = 2
-widget_order = [ "lockscreen-login-box@HDMI-A-1" ]
+widget_order = [ "lockscreen-login-box@HDMI-A-1", "lockscreen-login-box@eDP-1" ]
 
     [lockscreen_widgets.grid]
     cell_size = 16
@@ -116,37 +80,63 @@ widget_order = [ "lockscreen-login-box@HDMI-A-1" ]
         show_unlock_hint = true
         show_weather = true
 
-[osd.kinds]
-media = false
+    [lockscreen_widgets.widget."lockscreen-login-box@eDP-1"]
+    box_height = 196.0
+    box_width = 810.0
+    cx = 960.0
+    cy = 898.0
+    output = "eDP-1"
+    placement_height = 1080.0
+    placement_width = 1920.0
+    rotation = 0.0
+    type = "login_box"
+
+        [lockscreen_widgets.widget."lockscreen-login-box@eDP-1".settings]
+        background_color = "surface_variant"
+        background_opacity = 0.88
+        background_radius = 12.0
+        center_password_text = false
+        input_opacity = 1.0
+        input_radius = 6.0
+        layout = "regular"
+        show_caps_lock = true
+        show_keyboard_layout = true
+        show_login_button = true
+        show_media = true
+        show_session_buttons = true
+        show_unlock_hint = true
+        show_weather = true
+
+[[plugins.source]]
+enabled = false
+kind = "git"
+location = "https://github.com/noctalia-dev/official-plugins"
+name = "official"
+
+[[plugins.source]]
+enabled = false
+kind = "git"
+location = "https://github.com/noctalia-dev/community-plugins"
+name = "community"
+
+[shell]
+offline_mode = true
+polkit_agent = true
+
+    [shell.screenshot]
+    annotate = true
+    confirm_region = true
+    directory = "~/Pictures/Screenshots"
 
 [system.monitor]
 enabled = false
-
-[shell]
-clipboard_enabled = false
-offline_mode = true
-polkit_agent = true
-screen_time_enabled = false
-
-    [shell.animation]
-    enabled = false
-
-    [shell.screenshot]
-    confirm_region = true
-    copy_to_clipboard = false
-    pipe_command = "satty -f -"
-    pipe_to_command = true
-    save_to_file = false
 
 [theme]
 builtin = "Dracula"
 mode = "dark"
 
-[wallpaper.default]
-path = "/usr/share/void-artwork/splash.png"
-
-[wallpaper.last]
-path = "/usr/share/void-artwork/splash.png"
+[wallpaper]
+directory = "~/Pictures/Wallpapers"
 
 [weather]
 enabled = false
@@ -154,17 +144,8 @@ enabled = false
 [widget.brightness]
 show_label = false
 
-[widget.keyboard_layout]
-display = "short"
-
-[widget.privacy]
-hide_inactive = true
-
-[widget.network]
-show_label = false
+[widget.media]
+enabled = false
 
 [widget.volume]
 show_label = false
-
-[widget.bluetooth]
-show_label = true

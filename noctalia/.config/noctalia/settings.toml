@@ -141,6 +141,9 @@ directory = "~/Pictures/Wallpapers"
 [weather]
 enabled = false
 
+[widget.bluetooth]
+show_label = true
+
 [widget.brightness]
 show_label = false
 

@@ -28,6 +28,7 @@
       "space f s": "outline::Toggle",
       "space f shift-s": "project_symbols::Toggle",
       "space f p": "projects::OpenRecent",
+      "space f e": "pane::RevealInProjectPanel",
       "space e": "project_panel::Toggle",
       "space r": "buffer_search::DeployReplace",
 
@@ -35,6 +36,7 @@
       "space c a": "editor::ToggleCodeActions",
       "space c r": "editor::Rename",
       "space c f": "editor::Format",
+      "space c o": "editor::OrganizeImports",
       "space x x": "diagnostics::Deploy",
 
       // Git: match Neovim's <leader>g vocabulary.
@@ -55,6 +57,7 @@
       "space w v": "pane::SplitRight",
       "space w s": "pane::SplitDown",
       "space w q": "pane::CloseActiveItem",
+      "space w o": "pane::CloseOtherItems",
       "space u i": "editor::ToggleInlayHints",
       "space u w": "editor::ToggleSoftWrap",
       "space u z": "workspace::ToggleZoom",

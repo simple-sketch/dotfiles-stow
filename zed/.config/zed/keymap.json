@@ -37,10 +37,10 @@
       "space c f": "editor::Format",
       "space x x": "diagnostics::Deploy",
 
-      // Git: panel, file diff, hunks, history, and restore.
+      // Git: match Neovim's <leader>g vocabulary.
       "space g g": "git_panel::ToggleFocus",
-      "space g h": "editor::ToggleSelectedDiffHunks",
-      "space g l": "git::FileHistory",
+      "space g d": "git::OpenFileDiff",
+      "space g f": "git::FileHistory",
 
       // Terminal and tasks.
       "space t t": "terminal_panel::Toggle",
@@ -85,8 +85,7 @@
       "ctrl-k": "workspace::ActivatePaneUp",
       "ctrl-l": "workspace::ActivatePaneRight",
       // Vim's [c / ]c remain the concise built-in hunk navigation.
-      "space g d": "git::OpenFileDiff",
-      "space g r": "git::Restore"
+      "space g h r": "git::Restore"
     }
   },
   {

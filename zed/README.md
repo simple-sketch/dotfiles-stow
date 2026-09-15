@@ -81,11 +81,9 @@ in the Git panel, settings, welcome screen, and image viewer.
 | `Space k` | Hover documentation |
 | `Space x x` | Project diagnostics |
 | `Space g g` | Toggle Git panel focus |
-| `Space g f` | Open file diff (Normal mode) |
-| `Space g d` | Expand/collapse selected Git hunks |
-| `Space g r` | Restore selected Git hunks (Normal mode; discards changes) |
-| `Space g h` | Open Git file history |
-| `[ g` / `] g` | Previous / next Git change (Helix aliases) |
+| `Space g d` | Open file diff (Normal mode) |
+| `Space g f` | Open Git file history |
+| `Space g h r` | Restore selected Git hunks (Normal mode; discards changes) |
 | `Space t t` | Toggle terminal panel |
 | `Space t r` / `Space t R` | Pick task / rerun last task |
 | `Space w w` / `Space w W` | Save file / all files |

@@ -160,24 +160,33 @@ if command -v fzf >/dev/null; then
     # Live project-text search: rerun ripgrep on every query change, preview
     # the selected match, then open it at the matching line in $VISUAL/$EDITOR.
     rgf() {
-        if ! command -v rg >/dev/null; then
-            printf 'rgf: ripgrep is not installed\n' >&2
-            return 127
-        fi
-
-        if ! command -v jq >/dev/null; then
-            printf 'rgf: jq is not installed\n' >&2
-            return 127
-        fi
-
-        local query="$*" selection encoded file rest line editor decode_status
-        local rg_command jq_filter
+        local dependency query="$*" selection encoded file rest line editor
+        local decode_status rg_command jq_filter
         local -a editor_command
+
+        for dependency in rg jq fzf bat base64 xargs; do
+            if ! command -v -- "$dependency" >/dev/null; then
+                printf 'rgf: required command is not installed: %s\n' \
+                    "$dependency" >&2
+                return 127
+            fi
+        done
 
         # Keep machine-readable metadata separate from the displayed match.
         # The path is Base64-encoded so every valid Unix filename is safe,
         # including names containing colons, tabs, or newlines.
         jq_filter='
+            def escape_controls:
+                reduce (explode[]) as $codepoint ("";
+                    . + (if $codepoint < 32 then
+                             (([$codepoint] | implode | @json)[1:-1])
+                         elif $codepoint >= 127 and $codepoint <= 159 then
+                             "<control>"
+                         else
+                             ([$codepoint] | implode)
+                         end)
+                );
+
             def byte_index($byte_offset):
                 reduce (explode[]) as $codepoint (
                     {bytes: 0, index: 0};
@@ -195,20 +204,21 @@ if command -v fzf >/dev/null; then
                     ($text | byte_index($match.start)) as $start
                     | ($text | byte_index($match.end)) as $end
                     | .index as $previous
-                    | .text += ($text[$previous:$start]
+                    | .text += (($text[$previous:$start] | escape_controls)
                                + "\u001b[1m\u001b[31m"
-                               + $text[$start:$end]
+                               + ($text[$start:$end] | escape_controls)
                                + "\u001b[0m")
                     | .index = $end
                 )
                 | .index as $end
-                | .text + $text[$end:];
+                | .text + ($text[$end:] | escape_controls);
 
             select(.type == "match")
             | .data as $d
             | ($d.line_number | tostring) as $line
             | (($d.submatches[0].start + 1) | tostring) as $column
-            | ($d.path.text // "<non-UTF-8 path>") as $display_path
+            | (($d.path.text // "<non-UTF-8 path>") | escape_controls)
+              as $display_path
             | (if $d.lines.text != null
                then (($d.lines.text | rtrimstr("\n")) as $text
                      | highlight_matches($text; $d.submatches))
@@ -227,7 +237,7 @@ if command -v fzf >/dev/null; then
               ]
             | @tsv + "\u0000"
         '
-        rg_command='if test -n {q}; then rg --json --smart-case -- {q} | jq -jrc "$RGF_JQ_FILTER"; fi'
+        rg_command='if test -n {q}; then command rg --json --smart-case -- {q} | command jq -jrc "$RGF_JQ_FILTER"; fi'
 
         selection=$(
             RGF_JQ_FILTER=$jq_filter command fzf --ansi --disabled --read0 \

@@ -157,6 +157,100 @@ if command -v fzf >/dev/null; then
         --height=45% --layout=reverse --border=rounded --info=inline
         --bind=ctrl-/:toggle-preview,ctrl-u:preview-page-up,ctrl-d:preview-page-down"
 
+    # Live project-text search: rerun ripgrep on every query change, preview
+    # the selected match, then open it at the matching line in $VISUAL/$EDITOR.
+    rgf() {
+        if ! command -v rg >/dev/null; then
+            printf 'rgf: ripgrep is not installed\n' >&2
+            return 127
+        fi
+
+        if ! command -v jq >/dev/null; then
+            printf 'rgf: jq is not installed\n' >&2
+            return 127
+        fi
+
+        local query="$*" selection encoded file rest line editor decode_status
+        local rg_command jq_filter
+        local -a editor_command
+
+        # Keep machine-readable metadata separate from the displayed match.
+        # The path is Base64-encoded so every valid Unix filename is safe,
+        # including names containing colons, tabs, or newlines.
+        jq_filter='
+            select(.type == "match")
+            | .data as $d
+            | ($d.line_number | tostring) as $line
+            | (($d.submatches[0].start + 1) | tostring) as $column
+            | ($d.path.text // "<non-UTF-8 path>") as $display_path
+            | ($d.lines.text // "<non-UTF-8 matching line>") as $display_line
+            | [
+                (if $d.path.text != null
+                 then ($d.path.text | @base64)
+                 else $d.path.bytes
+                 end),
+                $line,
+                $column,
+                ($display_path + ":" + $line + ":" + $column + ":" +
+                 ($display_line | rtrimstr("\n")))
+              ]
+            | @tsv + "\u0000"
+        '
+        rg_command='if test -n {q}; then rg --json --smart-case -- {q} | jq -jrc "$RGF_JQ_FILTER"; fi'
+
+        selection=$(
+            RGF_JQ_FILTER=$jq_filter command fzf --ansi --disabled --read0 \
+                --query="$query" --prompt='RG> ' --delimiter=$'\t' \
+                --with-nth=4 --nth=4 \
+                --preview='printf %s {1} | base64 --decode | xargs -0 -r bat --color=always --style=numbers --highlight-line {2} --' \
+                --preview-window='right,60%,border-left,+{2}/2' \
+                --bind="start:reload:$rg_command || true" \
+                --bind="change:reload:$rg_command || true"
+        ) || return
+
+        encoded=${selection%%$'\t'*}
+        rest=${selection#*$'\t'}
+        line=${rest%%$'\t'*}
+
+        if [[ -z $encoded || ! $line =~ ^[0-9]+$ ]]; then
+            printf 'rgf: invalid selection metadata\n' >&2
+            return 1
+        fi
+
+        # The sentinel preserves any trailing newlines in the decoded path;
+        # command substitution would otherwise remove them.
+        file=$(
+            printf '%s' "$encoded" | command base64 --decode
+            decode_status=${PIPESTATUS[1]}
+            printf '\034'
+            exit "$decode_status"
+        ) || {
+            printf 'rgf: could not decode selected path\n' >&2
+            return 1
+        }
+        file=${file%$'\034'}
+
+        editor=${VISUAL:-${EDITOR:-vim}}
+        if command -v -- "$editor" >/dev/null 2>&1; then
+            editor_command=("$editor")
+        else
+            read -r -a editor_command <<<"$editor"
+        fi
+
+        if [ "${#editor_command[@]}" -eq 0 ] ||
+            ! command -v -- "${editor_command[0]}" >/dev/null 2>&1; then
+            printf 'rgf: editor is not executable: %s\n' "$editor" >&2
+            return 127
+        fi
+
+        command "${editor_command[@]}" "+$line" -- "$file"
+    }
+
+    # Ctrl-F is the terminal counterpart of Vim's <leader>fg.
+    bind -m emacs-standard -x '"\C-f": rgf'
+    bind -m vi-command -x '"\C-f": rgf'
+    bind -m vi-insert -x '"\C-f": rgf'
+
     if command -v fd >/dev/null; then
         export FZF_DEFAULT_COMMAND='fd --type=f --hidden --follow --exclude=.git'
         export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"

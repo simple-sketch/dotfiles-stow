@@ -67,7 +67,7 @@
   },
 
   // Built-in theme: no appearance extensions required.
-  "theme": "One Dark",
+  "theme": "Snazzy Theme",
   "colorize_brackets": false,
   "current_line_highlight": "all",
   "indent_guides": {

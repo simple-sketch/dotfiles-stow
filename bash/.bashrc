@@ -81,6 +81,7 @@ alias chmod='chmod --preserve-root'
 # --- Void package management -----------------------------------------------
 alias xu='sudo xbps-install -Suv'    # full system update
 alias xr='sudo xbps-remove -R'       # remove + now-orphaned deps
+alias xq='xbps-query -Rs'            # search repository packages
 alias xl='xbps-query -l'             # list installed
 alias xf='xbps-query -Rf'            # files in a package
 alias xo='xbps-query -o'             # which package owns a file

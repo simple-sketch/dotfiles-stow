@@ -37,10 +37,10 @@
       "space c f": "editor::Format",
       "space x x": "diagnostics::Deploy",
 
-      // Git: panel, diff hunks, and file history.
+      // Git: panel, file diff, hunks, history, and restore.
       "space g g": "git_panel::ToggleFocus",
-      "space g d": "editor::ToggleSelectedDiffHunks",
-      "space g h": "git::FileHistory",
+      "space g h": "editor::ToggleSelectedDiffHunks",
+      "space g l": "git::FileHistory",
 
       // Terminal and tasks.
       "space t t": "terminal_panel::Toggle",
@@ -84,9 +84,9 @@
       "ctrl-j": "workspace::ActivatePaneDown",
       "ctrl-k": "workspace::ActivatePaneUp",
       "ctrl-l": "workspace::ActivatePaneRight",
-      // Helix uses [g / ]g for changes. Vim's [c / ]c also remain available.
-      "[ g": "editor::GoToPreviousHunk",
-      "] g": "editor::GoToHunk"
+      // Vim's [c / ]c remain the concise built-in hunk navigation.
+      "space g d": "git::OpenFileDiff",
+      "space g r": "git::Restore"
     }
   },
   {
@@ -96,14 +96,6 @@
       "alt-w": "vim::NextSubwordStart",
       "alt-b": "vim::PreviousSubwordStart",
       "alt-e": "vim::NextSubwordEnd"
-    }
-  },
-  {
-    // Git file diff and hunk restore retain their Normal-mode scope.
-    "context": "Editor && mode == full && vim_mode == normal && !menu",
-    "bindings": {
-      "space g f": "git::OpenFileDiff",
-      "space g r": "git::Restore"
     }
   },
   {

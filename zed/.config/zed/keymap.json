@@ -41,6 +41,7 @@
       "space g g": "git_panel::ToggleFocus",
       "space g d": "git::OpenFileDiff",
       "space g f": "git::FileHistory",
+      "space g b": "git::Blame",
       "space g h p": "editor::ToggleSelectedDiffHunks",
 
       // Terminal and tasks.

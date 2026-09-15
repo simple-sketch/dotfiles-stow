@@ -178,12 +178,42 @@ if command -v fzf >/dev/null; then
         # The path is Base64-encoded so every valid Unix filename is safe,
         # including names containing colons, tabs, or newlines.
         jq_filter='
+            def byte_index($byte_offset):
+                reduce (explode[]) as $codepoint (
+                    {bytes: 0, index: 0};
+                    if .bytes < $byte_offset then
+                        .bytes += ([$codepoint] | implode | utf8bytelength)
+                        | .index += 1
+                    else .
+                    end
+                )
+                | .index;
+
+            def highlight_matches($text; $matches):
+                reduce $matches[] as $match (
+                    {text: "", index: 0};
+                    ($text | byte_index($match.start)) as $start
+                    | ($text | byte_index($match.end)) as $end
+                    | .index as $previous
+                    | .text += ($text[$previous:$start]
+                               + "\u001b[1m\u001b[31m"
+                               + $text[$start:$end]
+                               + "\u001b[0m")
+                    | .index = $end
+                )
+                | .index as $end
+                | .text + $text[$end:];
+
             select(.type == "match")
             | .data as $d
             | ($d.line_number | tostring) as $line
             | (($d.submatches[0].start + 1) | tostring) as $column
             | ($d.path.text // "<non-UTF-8 path>") as $display_path
-            | ($d.lines.text // "<non-UTF-8 matching line>") as $display_line
+            | (if $d.lines.text != null
+               then (($d.lines.text | rtrimstr("\n")) as $text
+                     | highlight_matches($text; $d.submatches))
+               else "<non-UTF-8 matching line>"
+               end) as $display_line
             | [
                 (if $d.path.text != null
                  then ($d.path.text | @base64)
@@ -191,8 +221,9 @@ if command -v fzf >/dev/null; then
                  end),
                 $line,
                 $column,
-                ($display_path + ":" + $line + ":" + $column + ":" +
-                 ($display_line | rtrimstr("\n")))
+                ("\u001b[35m" + $display_path + "\u001b[0m:"
+                 + "\u001b[32m" + $line + "\u001b[0m:"
+                 + $column + ":" + $display_line)
               ]
             | @tsv + "\u0000"
         '

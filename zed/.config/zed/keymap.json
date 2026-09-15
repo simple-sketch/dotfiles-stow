@@ -39,6 +39,9 @@
       "space c o": "editor::OrganizeImports",
       "space x x": "diagnostics::Deploy",
 
+      // Markdown.
+      "space m p": "markdown::OpenPreview",
+
       // Git: match Neovim's <leader>g vocabulary.
       "space g g": "git_panel::ToggleFocus",
       "space g d": "git::OpenFileDiff",
@@ -79,6 +82,13 @@
     "context": "Editor && !menu",
     "bindings": {
       "ctrl-s": "workspace::Save"
+    }
+  },
+  {
+    // Reuse the Markdown preview chord to return to the source editor.
+    "context": "MarkdownPreview && !menu",
+    "bindings": {
+      "space m p": "markdown::CloseAndReturnToEditor"
     }
   },
   {

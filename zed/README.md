@@ -80,6 +80,7 @@ in the Git panel, settings, welcome screen, and image viewer.
 | `Space c f` | Format |
 | `Space k` | Hover documentation |
 | `Space x x` | Project diagnostics |
+| `Space m p` | Toggle the current Markdown file’s preview/source |
 | `Space g g` | Toggle Git panel focus |
 | `Space g d` | Open file diff (Normal mode) |
 | `Space g f` | Open Git file history |

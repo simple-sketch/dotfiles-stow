@@ -120,6 +120,7 @@ location = "https://github.com/noctalia-dev/community-plugins"
 name = "community"
 
 [shell]
+clipboard_enabled = false
 offline_mode = true
 polkit_agent = true
 

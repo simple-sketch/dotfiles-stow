@@ -83,6 +83,7 @@ in the Git panel, settings, welcome screen, and image viewer.
 | `Space g g` | Toggle Git panel focus |
 | `Space g d` | Open file diff (Normal mode) |
 | `Space g f` | Open Git file history |
+| `Space g h p` | Preview/toggle selected Git hunks |
 | `Space g h r` | Restore selected Git hunks (Normal mode; discards changes) |
 | `Space t t` | Toggle terminal panel |
 | `Space t r` / `Space t R` | Pick task / rerun last task |

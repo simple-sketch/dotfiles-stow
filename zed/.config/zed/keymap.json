@@ -86,6 +86,8 @@
       "ctrl-j": "workspace::ActivatePaneDown",
       "ctrl-k": "workspace::ActivatePaneUp",
       "ctrl-l": "workspace::ActivatePaneRight",
+      "alt-j": "editor::MoveLineDown",
+      "alt-k": "editor::MoveLineUp",
       // Vim's [c / ]c remain the concise built-in hunk navigation.
       "space g h r": "git::Restore"
     }

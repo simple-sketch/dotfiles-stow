@@ -79,7 +79,7 @@
   },
   "show_whitespaces": "selection",
   "soft_wrap": "bounded",
-  "preferred_line_length": 100,
+  "preferred_line_length": 120,
   "minimap": { "show": "never" },
   "tabs": { "git_status": true },
   "toolbar": {

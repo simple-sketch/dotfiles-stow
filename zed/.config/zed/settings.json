@@ -1,4 +1,5 @@
 {
+  "icon_theme": "Material Icon Theme",
   "project_panel": {
     "hide_hidden": false,
     "git_status": true,
@@ -70,7 +71,7 @@
   },
 
   // Built-in theme: no appearance extensions required.
-  "theme": "Snazzy Theme",
+  "theme": "One Dark",
   "colorize_brackets": false,
   "current_line_highlight": "all",
   "indent_guides": {

@@ -42,10 +42,13 @@
   "autosave": "off",
   "show_edit_predictions": false,
   "use_smartcase_search": true,
-  "cursor_blink": false,
-  "reduce_motion": "on",
   "vertical_scroll_margin": 5,
   "scroll_beyond_last_line": "off",
+  "cursor_blink": false,
+  "reduce_motion": "off", // needs to be turned off if cursor animation is enabled.
+  "cursor_animation": {
+    "enabled": true
+  },
 
   // A heavier programming font with Nerd Font symbols.
   "buffer_font_family": "JetBrainsMono Nerd Font",

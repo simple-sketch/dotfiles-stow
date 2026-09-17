@@ -72,6 +72,11 @@
 
   // Built-in theme: no appearance extensions required.
   "theme": "One Dark",
+  "theme_overrides": {
+      "One Dark": {
+        "vim.yank.background": "#FFD75F"
+      }
+    },
   "colorize_brackets": false,
   "current_line_highlight": "all",
   "indent_guides": {

@@ -117,6 +117,14 @@
     }
   },
   {
+    // Move selected lines with Alt-J / Alt-K in Visual mode.
+    "context": "Editor && mode == full && vim_mode == visual && !menu",
+    "bindings": {
+      "alt-j": "editor::MoveLineDown",
+      "alt-k": "editor::MoveLineUp"
+    }
+  },
+  {
     "context": "Editor && mode == full && vim_mode == visual && !menu",
     "bindings": {
       "shift-s": "vim::PushAddSurrounds",

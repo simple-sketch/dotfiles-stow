@@ -71,9 +71,9 @@
   },
 
   // Built-in theme: no appearance extensions required.
-  "theme": "One Dark",
+  "theme": "One Dark Pro",
   "theme_overrides": {
-      "One Dark": {
+      "One Dark Pro": {
         "vim.yank.background": "#FFD75F"
       }
     },

@@ -104,7 +104,8 @@
       "alt-shift-j": "editor::DuplicateLineDown",
       "alt-shift-k": "editor::DuplicateLineUp",
       // Vim's [c / ]c remain the concise built-in hunk navigation.
-      "space g h r": "git::Restore"
+      "space g h r": "git::Restore",
+      "space g h R": "git::RestoreFile",
     }
   },
   {
@@ -147,12 +148,26 @@
       "space /": "pane::DeploySearch",
       "space b": "tab_switcher::ToggleAll",
       "space e": "project_panel::Toggle",
-      "ctrl-h": "workspace::ActivatePaneLeft",
-      "ctrl-j": "workspace::ActivatePaneDown",
-      "ctrl-k": "workspace::ActivatePaneUp",
-      "ctrl-l": "workspace::ActivatePaneRight"
     }
   },
+  {
+     "context": "Pane",
+     "bindings": {
+       "ctrl-h": "workspace::ActivatePaneLeft",
+       "ctrl-j": "workspace::ActivatePaneDown",
+       "ctrl-k": "workspace::ActivatePaneUp",
+       "ctrl-l": "workspace::ActivatePaneRight"
+     }
+   },
+   {
+     "context": "Dock",
+     "bindings": {
+       "ctrl-h": "workspace::ActivatePaneLeft",
+       "ctrl-j": "workspace::ActivatePaneDown",
+       "ctrl-k": "workspace::ActivatePaneUp",
+       "ctrl-l": "workspace::ActivatePaneRight"
+     }
+   },
   {
     // Yazi-style navigation and file operations in the project panel.
     // Zed's native marked-entry behavior remains on shift-up/shift-down.

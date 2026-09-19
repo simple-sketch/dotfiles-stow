@@ -7,7 +7,7 @@
   },
   "agent_servers": {
     "pi-acp": {
-      "type": "registry"
+      "type": "registry",
     },
     "codex-acp": {
       "type": "registry",
@@ -31,6 +31,12 @@
     "enabled": true,
     "delay_ms": 500,
   },
+  "status_bar": {
+    // "show_active_file": true,
+    // "active_language_button": true,
+    // "cursor_position_button": true,
+    "line_endings_button": true,
+  },
 
   // Wide picker defaults; preview layouts and resized widths are saved by Zed.
   "file_finder": { "modal_max_width": "xlarge" },
@@ -41,10 +47,10 @@
   "format_on_save": "off",
   "use_on_type_format": true,
   "autosave": {
-      "after_delay": {
-        "milliseconds": 1000
-      }
+    "after_delay": {
+      "milliseconds": 1000,
     },
+  },
   "show_edit_predictions": false,
   "use_smartcase_search": true,
   "vertical_scroll_margin": 5,
@@ -52,7 +58,7 @@
   "cursor_blink": false,
   "reduce_motion": "off", // needs to be turned off if cursor animation is enabled.
   "cursor_animation": {
-    "enabled": true
+    "enabled": true,
   },
 
   // A heavier programming font with Nerd Font symbols.
@@ -77,10 +83,10 @@
   // Built-in theme: no appearance extensions required.
   "theme": "macOS Classic Dark",
   "theme_overrides": {
-      "macOS Classic Dark": {
-        "vim.yank.background": "#FFD75F"
-      }
+    "macOS Classic Dark": {
+      "vim.yank.background": "#FFD75F",
     },
+  },
   "colorize_brackets": false,
   "current_line_highlight": "all",
   "indent_guides": {

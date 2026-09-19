@@ -81,14 +81,12 @@ alias chmod='chmod --preserve-root'
 # --- Void package management -----------------------------------------------
 alias xu='sudo xbps-install -Suv'    # full system update
 alias xr='sudo xbps-remove -R'       # remove + now-orphaned deps
-alias xq='xbps-query -Rs'            # search repository packages
 alias xl='xbps-query -l'             # list installed
 alias xf='xbps-query -Rf'            # files in a package
 alias xo='xbps-query -o'             # which package owns a file
 alias xclean='sudo xbps-remove -Ooy' # drop orphans and cached packages
 
 # --- Sway / Wayland --------------------------------------------------------
-alias swayreload='swaymsg reload'
 alias swaytree='swaymsg -t get_tree | jq'
 # Disabled outputs have no current_mode, so label them instead of asking jq to
 # divide null by 1000. Remove the old alias when re-sourcing this file.

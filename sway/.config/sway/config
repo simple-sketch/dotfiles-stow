@@ -88,6 +88,9 @@ set $text_editor neovide
 # Neovide: workspace 2.
 for_window [app_id="(?i)^neovide$"] move container to workspace number 2, workspace number 2
 
+# Zed IDE: workspace 2.
+for_window [app_id="^dev.zed.Zed$"] move container to workspace number 2, workspace number 2
+
 # Swayimg: workspace 4; app config disables overlay mode.
 for_window [app_id="^swayimg$"] move container to workspace number 4, workspace number 4
 

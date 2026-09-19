@@ -1,6 +1,13 @@
 {
+  "git_panel": {
+    "dock": "left"
+  },
+  "debugger": {
+    "dock": "left"
+  },
   "icon_theme": "Material Icon Theme",
   "project_panel": {
+    "dock": "left",
     "hide_hidden": false,
     "git_status": true,
     "git_status_indicator": true,
@@ -15,6 +22,8 @@
   },
   // Vim editing, with a small Space-leader keymap in keymap.json.
   "agent": {
+    "sidebar_side": "right",
+    "dock": "right",
     "commit_message_instructions": "Use Conventional Commits format: <type>(<scope>): <description>. Keep the subject imperative, concise, and under 72 characters. Add a short body only when it provides useful context. Return only the commit message, with no quotes or Markdown.",
   },
   "cli_default_open_behavior": "existing_window",
@@ -69,6 +78,7 @@
   "ui_font_size": 15,
   "ui_font_weight": 400,
   "terminal": {
+    "dock": "left",
     "font_family": "JetBrainsMono Nerd Font Mono",
     "font_weight": 400,
     "blinking": "off",

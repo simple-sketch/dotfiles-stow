@@ -39,8 +39,12 @@
   // Match the quiet editing style of the Vim/Neovim packages.
   // Use Space c f to format on demand; projects can override these defaults.
   "format_on_save": "off",
-  "use_on_type_format": false,
-  "autosave": "off",
+  "use_on_type_format": true,
+  "autosave": {
+      "after_delay": {
+        "milliseconds": 1000
+      }
+    },
   "show_edit_predictions": false,
   "use_smartcase_search": true,
   "vertical_scroll_margin": 5,
@@ -71,9 +75,9 @@
   },
 
   // Built-in theme: no appearance extensions required.
-  "theme": "One Dark Pro",
+  "theme": "macOS Classic Dark",
   "theme_overrides": {
-      "One Dark Pro": {
+      "macOS Classic Dark": {
         "vim.yank.background": "#FFD75F"
       }
     },

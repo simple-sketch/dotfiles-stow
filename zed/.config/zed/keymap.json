@@ -104,6 +104,14 @@
     }
   },
   {
+    // In project-search results, use Vim's n instead of F3 for the next match.
+    "context": "ProjectSearchView > Editor && vim_mode == normal && !menu",
+    "bindings": {
+      "n": "search::SelectNextMatch",
+      "shift-n": "search::SelectPreviousMatch"
+    }
+  },
+  {
     // Extra motions also work after operators: c Alt-E changes a subword.
     "context": "Editor && mode == full && VimControl && !menu",
     "bindings": {

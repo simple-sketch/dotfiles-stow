@@ -7,7 +7,6 @@ end = [
     "tray",
     "notifications",
     "screenshot",
-    "keyboard_layout",
     "clipboard",
     "network",
     "bluetooth",

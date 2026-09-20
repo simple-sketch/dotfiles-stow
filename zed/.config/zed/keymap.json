@@ -137,11 +137,10 @@
     }
   },
   {
-    // Direct navigation in Normal mode, panel lists, previews, and terminals.
-    // Terminal Ctrl-H/J/K/L are deliberately reserved for pane navigation,
-    // not forwarded to the shell/TUI. Editor Insert/Visual/operator modes
-    // and panel text inputs retain their editing keys.
-    "context": "((Editor && mode == full && vim_mode == normal) || Terminal || EmptyPane || MarkdownPreview || (ProjectPanel && not_editing) || (GitPanel && ChangesList && !GitBranchSelector && !GitRepositorySelector)) && !menu",
+    // Global navigation throughout Zed: editors in every mode, all panels,
+    // terminals, inputs, and menus. No context means these bindings take
+    // precedence over contextual defaults. Ctrl-H/J/K/L are intentionally
+    // reserved for navigation rather than editing or shell/TUI commands.
     "bindings": {
       "ctrl-h": "workspace::ActivatePaneLeft",
       "ctrl-j": "workspace::ActivatePaneDown",

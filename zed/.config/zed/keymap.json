@@ -137,15 +137,18 @@
     }
   },
   {
-    // Global navigation throughout Zed: editors in every mode, all panels,
-    // terminals, inputs, and menus. No context means these bindings take
-    // precedence over contextual defaults. Ctrl-H/J/K/L are intentionally
-    // reserved for navigation rather than editing or shell/TUI commands.
+    // Zed's recommended Vim dock navigation; Terminal also covers terminals
+    // opened in center panes. Press Ctrl-W, release, then H/J/K/L.
+    // Native editor Ctrl-W bindings and plain Ctrl-H/J/K/L stay unchanged.
+    // In terminals these chords take precedence over shell/TUI Ctrl-W input.
+    "context": "Dock || Terminal",
     "bindings": {
-      "ctrl-h": "workspace::ActivatePaneLeft",
-      "ctrl-j": "workspace::ActivatePaneDown",
-      "ctrl-k": "workspace::ActivatePaneUp",
-      "ctrl-l": "workspace::ActivatePaneRight"
+      "ctrl-w h": "workspace::ActivatePaneLeft",
+      "ctrl-w j": "workspace::ActivatePaneDown",
+      "ctrl-w k": "workspace::ActivatePaneUp",
+      "ctrl-w l": "workspace::ActivatePaneRight",
+      // Explicit return also works when the center editor has no open file.
+      "ctrl-w w": "workspace::FocusCenterPane"
     }
   },
   {

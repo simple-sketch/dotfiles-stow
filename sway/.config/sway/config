@@ -51,6 +51,8 @@ for_window [app_id="^flameshot$"] floating enable, resize set width $floating_wi
 for_window [app_id="^com[.]gabm[.]satty$"] floating enable, resize set width $floating_width ppt height $floating_height ppt, move position center
 for_window [app_id="^dev[.]noctalia[.]Noctalia$"] floating enable, resize set width $floating_width ppt height $floating_height ppt, move position center
 for_window [app_id="(?i)^thunar$"] floating enable, resize set width $floating_width ppt height $floating_height ppt, move position center
+# Thunar's archive-plugin shim opens these GTK dialogs as separate windows.
+for_window [title="^(Create Archive|Extract Archive To)$"] floating enable, resize set width $floating_width ppt height $floating_height ppt, move position center
 
 # XWayland fallbacks; Noctalia has no observed class.
 for_window [class="(?i)^(flameshot|satty|thunar)$"] floating enable, resize set width $floating_width ppt height $floating_height ppt, move position center
@@ -89,7 +91,7 @@ set $text_editor neovide
 for_window [app_id="(?i)^neovide$"] move container to workspace number 2, workspace number 2
 
 # Zed IDE: workspace 2.
-for_window [app_id="^dev.zed.Zed$"] move container to workspace number 2, workspace number 2
+for_window [app_id="(?i)^dev[.]zed[.]Zed$"] move container to workspace number 2, workspace number 2
 
 # Swayimg: workspace 4; app config disables overlay mode.
 for_window [app_id="^swayimg$"] move container to workspace number 4, workspace number 4

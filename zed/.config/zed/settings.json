@@ -118,6 +118,11 @@
   "diagnostics": { "inline": { "enabled": false } },
   "git": { "inline_blame": { "enabled": false } },
 
+  // Treat files as Java-style properties files.
+  "file_types": {
+    "Properties": ["config", "*.conf", "*.list", "*.desktop"],
+  },
+
   // Language-specific editing and formatting defaults.
   "languages": {
     // Keep JDTLS for Java; Zed supplies indentation and whitespace defaults.

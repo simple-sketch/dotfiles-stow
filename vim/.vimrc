@@ -244,6 +244,13 @@ nnoremap <silent> <leader>fj <Cmd>Jumps<CR>
 nnoremap <silent> <leader>fc <Cmd>Changes<CR>
 nnoremap <silent> <leader>fC <Cmd>Commands<CR>
 
+# terminal like foot or kitty sends Alt as an Escape-prefixed key sequence (Alt-J = Esc, J).
+# Move the current line or visual selection while preserving the selection.
+nnoremap <Esc>j <Cmd>move .+1<CR>==
+nnoremap <Esc>k <Cmd>move .-2<CR>==
+xnoremap <Esc>j :move '>+1<CR>gv=gv
+xnoremap <Esc>k :move '<-2<CR>gv=gv
+
 # Vim otherwise sends Ctrl-Alt-X to terminal jobs as U+0098, which fzf ignores.
 tnoremap <silent> <C-M-x> <Esc><C-x>
 

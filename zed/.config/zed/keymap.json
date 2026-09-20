@@ -132,7 +132,7 @@
       "space f g": "pane::DeploySearch",
       "space f b": "tab_switcher::Toggle",
       "space f p": "projects::OpenRecent",
-      "space b b": "tab_switcher::ToggleAll",
+      "space b b": "tab_switcher::OpenInActivePane",
       "space e": "project_panel::Toggle"
     }
   },

@@ -5,6 +5,7 @@
   "debugger": {
     "dock": "left"
   },
+  // Requires the Material Icon Theme extension.
   "icon_theme": "Material Icon Theme",
   "project_panel": {
     "dock": "left",
@@ -20,13 +21,13 @@
       "type": "registry",
     },
   },
-  // Vim editing, with a small Space-leader keymap in keymap.json.
   "agent": {
     "sidebar_side": "right",
     "dock": "right",
     "commit_message_instructions": "Use Conventional Commits format: <type>(<scope>): <description>. Keep the subject imperative, concise, and under 72 characters. Add a short body only when it provides useful context. Return only the commit message, with no quotes or Markdown.",
   },
   "cli_default_open_behavior": "existing_window",
+  // Vim editing, with a Space-leader keymap in keymap.json.
   "vim_mode": true,
   "helix_mode": false,
   "base_keymap": "Zed",
@@ -41,9 +42,6 @@
     "delay_ms": 500,
   },
   "status_bar": {
-    // "show_active_file": true,
-    // "active_language_button": true,
-    // "cursor_position_button": true,
     "line_endings_button": true,
   },
 
@@ -54,7 +52,7 @@
   // Match the quiet editing style of the Vim/Neovim packages.
   // Use Space c f to format on demand; projects can override these defaults.
   "format_on_save": "off",
-  "use_on_type_format": true,
+  "use_on_type_format": false,
   "autosave": {
     "after_delay": {
       "milliseconds": 1000,
@@ -90,7 +88,7 @@
     "vim.helix_jump_label.foreground": "#FFD75F",
   },
 
-  // Built-in theme: no appearance extensions required.
+  // Requires the macOS Classic Theme extension (macos-classic).
   "theme": "macOS Classic Dark",
   "theme_overrides": {
     "macOS Classic Dark": {
@@ -124,7 +122,7 @@
   "languages": {
     // Keep JDTLS for Java; Zed supplies indentation and whitespace defaults.
     "Java": { "formatter": "language_server" },
-    // Use the default Prettier integration for JS/TS and Ruff for Python.
+    // JS/TS retain Zed's default formatter integration; only indent size is pinned.
     "JavaScript": { "tab_size": 2 },
     "TypeScript": { "tab_size": 2 },
     "TSX": { "tab_size": 2 },

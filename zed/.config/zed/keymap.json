@@ -23,8 +23,6 @@
       "space f g": "pane::DeploySearch",
       "space f b": "tab_switcher::Toggle",
       "space f l": "buffer_search::Deploy",
-      "space f j": "pane::GoBack",
-      "space f c": "pane::GoForward",
       "space f s": "outline::Toggle",
       "space f shift-s": "project_symbols::Toggle",
       "space f p": "projects::OpenRecent",
@@ -37,6 +35,7 @@
       "space c r": "editor::Rename",
       "space c f": "editor::Format",
       "space c o": "editor::OrganizeImports",
+      "space c s": "editor::ShowSignatureHelp",
       "space x x": "diagnostics::Deploy",
 
       // Markdown.
@@ -54,34 +53,36 @@
       "space t r": "task::Spawn",
       "space t shift-r": "task::Rerun",
 
-      // Save and windows. Closing a modified file uses Zed's normal prompt.
+      // Save and split creation; tab/item closing lives under Space b.
       "space w w": "workspace::Save",
       "space w shift-w": "workspace::SaveAll",
       "space w v": "pane::SplitRight",
       "space w s": "pane::SplitDown",
-      "space w q": "pane::CloseActiveItem",
-      "space w o": "pane::CloseOtherItems",
+      // Space f b uses the current pane's switcher; Space b b lists all panes.
+      "space b b": "tab_switcher::ToggleAll",
+      "space b d": "pane::CloseActiveItem",
+      "space b o": "pane::CloseOtherItems",
       "space u i": "editor::ToggleInlayHints",
       "space u w": "editor::ToggleSoftWrap",
       "space u z": "workspace::ToggleZoom",
       "space ,": "zed::OpenSettingsFile",
       "space ?": "zed::OpenKeymap",
 
+      // Keep built-in K for hover and Ctrl-O / Ctrl-I for navigation history.
       // Small Helix-inspired additions; use Vim-aware syntax selections.
-      "space /": "pane::DeploySearch",
-      "space b": "tab_switcher::ToggleAll",
-      "space a": "editor::ToggleCodeActions",
-      "space k": "editor::Hover",
       "space .": "vim::HelixJumpToWord",
       "alt-o": "vim::SelectLargerSyntaxNode",
-      "alt-i": "vim::SelectSmallerSyntaxNode"
+      "alt-i": "vim::SelectSmallerSyntaxNode",
+      "alt-j": "editor::MoveLineDown",
+      "alt-k": "editor::MoveLineUp"
     }
   },
   {
-    // Keep the usual save muscle memory available in every editor mode.
-    "context": "Editor && !menu",
+    // Save in every full-editor mode; keep signature help available in Insert.
+    "context": "Editor && mode == full && !menu",
     "bindings": {
-      "ctrl-s": "workspace::Save"
+      "ctrl-s": "workspace::Save",
+      "ctrl-shift-space": "editor::ShowSignatureHelp"
     }
   },
   {
@@ -92,20 +93,14 @@
     }
   },
   {
-    // Restrict split navigation to Normal mode; Insert keeps Ctrl-H/J/K/L.
+    // Normal-only edits; Alt-J / Alt-K above also support Visual mode.
     "context": "Editor && mode == full && vim_mode == normal && !menu",
     "bindings": {
-      "ctrl-h": "workspace::ActivatePaneLeft",
-      "ctrl-j": "workspace::ActivatePaneDown",
-      "ctrl-k": "workspace::ActivatePaneUp",
-      "ctrl-l": "workspace::ActivatePaneRight",
-      "alt-j": "editor::MoveLineDown",
-      "alt-k": "editor::MoveLineUp",
       "alt-shift-j": "editor::DuplicateLineDown",
       "alt-shift-k": "editor::DuplicateLineUp",
-      // Vim's [c / ]c remain the concise built-in hunk navigation.
-      "space g h r": "git::Restore",
-      "space g h R": "git::RestoreFile",
+      // [c / ]c navigate hunks. RestoreFile is intentionally not bound here:
+      // the editor does not prompt; use the Git panel for whole-file discard.
+      "space g h r": "git::Restore"
     }
   },
   {
@@ -115,14 +110,6 @@
       "alt-w": "vim::NextSubwordStart",
       "alt-b": "vim::PreviousSubwordStart",
       "alt-e": "vim::NextSubwordEnd"
-    }
-  },
-  {
-    // Move selected lines with Alt-J / Alt-K in Visual mode.
-    "context": "Editor && mode == full && vim_mode == visual && !menu",
-    "bindings": {
-      "alt-j": "editor::MoveLineDown",
-      "alt-k": "editor::MoveLineUp"
     }
   },
   {
@@ -139,30 +126,33 @@
   {
     // Make the essential pickers reachable after closing the last file.
     // not_editing keeps these out of project-panel rename/new-file inputs.
-    "context": "EmptyPane || (ProjectPanel && not_editing)",
+    "context": "(EmptyPane || (ProjectPanel && not_editing)) && !menu",
     "bindings": {
       "space f f": "file_finder::Toggle",
       "space f g": "pane::DeploySearch",
       "space f b": "tab_switcher::Toggle",
       "space f p": "projects::OpenRecent",
-      "space /": "pane::DeploySearch",
-      "space b": "tab_switcher::ToggleAll",
-      "space e": "project_panel::Toggle",
+      "space b b": "tab_switcher::ToggleAll",
+      "space e": "project_panel::Toggle"
     }
   },
   {
-     "context": "Pane || Dock || Editor",
-     "bindings": {
-       "ctrl-h": "workspace::ActivatePaneLeft",
-       "ctrl-j": "workspace::ActivatePaneDown",
-       "ctrl-k": "workspace::ActivatePaneUp",
-       "ctrl-l": "workspace::ActivatePaneRight",
-     }
-   },
+    // Direct navigation in Normal mode, panel lists, previews, and terminals.
+    // Terminal Ctrl-H/J/K/L are deliberately reserved for pane navigation,
+    // not forwarded to the shell/TUI. Editor Insert/Visual/operator modes
+    // and panel text inputs retain their editing keys.
+    "context": "((Editor && mode == full && vim_mode == normal) || Terminal || EmptyPane || MarkdownPreview || (ProjectPanel && not_editing) || (GitPanel && ChangesList && !GitBranchSelector && !GitRepositorySelector)) && !menu",
+    "bindings": {
+      "ctrl-h": "workspace::ActivatePaneLeft",
+      "ctrl-j": "workspace::ActivatePaneDown",
+      "ctrl-k": "workspace::ActivatePaneUp",
+      "ctrl-l": "workspace::ActivatePaneRight"
+    }
+  },
   {
     // Yazi-style navigation and file operations in the project panel.
     // Zed's native marked-entry behavior remains on shift-up/shift-down.
-    "context": "ProjectPanel && not_editing",
+    "context": "ProjectPanel && not_editing && !menu",
     "bindings": {
       "q": "project_panel::ToggleFocus",
       "h": "project_panel::CollapseSelectedEntry",
@@ -174,7 +164,6 @@
       "backspace": "project_panel::SelectParent",
 
       "enter": "project_panel::OpenPermanent",
-      "shift-enter": "workspace::OpenWithSystem",
       "o": "project_panel::Open",
       "shift-o": "workspace::OpenWithSystem",
 

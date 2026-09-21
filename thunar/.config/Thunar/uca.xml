@@ -12,4 +12,16 @@
 	<startup-notify/>
 	<directories/>
 </action>
+<action>
+	<icon>utilities-terminal</icon>
+	<name>Open Floating Terminal Here</name>
+	<submenu></submenu>
+	<unique-id>1789915419663372-2</unique-id>
+	<command>kitty --single-instance --instance-group=sway-shortcuts --class kitty-floating --directory=%f</command>
+	<description>Open a floating Kitty window in the selected directory</description>
+	<range></range>
+	<patterns>*</patterns>
+	<startup-notify/>
+	<directories/>
+</action>
 </actions>

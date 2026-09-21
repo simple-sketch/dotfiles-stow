@@ -98,6 +98,7 @@
     "bindings": {
       "alt-shift-j": "editor::DuplicateLineDown",
       "alt-shift-k": "editor::DuplicateLineUp",
+      "/": "buffer_search::Deploy",
       // [c / ]c navigate hunks. RestoreFile is intentionally not bound here:
       // the editor does not prompt; use the Git panel for whole-file discard.
       "space g h r": "git::Restore"

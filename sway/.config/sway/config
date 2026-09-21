@@ -80,9 +80,8 @@ set $browser firefox
 set $floating_term kitty --single-instance --instance-group=sway-shortcuts --class kitty-floating
 for_window [app_id="^kitty-floating$"] floating enable, resize set width $floating_width ppt height $floating_height ppt, move position center
 
-# Run Yazi in its own floating Kitty window.
-set $file_manager kitty --single-instance --instance-group=sway-shortcuts --class kitty-yazi /usr/bin/yazi
-for_window [app_id="^kitty-yazi$"] floating enable, resize set width $floating_width ppt height $floating_height ppt, move position center
+# File manager.
+set $file_manager thunar
 
 # Editor.
 set $text_editor neovide

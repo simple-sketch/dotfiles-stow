@@ -10,7 +10,7 @@
   {
     // Remove built-in Space bindings before defining leader sequences.
     // Keep this separate and earlier so it does not disable our sequences.
-    "context": "((Editor && mode == full && (vim_mode == normal || vim_mode == visual)) || EmptyPane || (ProjectPanel && not_editing)) && !menu",
+    "context": "(((Editor && mode == full && (vim_mode == normal || vim_mode == visual)) || EmptyPane) && !menu) || (ProjectPanel && not_editing)",
     "bindings": {
       "space": null
     }
@@ -135,7 +135,7 @@
   {
     // Make the essential pickers reachable after closing the last file.
     // not_editing keeps these out of project-panel rename/new-file inputs.
-    "context": "(EmptyPane || (ProjectPanel && not_editing)) && !menu",
+    "context": "(EmptyPane && !menu) || (ProjectPanel && not_editing)",
     "bindings": {
       "space f f": "file_finder::Toggle",
       "space f g": "pane::DeploySearch",
@@ -163,7 +163,7 @@
   {
     // Yazi-style navigation and file operations in the project panel.
     // Zed's native marked-entry behavior remains on shift-up/shift-down.
-    "context": "ProjectPanel && not_editing && !menu",
+    "context": "ProjectPanel && not_editing",
     "bindings": {
       "q": "project_panel::ToggleFocus",
       "h": "project_panel::CollapseSelectedEntry",

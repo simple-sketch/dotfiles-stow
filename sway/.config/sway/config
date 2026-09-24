@@ -51,11 +51,12 @@ for_window [app_id="^flameshot$"] floating enable, resize set width $floating_wi
 for_window [app_id="^com[.]gabm[.]satty$"] floating enable, resize set width $floating_width ppt height $floating_height ppt, move position center
 for_window [app_id="^dev[.]noctalia[.]Noctalia$"] floating enable, resize set width $floating_width ppt height $floating_height ppt, move position center
 for_window [app_id="(?i)^thunar$"] floating enable, resize set width $floating_width ppt height $floating_height ppt, move position center
+for_window [app_id="(?i)^engrampa$"] floating enable, resize set width $floating_width ppt height $floating_height ppt, move position center
 # Thunar's archive-plugin shim opens these GTK dialogs as separate windows.
 for_window [title="^(Create Archive|Extract Archive To)$"] floating enable, resize set width $floating_width ppt height $floating_height ppt, move position center
 
 # XWayland fallbacks; Noctalia has no observed class.
-for_window [class="(?i)^(flameshot|satty|thunar)$"] floating enable, resize set width $floating_width ppt height $floating_height ppt, move position center
+for_window [class="(?i)^(flameshot|satty|thunar|engrampa)$"] floating enable, resize set width $floating_width ppt height $floating_height ppt, move position center
 
 # Sway already floats typed dialogs; the generic rule sizes them.
 # Use roles only as a fallback for legacy X11 windows with incomplete hints.

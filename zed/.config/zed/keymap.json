@@ -8,6 +8,17 @@
     }
   },
   {
+    // Extra quote/bracket text objects for i/a operators and surrounds.
+    // Lowercase uses character matching; uppercase uses syntax-aware matching.
+    "context": "vim_operator == a || vim_operator == i || vim_operator == cs",
+    "bindings": {
+      "q": "vim::AnyQuotes",
+      "b": "vim::AnyBrackets",
+      "shift-q": "vim::MiniQuotes",
+      "shift-b": "vim::MiniBrackets"
+    }
+  },
+  {
     // Remove built-in Space bindings before defining leader sequences.
     // Keep this separate and earlier so it does not disable our sequences.
     "context": "(((Editor && mode == full && (vim_mode == normal || vim_mode == visual)) || EmptyPane) && !menu) || (ProjectPanel && not_editing)",
@@ -78,6 +89,14 @@
     }
   },
   {
+    // Fast return to Normal mode without reaching for Escape.
+    // A lone `j` is inserted after Zed's key-sequence timeout.
+    "context": "Editor && vim_mode == insert && !menu",
+    "bindings": {
+      "j k": "vim::NormalBefore"
+    }
+  },
+  {
     // Save in every full-editor mode; keep signature help available in Insert.
     "context": "Editor && mode == full && !menu",
     "bindings": {
@@ -118,7 +137,8 @@
     "bindings": {
       "alt-w": "vim::NextSubwordStart",
       "alt-b": "vim::PreviousSubwordStart",
-      "alt-e": "vim::NextSubwordEnd"
+      "alt-e": "vim::NextSubwordEnd",
+      "alt-shift-e": "vim::PreviousSubwordEnd"
     }
   },
   {

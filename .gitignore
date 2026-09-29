@@ -13,3 +13,6 @@
 
 # Downloaded Yazi plugins; restore with `ya pkg install`.
 /yazi/.config/yazi/plugins/
+
+# Generated Thunar keyboard shortcuts.
+/thunar/.config/Thunar/accels.scm

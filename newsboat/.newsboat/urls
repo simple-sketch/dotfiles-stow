@@ -1,20 +1,10 @@
+# Software engineering and technology
 https://geohot.github.io/blog/feed.xml "geohot"
 https://martinfowler.com/feed.atom "fowler"
-https://jvns.ca/atom.xml "julia-evans"
-https://brooker.co.za/blog/rss.xml "marc-brooker"
-https://eli.thegreenplace.net/feeds/all.atom.xml "eli-bendersky"
-https://engineering.fb.com/feed/ "meta-engineering"
-https://blog.cloudflare.com/rss/ "cloudflare"
-https://netflixtechblog.com/feed "netflix-tech"
-https://go.dev/blog/feed.atom "go-blog"
-https://mechanical-sympathy.blogspot.com/feeds/posts/default "mechanical-sympathy"
-https://www.hillelwayne.com/index.xml "hillel-wayne"
-https://brandur.org/articles.atom "brandur"
-https://nullprogram.com/feed/ "nullprogram"
-https://matklad.github.io/feed.xml "matklad"
-https://ericlippert.com/feed/ "eric-lippert"
-https://www.the-paper-trail.org/index.xml "paper-trail"
-https://surfingcomplexity.blog/feed/ "surfing-complexity"
-https://muratbuffalo.blogspot.com/feeds/posts/default "murat-demirbas"
-https://ferd.ca/feed.rss "fred-hebert"
+https://lobste.rs/rss "lobsters"
+
+# Arts, culture, and learning
+https://www.openculture.com/feed "open-culture"
+
+# YouTube: illustration and art history
 https://www.youtube.com/feeds/videos.xml?channel_id=UCEP5zb_eXvX2q2BlH8XkXNA "pete-beard" "youtube"

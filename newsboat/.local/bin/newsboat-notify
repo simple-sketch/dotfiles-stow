@@ -1,2 +1,2 @@
 #!/bin/sh
-exec /usr/bin/notify-send --app-name=Newsboat "Newsboat" "$1"
+exec /usr/bin/notify-send --app-name=Newsboat --icon=newsboat "Newsboat" "$1"

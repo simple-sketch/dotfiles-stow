@@ -1,0 +1,13 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Newsboat
+GenericName=RSS Feed Reader
+Comment=Read RSS and Atom feeds in the terminal
+TryExec=newsboat
+Exec=newsboat
+Icon=newsboat
+Terminal=true
+Categories=Network;News;ConsoleOnly;
+Keywords=RSS;Atom;Feed;News;Reader;
+StartupNotify=false

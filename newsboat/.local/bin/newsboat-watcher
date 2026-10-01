@@ -1,0 +1,11 @@
+#!/bin/sh
+
+# Keep one checker per graphical session, including after Sway config reloads.
+lock="${XDG_RUNTIME_DIR:-/tmp}/newsboat-watcher-${UID}.lock"
+exec 9>"$lock"
+/usr/bin/flock --nonblock 9 || exit 0
+
+# Newsboat's notify-program reports newly downloaded articles.
+while /usr/bin/sleep 1800; do
+    /usr/bin/newsboat -x reload >/dev/null 2>&1
+done

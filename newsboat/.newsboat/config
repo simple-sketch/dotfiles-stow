@@ -1,0 +1,5 @@
+# Refresh and notify while the interactive Newsboat UI is open.
+auto-reload yes
+reload-time 30
+notify-program "~/.local/bin/newsboat-notify"
+notify-format "%d new articles (%n unread total)"

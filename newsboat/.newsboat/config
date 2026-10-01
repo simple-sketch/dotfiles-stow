@@ -1,4 +1,25 @@
-# Refresh and notify while the interactive Newsboat UI is open.
+# Vim-style navigation (g = first item, G = last item).
+bind-key j down
+bind-key k up
+bind-key h quit
+bind-key l open
+bind-key g home
+bind-key G end
+bind-key ^f pagedown
+bind-key ^b pageup
+bind-key ^d halfpagedown
+bind-key ^u halfpageup
+# Keep help accessible after rebinding h.
+bind-key ? help
+
+# Reading and external links.
+text-width 80
+browser "xdg-open %u"
+confirm-exit no
+
+# Refresh on startup, then while the interactive Newsboat UI is open.
+refresh-on-startup yes
+reload-threads 3
 auto-reload yes
 reload-time 30
 notify-program "~/.local/bin/newsboat-notify"

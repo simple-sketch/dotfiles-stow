@@ -12,6 +12,13 @@ bind-key ^u halfpageup
 # Keep help accessible after rebinding h.
 bind-key ? help
 
+# Visual feed categories (the first tag in urls is shown here).
+feedlist-format "%4i %n %-14T %11u %t"
+highlight feedlist "programming   " cyan default
+highlight feedlist "community     " green default
+highlight feedlist "culture       " yellow default
+highlight feedlist "art           " magenta default
+
 # Reading and external links.
 # Opening an article externally also marks it as read.
 bind-key o open-in-browser-and-mark-read articlelist

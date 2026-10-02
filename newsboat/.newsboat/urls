@@ -1,10 +1,10 @@
 # Software engineering and technology
-https://geohot.github.io/blog/feed.xml "geohot"
-https://martinfowler.com/feed.atom "fowler"
-https://lobste.rs/rss "lobsters"
+https://geohot.github.io/blog/feed.xml programming "~geohot"
+https://martinfowler.com/feed.atom programming "~Martin Fowler"
+https://lobste.rs/rss community "~Lobsters"
 
 # Arts, culture, and learning
-https://www.openculture.com/feed "open-culture"
+https://www.openculture.com/feed culture "~Open Culture"
 
 # YouTube: illustration and art history
-https://www.youtube.com/feeds/videos.xml?channel_id=UCEP5zb_eXvX2q2BlH8XkXNA "pete-beard" "youtube"
+https://www.youtube.com/feeds/videos.xml?channel_id=UCEP5zb_eXvX2q2BlH8XkXNA art "~Pete Beard" youtube

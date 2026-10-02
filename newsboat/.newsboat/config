@@ -13,6 +13,8 @@ bind-key ^u halfpageup
 bind-key ? help
 
 # Reading and external links.
+# Opening an article externally also marks it as read.
+bind-key o open-in-browser-and-mark-read articlelist
 text-width 80
 browser "xdg-open %u"
 confirm-exit no

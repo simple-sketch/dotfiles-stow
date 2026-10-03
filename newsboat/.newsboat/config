@@ -17,7 +17,7 @@ feedlist-format "%4i %n %-14T %11u %t"
 highlight feedlist "programming   " cyan default
 highlight feedlist "community     " green default
 highlight feedlist "culture       " yellow default
-highlight feedlist "art           " magenta default
+highlight feedlist "youtube       " magenta default
 
 # Color the unread marker in the article list.
 highlight articlelist " N[ !] " cyan default

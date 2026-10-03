@@ -7,5 +7,5 @@ https://lobste.rs/rss community "~Lobsters"
 https://www.openculture.com/feed culture "~Open Culture"
 
 # YouTube: illustration and art history
-https://www.youtube.com/feeds/videos.xml?channel_id=UCEP5zb_eXvX2q2BlH8XkXNA art "~Pete Beard"
-https://www.youtube.com/feeds/videos.xml?channel_id=UCQ9jJr1rsF4ub3Zm9lJIKaA art "~Shoot The Moon"
+https://www.youtube.com/feeds/videos.xml?channel_id=UCEP5zb_eXvX2q2BlH8XkXNA youtube "~Pete Beard"
+https://www.youtube.com/feeds/videos.xml?channel_id=UCQ9jJr1rsF4ub3Zm9lJIKaA youtube "~Shoot The Moon"

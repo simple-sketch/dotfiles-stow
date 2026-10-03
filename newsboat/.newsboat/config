@@ -19,6 +19,9 @@ highlight feedlist "community     " green default
 highlight feedlist "culture       " yellow default
 highlight feedlist "art           " magenta default
 
+# Color the unread marker in the article list.
+highlight articlelist " N[ !] " cyan default
+
 # Reading and external links.
 # Opening an article externally also marks it as read.
 bind-key o open-in-browser-and-mark-read articlelist

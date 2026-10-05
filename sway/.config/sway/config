@@ -26,7 +26,8 @@ exec "dbus-update-activation-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CU
 
 # Start audio once; the helper stops it when Sway exits or its IPC disconnects.
 # Use exec, not exec_always, so config reloads leave audio alone.
-exec ~/.config/sway/scripts/start-audio.sh
+# Keep the lock for the helper's lifetime; do not pass its fd to audio children.
+exec "exec flock --nonblock --close $XDG_RUNTIME_DIR/sway-audio.lock $HOME/.config/sway/scripts/start-audio.sh"
 
 # Preload Kitty at login and on reload so even the first shortcut is fast.
 # The lock prevents duplicate hidden windows; waiting keeps it held even when

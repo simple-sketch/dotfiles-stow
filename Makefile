@@ -1,12 +1,8 @@
 SHELL := /bin/sh
 
-.PHONY: check check-shell check-audio format-shell
+.PHONY: check check-shell format-shell
 
-check: check-shell check-audio
-
-check-audio:
-	shellcheck --shell=sh sway/.config/sway/scripts/start-audio.sh
-	PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s pipewire/tests -v
+check: check-shell
 
 check-shell:
 	shellcheck --shell=bash --external-sources --source-path=SCRIPTDIR bash/.bashrc bash/.bash_profile

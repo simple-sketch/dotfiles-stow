@@ -62,12 +62,8 @@ if [ -z "$WAYLAND_DISPLAY" ] && [ "$(tty)" = "/dev/tty1" ]; then
     export XDG_SESSION_DESKTOP=sway
     export XDG_SESSION_TYPE=wayland
 
-    # elogind has no user service manager, so nothing has started a session bus
-    # by this point. dbus-run-session starts one, exports its address and execs
-    # sway inside it, which ties the bus to the session instead of to the boot.
-    #
-    # The log redirect is what you read after a failed start: without it a sway
-    # crash on tty1 scrolls past and is gone.
+    # Start Sway with its own session bus; audio is managed in the Sway config.
+    # Keep startup errors in the log instead of losing them on tty1.
     mkdir -p "$XDG_STATE_HOME"
     exec dbus-run-session sway >"$XDG_STATE_HOME/sway.log" 2>&1
 fi

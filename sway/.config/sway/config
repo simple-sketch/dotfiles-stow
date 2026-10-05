@@ -24,8 +24,8 @@ seat * xcursor_theme Bibata-Modern-Ice 24
 # Export session variables and initialize the keyring unlocked by PAM before Noctalia.
 exec "dbus-update-activation-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP XDG_SESSION_TYPE XDG_SESSION_DESKTOP QT_QPA_PLATFORM; gnome-keyring-daemon --start --components=secrets; exec noctalia"
 
-# Start PipeWire after removing stale sessions that can break Bluetooth audio.
-# Recovery: ~/.config/sway/scripts/start-audio.sh &
+# Start audio once; the helper stops it when Sway exits or its IPC disconnects.
+# Use exec, not exec_always, so config reloads leave audio alone.
 exec ~/.config/sway/scripts/start-audio.sh
 
 # Preload Kitty at login and on reload so even the first shortcut is fast.

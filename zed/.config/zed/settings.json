@@ -22,7 +22,9 @@
     },
   },
   "agent": {
-    "sidebar_side": "right",
+    "threads_sidebar": {
+      "position": "right"
+    },
     "dock": "right",
     "commit_message_instructions": "Use Conventional Commits format: <type>(<scope>): <description>. Keep the subject imperative, concise, and under 72 characters. Add a short body only when it provides useful context. Return only the commit message, with no quotes or Markdown.",
   },

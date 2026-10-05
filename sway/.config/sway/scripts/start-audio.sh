@@ -21,19 +21,37 @@
 # names rather than full command lines also keeps pkill off this script's own
 # arguments.
 
-pkill -x wireplumber
-pkill -x pipewire
+# Serialize manual recovery/login launches; never signal another user's audio.
+uid=$(id -u)
+if [ "$uid" -eq 0 ] || [ -z "$XDG_RUNTIME_DIR" ] ||
+    [ ! -d "$XDG_RUNTIME_DIR" ] || [ -L "$XDG_RUNTIME_DIR" ] ||
+    [ "$(stat -c '%u:%a' "$XDG_RUNTIME_DIR")" != "$uid:700" ]; then
+    printf '%s\n' 'Audio startup requires a private desktop-user runtime directory.' >&2
+    exit 1
+fi
+exec 9>"$XDG_RUNTIME_DIR/sway-audio-start.lock"
+flock -w 10 9 || exit 1
+
+# Stop the core first so its WirePlumber supervisor will not restart the child.
+pkill -u "$uid" -x pipewire
+pkill -u "$uid" -x wireplumber
 
 # pipewire unlinks its sockets under /run/user/$UID on the way out, and it does
 # so for the paths it holds regardless of which instance created them. Start
 # the replacement too early and the dying one deletes the new socket, leaving a
 # pipewire that nothing can connect to. Wait for it to go.
 i=0
-while pgrep -x pipewire >/dev/null 2>&1 && [ "$i" -lt 50 ]; do
+while pgrep -u "$uid" -x pipewire >/dev/null 2>&1 ||
+    pgrep -u "$uid" -x wireplumber >/dev/null 2>&1; do
+    if [ "$i" -ge 80 ]; then
+        printf '%s\n' 'Old audio processes did not stop; refusing to start duplicates.' >&2
+        exit 1
+    fi
     sleep 0.1
     i=$((i + 1))
 done
 
-# wireplumber and pipewire-pulse come up as children of this process, from the
-# context.exec drop-ins in ~/.config/pipewire/pipewire.conf.d.
+# The pipewire Stow package launches the WirePlumber supervisor and pulse server
+# through context.exec. Release the startup lock before executing the core.
+exec 9>&-
 exec pipewire

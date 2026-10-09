@@ -4,4 +4,5 @@ if [ "$#" -gt 0 ]; then
   exec swayimg "$@"
 fi
 
-exec swayimg "$(xdg-user-dir PICTURES)"
+# Pictures may contain only subdirectories; include images inside them.
+exec swayimg -e 'swayimg.imagelist.recursive = true' "$(xdg-user-dir PICTURES)"

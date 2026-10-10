@@ -26,6 +26,11 @@ swayimg.gallery.pstore = false -- Avoid an unbounded persistent thumbnail cache.
 -- Load the other images in the selected image's directory.
 swayimg.imagelist.adjacent = true
 
+-- Make the selected image's folder visible when browsing recursive lists.
+swayimg.viewer.text = { topleft = { "Folder: {dir}", "{name}" } }
+swayimg.slideshow.text = { topleft = { "Folder: {dir}", "{name}" } }
+swayimg.gallery.text = { topleft = { "Folder: {dir}", "{name}" } }
+
 -- Require confirmation before Escape closes swayimg.
 local close_pending = false
 
@@ -156,6 +161,50 @@ end
 
 bind_vim_navigation(swayimg.viewer)
 bind_vim_navigation(swayimg.slideshow)
+
+-- Shift-j/k jump between folders instead of individual images.
+for _, mode in ipairs({ swayimg.viewer, swayimg.slideshow }) do
+  mode.on_key("Shift-j", function()
+    mode.open("next_dir")
+  end)
+  mode.on_key("Shift-k", function()
+    mode.open("prev_dir")
+  end)
+end
+
+-- Gallery has no built-in directory jump, so select the first image in the
+-- next folder (or the last image in the previous one) from its ordered list.
+local function parent_dir(path)
+  return path:match("^(.*)/[^/]+$") or ""
+end
+
+local function gallery_jump_dir(step)
+  local selected = swayimg.gallery.get_image()
+  if not selected then
+    return
+  end
+
+  local entries = swayimg.imagelist.get()
+  local current_dir = parent_dir(selected.path)
+  for index, entry in ipairs(entries) do
+    if entry.path == selected.path then
+      for i = index + step, step > 0 and #entries or 1, step do
+        if parent_dir(entries[i].path) ~= current_dir then
+          swayimg.gallery.select_path(entries[i].path)
+          return
+        end
+      end
+      return
+    end
+  end
+end
+
+swayimg.gallery.on_key("Shift-j", function()
+  gallery_jump_dir(1)
+end)
+swayimg.gallery.on_key("Shift-k", function()
+  gallery_jump_dir(-1)
+end)
 
 swayimg.gallery.on_key("h", function()
   swayimg.gallery.select("left")

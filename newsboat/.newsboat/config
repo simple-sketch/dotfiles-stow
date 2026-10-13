@@ -1,9 +1,13 @@
 # Vim-style navigation (g = first item, G = last item).
 bind-key j down
 bind-key k up
-# h goes back within Newsboat, but only q exits from the feed list.
+bind-key DOWN down
+bind-key UP up
+# h/Left goes back within Newsboat, but only q exits from the feed list.
 bind h articlelist,article,help,filebrowser,tagselection,filterselection,urlview,dirbrowser,searchresultslist quit
+bind <LEFT> articlelist,article,help,filebrowser,tagselection,filterselection,urlview,dirbrowser,searchresultslist quit
 bind-key l open
+bind-key RIGHT open
 bind-key g home
 bind-key G end
 bind-key ^f pagedown

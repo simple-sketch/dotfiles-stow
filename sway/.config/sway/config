@@ -29,7 +29,7 @@ exec "dbus-update-activation-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CU
 # Keep the lock for the helper's lifetime; do not pass its fd to audio children.
 exec "exec flock --nonblock --close $XDG_RUNTIME_DIR/sway-audio.lock $HOME/.config/sway/scripts/start-audio.sh"
 
-# Start local dictation once at login (after installing Voxtype and its model).
+# Start voxtype local dictation daemon
 exec voxtype daemon
 
 # Hold F8 to dictate into the focused editor or agent prompt; release to transcribe.

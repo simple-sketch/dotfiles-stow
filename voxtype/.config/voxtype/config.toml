@@ -1,0 +1,14 @@
+# Local, English-language dictation for coding-agent prompts on Sway.
+# Sway handles the F8 shortcut; no evdev/input-group access is needed.
+[hotkey]
+enabled = false
+
+[whisper]
+model = "base.en"
+# Replace these examples with terms from the current project when needed.
+initial_prompt = "Software development: Sway, Noctalia, Rust, Python, TypeScript, Git, CLI, API, LLM, Kubernetes."
+
+[text]
+spoken_punctuation = true
+# Keep submission manual so agent prompts and shell commands can be reviewed.
+smart_auto_submit = false

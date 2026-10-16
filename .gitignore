@@ -17,8 +17,7 @@
 # Generated Thunar keyboard shortcuts.
 /thunar/.config/Thunar/accels.scm
 
-# Generated Newsboat article cache and SQLite runtime files.
-/newsboat/.newsboat/cache.db
-/newsboat/.newsboat/cache.db.lock
-/newsboat/.newsboat/cache.db-shm
-/newsboat/.newsboat/cache.db-wal
+# Keep Newsboat state outside this public repository.
+/newsboat/.newsboat/*
+!/newsboat/.newsboat/config
+!/newsboat/.newsboat/urls

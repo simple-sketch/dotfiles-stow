@@ -41,9 +41,18 @@ until kill -0 "-$audio_pid" 2>/dev/null; do
     i=$((i + 1))
 done
 
-# -m keeps the subscription alive after the acknowledgement. The connection
-# closes on normal logout or compositor crash; either way, clean up audio.
+# Keep the audio group alive while Sway runs. Restart it if PipeWire crashes.
 swaymsg -m -t subscribe '["shutdown"]' >/dev/null &
 watch_pid=$!
+while kill -0 "$watch_pid" 2>/dev/null; do
+    if ! kill -0 "$audio_pid" 2>/dev/null; then
+        wait "$audio_pid" 2>/dev/null || true
+        kill -TERM "-$audio_pid" 2>/dev/null || true
+        echo 'start-audio: PipeWire stopped. Restart the audio group.' >&2
+        setsid pipewire &
+        audio_pid=$!
+    fi
+    sleep 2
+done
 wait "$watch_pid"
 exit "$?"

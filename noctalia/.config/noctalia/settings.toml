@@ -138,7 +138,7 @@ polkit_agent = true
 enabled = false
 
 [theme]
-builtin = "Dracula"
+builtin = "Nord"
 mode = "dark"
 
 [wallpaper]

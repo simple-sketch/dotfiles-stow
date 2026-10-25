@@ -17,6 +17,9 @@ end = [
     "session"
 ]
 
+[notification]
+show_actions = true
+
 [battery]
 warning_threshold = 15
 

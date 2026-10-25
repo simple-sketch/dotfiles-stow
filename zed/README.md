@@ -1,9 +1,11 @@
-# Zed: Vim editing with a little Helix
+# Zed: Vim keys in editors and lists
 
-A small configuration using Zed's built-in Vim mode, language servers, Git UI,
-tasks, and syntax selections. No keybinding or theme extensions are needed.
-Settings and action names were checked against Zed 1.19.2
-(`df181c6f58d02677b385fa947d6bfde6d3530078`).
+This configuration uses Zed's Vim mode in editors and list navigation in panels.
+It uses a small Space leader in editors, empty panes, and non-editing panel lists.
+It also uses some Helix selection keys. One key set covers common tasks without a new modal system.
+The theme and icon theme need their named extensions.
+Panel contexts and built-in keys were checked against Zed 1.25.3
+(`8dd255c3eafb5231056fe4e6f601cedd011f1c93`).
 
 ## Install
 
@@ -44,20 +46,22 @@ stow --delete --target="$HOME" zed
   [TypeScript documentation](https://zed.dev/docs/languages/typescript).
 - Python uses Zed's default Ruff formatter; see
   [Zed's Python documentation](https://zed.dev/docs/languages/python).
-- Built-in One Dark theme, steady cursor, reduced UI motion, no minimap or inline
-  blame, and inlay hints off until requested. Inline diagnostic text is hidden;
-  diagnostic navigation and the diagnostics view are still available.
-- Code stays unwrapped; Markdown and plain text wrap at the editor width.
-  Markdown trailing spaces are preserved because they can mean hard line breaks.
+- macOS Classic Dark theme, Material Icon Theme, animated cursor, no minimap or
+  inline blame, and inlay hints off until requested. Install both named theme
+  extensions. Inline diagnostic text is hidden. Diagnostic navigation remains.
+- Files wrap at the preferred line length of 120 when bounded wrapping applies.
   Other indentation and language tools use Zed/project defaults and `.editorconfig`.
 
 ## Custom shortcuts
 
 Keys separated by spaces are pressed in sequence. Uppercase letters mean Shift.
 Leader shortcuts work in Normal and Visual mode in full editors, except Git file
-diff and hunk restore, which are Normal-mode only. Split navigation
-with Ctrl-H/J/K/L works in Normal mode, the project panel, and empty panes.
-Insert mode, search fields, menus, and terminal input retain their usual bindings.
+diff and hunk restore, which are Normal-mode only.
+
+Split navigation with `Ctrl-w h/j/k/l` works across editor panes and non-editor dock views.
+Space leader keys also work in the project, outline, and Git lists.
+Insert mode, search fields, and picker input keep their usual keys.
+Use `Ctrl-p` / `Ctrl-n` to move up / down in picker results while you type.
 
 `Ctrl-Alt-1` returns focus to the active center pane from panels, including the
 terminal, and is available in every Vim mode. It avoids `Ctrl-1`, which Zed uses
@@ -66,19 +70,18 @@ in the Git panel, settings, welcome screen, and image viewer.
 | Keys | Action |
 | --- | --- |
 | `Space f f` | Find file |
-| `Space f g` or `Space /` | Search project |
-| `Space f b` or `Space b` | Pick an open buffer across panes |
+| `Space f g` | Search project |
+| `Space f b` | Pick an open buffer in the current pane |
+| `Space b b` | Pick an open buffer across panes in the editor |
 | `Space f l` | Search in the current buffer |
-| `Space f j` / `Space f c` | Navigate backward / forward in navigation history |
 | `Space f s` / `Space f S` | Find symbol in file / project |
 | `Space f p` | Open recent project |
 | `Space e` | Toggle project panel focus |
 | `Space r` | Open text replacement, seeded from cursor/selection |
 | `n` / `Shift-n` | Next / previous search match in Vim Normal mode |
 | `Space c r` | Rename symbol through the language server |
-| `Space c a` or `Space a` | Code actions |
+| `Space c a` | Code actions |
 | `Space c f` | Format |
-| `Space k` | Hover documentation |
 | `Space x x` | Project diagnostics |
 | `Space m p` | Toggle the current Markdown file’s preview/source |
 | `Space g g` | Toggle Git panel focus |
@@ -91,13 +94,30 @@ in the Git panel, settings, welcome screen, and image viewer.
 | `Space w w` / `Space w W` | Save file / all files |
 | `Ctrl-s` | Save the current file from any editor mode |
 | `Space w v` / `Space w s` | Split right / below |
-| `Ctrl-h/j/k/l` | Focus pane left / down / up / right |
+| `Ctrl-w h/j/k/l` | Focus pane or dock left / down / up / right |
 | `Ctrl-Alt-1` | Focus the active center pane (all Vim modes and panels) |
-| `Space w q` | Close active tab, with normal save prompts |
+| `Space b d` | Close active tab, with normal save prompts |
 | `Space u i` | Toggle inlay hints |
 | `Space u w` | Toggle line wrapping |
 | `Space u z` | Toggle focused pane zoom |
 | `Space ,` / `Space ?` | Open settings file / keymap editor |
+
+### Navigation outside the editor
+
+The project, outline, and Git lists use `j/k` to select entries. The project
+and outline lists use `h/l` to collapse and expand entries. Git changes use
+`h/l` for the same actions. Use `g g` / `G` to select the first / last entry
+in the project, outline, and Git changes lists. Zed supplies most of these list keys.
+
+Git history does not use these end-of-list keys. In the project, outline, and Git lists,
+`Space f f` finds a file, `Space f g` searches the project,
+and `Space f p` opens a recent project. `Space e` opens the project panel,
+`Space g g` opens the Git panel, and `Space t t` opens the terminal panel.
+These leader keys do not apply in text fields or terminal input.
+The shared `Space f f` chord replaces the Project Panel's built-in `Space f` chord.
+
+Use `Ctrl-w w` or `Ctrl-Alt-1` to return to the center pane from a dock.
+Dock editors keep their text keys. Terminal `Ctrl-w` chords take precedence over shell and terminal-UI keys.
 
 ### Yazi-style project panel
 
@@ -178,7 +198,7 @@ These already ship with Zed's Vim mode, so the keymap does not duplicate them.
 | `vif` / `vaf` | Select inside / around function |
 | `via` / `vaa` | Select inside / around argument |
 | `Ctrl-o` / `Ctrl-i` | Jump back / forward |
-| `Ctrl-w h/j/k/l` | Move between panes |
+| `Ctrl-w h/j/k/l` | Move between panes and docks |
 | ``Ctrl-` `` | Toggle terminal panel, including from the terminal |
 | `:w` / `:q` / `:noh` | Save / close / clear search highlights |
 
@@ -195,5 +215,4 @@ follow the [official Vim guide](https://zed.dev/docs/vim) and
 [keybinding guide](https://zed.dev/docs/key-bindings); selection shortcuts take
 inspiration from the [Helix keymap](https://docs.helix-editor.com/keymap.html).
 
-Version-specific references: [Zed default settings](https://github.com/zed-industries/zed/blob/df181c6f58d02677b385fa947d6bfde6d3530078/assets/settings/default.json)
-and [Vim/Helix keymap](https://github.com/zed-industries/zed/blob/df181c6f58d02677b385fa947d6bfde6d3530078/assets/keymaps/vim.json).
+Version-specific reference: [Zed Vim keymap](https://github.com/zed-industries/zed/blob/8dd255c3eafb5231056fe4e6f601cedd011f1c93/assets/keymaps/vim.json).

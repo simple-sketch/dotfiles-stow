@@ -19,9 +19,9 @@
     }
   },
   {
-    // Remove built-in Space bindings before defining leader sequences.
-    // Keep this separate and earlier so it does not disable our sequences.
-    "context": "(((Editor && mode == full && (vim_mode == normal || vim_mode == visual)) || EmptyPane) && !menu) || (ProjectPanel && not_editing)",
+    // Reserve Space for leader keys in full editors and empty panes.
+    // Text fields and terminal input keep their normal Space key.
+    "context": "((Editor && mode == full && (vim_mode == normal || vim_mode == visual)) || EmptyPane) && !menu",
     "bindings": {
       "space": null
     }
@@ -153,9 +153,8 @@
     }
   },
   {
-    // Make the essential pickers reachable after closing the last file.
-    // not_editing keeps these out of project-panel rename/new-file inputs.
-    "context": "(EmptyPane && !menu) || (ProjectPanel && not_editing)",
+    // Keep the file and buffer pickers usable in an empty center pane.
+    "context": "EmptyPane && !menu",
     "bindings": {
       "space f f": "file_finder::Toggle",
       "space f g": "pane::DeploySearch",
@@ -166,11 +165,31 @@
     }
   },
   {
-    // Zed's recommended Vim dock navigation; Terminal also covers terminals
-    // opened in center panes. Press Ctrl-W, release, then H/J/K/L.
-    // Native editor Ctrl-W bindings and plain Ctrl-H/J/K/L stay unchanged.
+    // Use the same leader keys in file, outline, and Git lists.
+    // Do not take Space from rename, search, commit, or picker fields.
+    "context": "((ProjectPanel || OutlinePanel) && not_editing) || (GitPanel && (ChangesList || HistoryList) && !GitBranchSelector && !GitRepositorySelector)",
+    "bindings": {
+      "space": null
+    }
+  },
+  {
+    // Keep these keys after the Space reset so their sequences work.
+    "context": "((ProjectPanel || OutlinePanel) && not_editing) || (GitPanel && (ChangesList || HistoryList) && !GitBranchSelector && !GitRepositorySelector)",
+    "bindings": {
+      "space f f": "file_finder::Toggle",
+      "space f g": "pane::DeploySearch",
+      "space f p": "projects::OpenRecent",
+      "space e": "project_panel::Toggle",
+      "space g g": "git_panel::ToggleFocus",
+      "space t t": "terminal_panel::Toggle"
+    }
+  },
+  {
+    // Exclude dock editors so Ctrl-W still edits commit messages.
+    // Terminal also covers terminals opened in center panes.
+    // Press Ctrl-W, release, then H/J/K/L.
     // In terminals these chords take precedence over shell/TUI Ctrl-W input.
-    "context": "Dock || Terminal",
+    "context": "(Dock && !Editor) || Terminal",
     "bindings": {
       "ctrl-w h": "workspace::ActivatePaneLeft",
       "ctrl-w j": "workspace::ActivatePaneDown",

@@ -168,43 +168,46 @@ bindswitch --locked --reload lid:off exec $displays lid open
     # ↓ Below: Noctalia-specific configuration
 
     # Super+\ cycles layouts through Noctalia.
-    bindsym --to-code $mod+backslash exec noctalia msg keyboard-layout-cycle
+    bindsym --no-repeat --to-code $mod+backslash exec noctalia msg keyboard-layout-cycle
 
 
 
 ### Key bindings
 
+# One-shot actions and toggles do not repeat while held. Navigation, movement,
+# resizing, brightness, and volume adjustment intentionally remain repeatable.
+
 # Basics
     # Close focused window.
-    bindsym $mod+Shift+q kill
+    bindsym --no-repeat $mod+Shift+q kill
 
     # Right-click a title bar to close.
     bindsym button3 kill
 
     # Terminal.
-    bindsym $mod+Return fullscreen disable; exec $term
+    bindsym --no-repeat $mod+Return fullscreen disable; exec $term
 
     # Launcher.
-    bindsym $mod+d exec $menu
+    bindsym --no-repeat $mod+d exec $menu
 
     # Focus/launch on workspace 1; open another only when already focused there.
     set $browser_focus_or_new ~/.config/sway/scripts/browser.sh
-    bindsym $mod+y fullscreen disable; exec $browser_focus_or_new $browser
+    bindsym --no-repeat $mod+y fullscreen disable; exec $browser_focus_or_new $browser
 
     # Floating terminal.
-    bindsym $mod+Shift+Return fullscreen disable; exec $floating_term
+    bindsym --no-repeat $mod+Shift+Return fullscreen disable; exec $floating_term
 
     # File manager.
-    bindsym $mod+n fullscreen disable; exec $file_manager
+    bindsym --no-repeat $mod+n fullscreen disable; exec $file_manager
 
     # Editor.
-    bindsym $mod+t fullscreen disable; exec $text_editor
+    bindsym --no-repeat $mod+t fullscreen disable; exec $text_editor
 
     # Window switcher.
-    bindsym $mod+o exec $window_switcher_overview
+    bindsym --no-repeat $mod+o exec $window_switcher_overview
 
     # Toggle Noctalia bars and reserved space.
-    bindsym $mod+Control+c exec noctalia msg bar-toggle
+    bindsym --no-repeat $mod+Control+c exec noctalia msg bar-toggle
 
     # Super+drag inside windows moves; Super+right-drag resizes (also tiled windows).
     floating_modifier $mod normal
@@ -213,7 +216,7 @@ bindswitch --locked --reload lid:off exec $displays lid open
     include ~/.config/sway/workspace-selector.conf
 
     # Reload config.
-    bindsym $mod+Shift+c reload
+    bindsym --no-repeat $mod+Shift+c reload
 
     # End the Wayland session.
     #bindsym $mod+Shift+e exec swaynag -t warning -m 'Do you really want to exit Sway? This will end your Wayland session.' -B 'Exit Sway' 'swaymsg exit'
@@ -223,10 +226,10 @@ bindswitch --locked --reload lid:off exec $displays lid open
 
     # End the Wayland session. noctalia specific
     # bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -B 'Yes, exit sway' 'swaymsg exit'
-    bindsym $mod+Shift+e exec noctalia msg panel-toggle session
+    bindsym --no-repeat $mod+Shift+e exec noctalia msg panel-toggle session
 
     # Lock immediately without opening the session panel.
-    bindsym $mod+Control+l exec noctalia msg session lock
+    bindsym --no-repeat $mod+Control+l exec noctalia msg session lock
 
 # Focus and movement
     # Vim-style focus.
@@ -295,28 +298,28 @@ bindswitch --locked --reload lid:off exec $displays lid open
     # Layout style.
     bindsym $mod+s layout stacking
     bindsym $mod+w layout tabbed
-    bindsym $mod+e layout toggle split
+    bindsym --no-repeat $mod+e layout toggle split
 
     # Fullscreen.
-    bindsym $mod+f fullscreen
+    bindsym --no-repeat $mod+f fullscreen
 
     # Toggle floating.
-    bindsym $mod+Shift+space floating toggle
+    bindsym --no-repeat $mod+Shift+space floating toggle
 
     # Switch between tiled and floating focus.
-    bindsym $mod+space focus mode_toggle
+    bindsym --no-repeat $mod+space focus mode_toggle
 
     # Focus parent.
     bindsym $mod+a focus parent
 # Scratchpad
 
     # Stash the focused window; support standard and keypad minus.
-    bindsym $mod+Shift+minus move scratchpad
-    bindsym $mod+Shift+KP_Subtract move scratchpad
+    bindsym --no-repeat $mod+Shift+minus move scratchpad
+    bindsym --no-repeat $mod+Shift+KP_Subtract move scratchpad
 
     # Show, hide, or cycle scratchpad windows.
-    bindsym $mod+minus scratchpad show
-    bindsym $mod+KP_Subtract scratchpad show
+    bindsym --no-repeat $mod+minus scratchpad show
+    bindsym --no-repeat $mod+KP_Subtract scratchpad show
 
 # Resize mode
 mode "resize" {
@@ -362,10 +365,10 @@ bindsym --locked XF86MonBrightnessUp exec noctalia msg brightness-up
 # ↓ Below: Noctalia-specific configuration
 
 # Volume with Noctalia OSD.
-bindsym --locked XF86AudioMute exec noctalia msg volume-mute
+bindsym --locked --no-repeat XF86AudioMute exec noctalia msg volume-mute
 bindsym --locked XF86AudioLowerVolume exec noctalia msg volume-down
 bindsym --locked XF86AudioRaiseVolume exec noctalia msg volume-up
-bindsym --locked XF86AudioMicMute exec noctalia msg mic-mute
+bindsym --locked --no-repeat XF86AudioMicMute exec noctalia msg mic-mute
 
 # Direct playerctl alternatives:
 # bindsym --locked XF86AudioPlay exec playerctl play-pause
@@ -378,19 +381,19 @@ bindsym --locked XF86AudioMicMute exec noctalia msg mic-mute
 # ↓ Below: Noctalia-specific configuration
 
 # Playback through Noctalia's MPRIS service.
-bindsym --locked XF86AudioPlay exec noctalia msg media toggle
-bindsym --locked XF86AudioPause exec noctalia msg media toggle
+bindsym --locked --no-repeat XF86AudioPlay exec noctalia msg media toggle
+bindsym --locked --no-repeat XF86AudioPause exec noctalia msg media toggle
 bindsym --locked XF86AudioPrev exec noctalia msg media previous
 bindsym --locked XF86AudioNext exec noctalia msg media next
-bindsym --locked XF86AudioStop exec noctalia msg media stop
+bindsym --locked --no-repeat XF86AudioStop exec noctalia msg media stop
 
 
 # Flameshot alternative:
 # bindsym Print exec flameshot gui
 
 # Screenshots through Noctalia; the configured region capture opens Satty.
-bindsym Print exec noctalia msg screenshot-region
-bindsym Shift+Print exec noctalia msg screenshot-fullscreen
+bindsym --no-repeat Print exec noctalia msg screenshot-region
+bindsym --no-repeat Shift+Print exec noctalia msg screenshot-fullscreen
 
 
 ### Default Swaybar (disabled)

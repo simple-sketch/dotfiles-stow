@@ -8,7 +8,6 @@ end = [
     "notifications",
     "screenshot",
     "keyboard_layout",
-    "clipboard",
     "network",
     "bluetooth",
     "volume",
@@ -19,6 +18,10 @@ end = [
 
 [notification]
 show_actions = true
+follow_focused_output = true
+
+[osd]
+follow_focused_output = true
 
 [battery]
 warning_threshold = 15
@@ -127,6 +130,9 @@ name = "community"
 clipboard_enabled = false
 offline_mode = true
 polkit_agent = true
+
+    [shell.launcher]
+    default_view = "all"
 
     [shell.screenshot]
     annotate = true

@@ -225,6 +225,9 @@ bindswitch --locked --reload lid:off exec $displays lid open
     # bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -B 'Yes, exit sway' 'swaymsg exit'
     bindsym $mod+Shift+e exec noctalia msg panel-toggle session
 
+    # Lock immediately without opening the session panel.
+    bindsym $mod+Control+l exec noctalia msg session lock
+
 # Focus and movement
     # Vim-style focus.
     bindsym $mod+$left focus left

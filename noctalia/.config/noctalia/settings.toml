@@ -48,6 +48,7 @@ behavior_order = [ "lock", "screen-off", "lock-and-suspend" ]
     timeout = 330.0
 
 [lockscreen]
+blur_intensity = 0.0
 fingerprint = false
 transition = []
 

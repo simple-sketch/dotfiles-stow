@@ -49,6 +49,7 @@ behavior_order = [ "lock", "screen-off", "lock-and-suspend" ]
 
 [lockscreen]
 fingerprint = false
+transition = []
 
 [lockscreen_widgets]
 enabled = false

@@ -261,9 +261,10 @@ class Controller:
                                       for name, (x, y) in positions.items()))
         return self.wait_for(lambda now: self.placed(now, positions), "Sway did not apply the monitor positions")
 
-    def remember_workspaces(self, outputs):
+    def remember_workspaces(self, outputs, *, active=None):
         workspaces = self.io.query("get_workspaces")
-        active = {o["name"] for o in outputs if o["active"]}
+        if active is None:
+            active = {o["name"] for o in outputs if o["active"]}
         homes = self.state.setdefault("homes", {})
         visible = self.state.setdefault("visible", {})
         # Preserve the home of a workspace displaced from a disabled display.
@@ -358,6 +359,9 @@ class Controller:
         if not snapshot or snapshot["identity"] != self.identity(self.outputs()):
             return
         profile = "docked" if self.io.lid_closed() and "docked" in self.available(self.outputs()) else snapshot["profile"]
+        # Refresh deliberate moves without losing homes on disabled displays.
+        # Reload may already have re-enabled outputs, so use the saved active set.
+        self.remember_workspaces(self.outputs(), active=set(snapshot["order"]))
         workspaces = self.io.query("get_workspaces")
         focus = next((w["name"] for w in workspaces if w.get("focused")), None)
         visible = {w["output"]: w["name"] for w in workspaces if w.get("visible")}

@@ -113,6 +113,28 @@ class Tests(unittest.TestCase):
             self.controller.remember_workspaces(self.backend.outputs)
             self.assertEqual(self.controller.state["homes"]["2"], "HDMI-A-1")
 
+    def test_reapply_preserves_current_workspace_assignments(self):
+        with self.controller.locked():
+            self.controller.remember_workspaces(self.backend.outputs)
+            self.controller.save_layout("extend", self.backend.outputs)
+            self.backend.workspaces[1]["output"] = "HDMI-A-1"
+            with patch.object(self.controller, "restore_workspaces") as restore:
+                self.controller.reapply()
+            self.assertEqual(self.controller.state["homes"]["2"], "HDMI-A-1")
+            self.assertEqual(restore.call_args.args[1], "1")
+
+    def test_reapply_preserves_homes_on_previously_disabled_outputs(self):
+        with self.controller.locked():
+            self.controller.remember_workspaces(self.backend.outputs)
+            self.backend.outputs[1]["active"] = False
+            self.backend.workspaces[1]["output"] = "HDMI-A-1"
+            self.controller.save_layout("docked", self.backend.outputs)
+            # Sway reload can re-enable the laptop before reapply runs.
+            self.backend.outputs[1]["active"] = True
+            with patch.object(self.controller, "apply"):
+                self.controller.reapply()
+            self.assertEqual(self.controller.state["homes"]["2"], "eDP-1")
+
     def test_lid_close_without_external_does_nothing(self):
         self.backend.outputs = self.backend.outputs[1:]
         self.backend.closed = True

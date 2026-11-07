@@ -45,7 +45,6 @@ class Decoder:
 
 class IPC:
     def __init__(self, path):
-        self.path = path
         self.sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
         self.sock.settimeout(2)
         self.sock.connect(path)

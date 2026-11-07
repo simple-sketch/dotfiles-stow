@@ -50,7 +50,7 @@ class Picker:
         self.timeout_source = None
         self.mode_source = None
         self.shutting_down = False
-        self.io_source = self.GLib.io_add_watch(
+        self.GLib.io_add_watch(
             self.events.sock, self.GLib.IO_IN | self.GLib.IO_HUP | self.GLib.IO_ERR, self.read_events)
         GLibUnix.signal_add(self.GLib.PRIORITY_DEFAULT, signal.SIGTERM, self.quit)
         GLibUnix.signal_add(self.GLib.PRIORITY_DEFAULT, signal.SIGINT, self.quit)

@@ -16,7 +16,7 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-from core import APP_ID, IPC, MODE, WIDTH, HEIGHT, cell_rect, find_target, walk
+from core import APP_ID, IPC, MODE, cell_rect, find_target, walk
 from virtual_pointer import Pointer
 
 

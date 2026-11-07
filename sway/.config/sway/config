@@ -15,12 +15,6 @@ set $floating_height 55
 # Match the GTK/XWayland cursor.
 seat * xcursor_theme Bibata-Modern-Ice 24
 
-# Export session variables so D-Bus services inherit them.
-#exec dbus-update-activation-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP XDG_SESSION_TYPE XDG_SESSION_DESKTOP QT_QPA_PLATFORM
-
-# ↑ Above: non-Noctalia configuration
-# ↓ Below: Noctalia-specific configuration
-
 # Export session variables and initialize the keyring unlocked by PAM before Noctalia.
 exec "dbus-update-activation-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP XDG_SESSION_TYPE XDG_SESSION_DESKTOP QT_QPA_PLATFORM; gnome-keyring-daemon --start --components=secrets; exec noctalia"
 
@@ -62,20 +56,14 @@ for_window [class="(?i)^(flameshot|satty|thunar|engrampa)$"] floating enable, re
 # Use roles only as a fallback for legacy X11 windows with incomplete hints.
 for_window [window_role="(?i)^(about|organizer|preferences|bubble|page-info|pop-up|task_dialog|toolbox|webconsole)$"] floating enable, resize set width $floating_width ppt height $floating_height ppt, move position center
 
-
 # Terminal.
 set $term foot
 
 # Launcher.
-#set $menu wmenu-run
 set $menu noctalia msg panel-toggle launcher
 
 # Browser; keep in sync with BROWSER in ~/.bash_profile.
 set $browser firefox
-
-# Super+Y focuses/launches the browser on workspace 1; if already focused there,
-# it opens another window on workspace 1.
-# Keep placement in browser.sh so dragged-out tabs stay on their current workspace.
 
 # Floating Kitty terminal; the distinct app ID keeps regular Kitty windows tiled.
 set $floating_term kitty --single-instance --instance-group=sway-shortcuts --class kitty-floating
@@ -98,12 +86,6 @@ for_window [app_id="^swayimg$"] move container to workspace number 4, workspace 
 
 # VLC: workspace 5.
 for_window [app_id="(?i)^vlc$"] move container to workspace number 5, workspace number 5
-
-# Window switcher for wmenu.
-#set $window_switcher_overview python3 ~/.config/sway/scripts/window-switcher.py
-
-# ↑ Above: non-Noctalia configuration
-# ↓ Below: Noctalia-specific configuration
 
 # Window switcher.
 set $window_switcher_overview noctalia msg window-switcher
@@ -128,13 +110,7 @@ bindsym --no-repeat $mod+Shift+g exec $displays toggle extend
 # Laptop only, including when an external monitor is still connected.
 bindsym --no-repeat $mod+Shift+i exec $displays switch laptop
 
-# Available profiles, with the current selection marked. For wmenu
-#bindsym --no-repeat $mod+p exec $displays pick --menu wmenu
-
-# ↑ Above: non-Noctalia configuration
-# ↓ Below: Noctalia-specific configuration
-
-# Available profiles, with the current selection marked. works on noctalia
+# Available profiles, with the current selection marked, in Noctalia.
 bindsym --no-repeat $mod+p exec $displays pick
 
 # Save the open-lid layout and workspaces, then restore them on reopening.
@@ -142,35 +118,22 @@ bindsym --no-repeat $mod+p exec $displays pick
 bindswitch --locked --reload lid:on exec $displays lid closed
 bindswitch --locked --reload lid:off exec $displays lid open
 
-
 ### Input
 
-  input type:touchpad {
-      dwt enabled
-      tap enabled
-      natural_scroll enabled
-      middle_emulation enabled
-  }
+input type:touchpad {
+    dwt enabled
+    tap enabled
+    natural_scroll enabled
+    middle_emulation enabled
+}
 
+# US/LT layouts.
+input "type:keyboard" {
+    xkb_layout "us,lt"
+}
 
-    # US/LT layouts.
-    input "type:keyboard" {
-        xkb_layout "us,lt"
-    }
-
-    # Direct Sway alternative:
-    # bindsym --to-code $mod+backslash input "type:keyboard" xkb_switch_layout next
-
-    # Super+\ cycles layouts.
-    #bindsym --to-code $mod+backslash input "type:keyboard" xkb_switch_layout next
-
-    # ↑ Above: non-Noctalia configuration
-    # ↓ Below: Noctalia-specific configuration
-
-    # Super+\ cycles layouts through Noctalia.
-    bindsym --no-repeat --to-code $mod+backslash exec noctalia msg keyboard-layout-cycle
-
-
+# Super+\ cycles layouts through Noctalia.
+bindsym --no-repeat --to-code $mod+backslash exec noctalia msg keyboard-layout-cycle
 
 ### Key bindings
 
@@ -191,6 +154,7 @@ bindswitch --locked --reload lid:off exec $displays lid open
     bindsym --no-repeat $mod+d exec $menu
 
     # Focus/launch on workspace 1; open another only when already focused there.
+    # Keep placement in browser.sh so dragged-out tabs stay on their current workspace.
     set $browser_focus_or_new ~/.config/sway/scripts/browser.sh
     bindsym --no-repeat $mod+y fullscreen disable; exec $browser_focus_or_new $browser
 
@@ -218,14 +182,7 @@ bindswitch --locked --reload lid:off exec $displays lid open
     # Reload config.
     bindsym --no-repeat $mod+Shift+c reload
 
-    # End the Wayland session.
-    #bindsym $mod+Shift+e exec swaynag -t warning -m 'Do you really want to exit Sway? This will end your Wayland session.' -B 'Exit Sway' 'swaymsg exit'
-
-    # ↑ Above: non-Noctalia configuration
-    # ↓ Below: Noctalia-specific configuration
-
-    # End the Wayland session. noctalia specific
-    # bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -B 'Yes, exit sway' 'swaymsg exit'
+    # Open Noctalia's session panel.
     bindsym --no-repeat $mod+Shift+e exec noctalia msg panel-toggle session
 
     # Lock immediately without opening the session panel.
@@ -342,44 +299,17 @@ mode "resize" {
 }
 bindsym $mod+r mode "resize"
 
-
 # Media keys
-
-# Direct brightnessctl alternative:
-# bindsym --locked XF86MonBrightnessDown exec brightnessctl set 5%-
-# bindsym --locked XF86MonBrightnessUp exec brightnessctl set 5%+
-
-# ↑ Above: non-Noctalia configuration
-# ↓ Below: Noctalia-specific configuration
 
 # Brightness with Noctalia OSD.
 bindsym --locked XF86MonBrightnessDown exec noctalia msg brightness-down
 bindsym --locked XF86MonBrightnessUp exec noctalia msg brightness-up
-
-# Direct pactl alternatives:
-# bindsym --locked XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle
-# bindsym --locked XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -5%
-# bindsym --locked XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5%
-# bindsym --locked XF86AudioMicMute exec pactl set-source-mute @DEFAULT_SOURCE@ toggle
-
-# ↑ Above: non-Noctalia configuration
-# ↓ Below: Noctalia-specific configuration
 
 # Volume with Noctalia OSD.
 bindsym --locked --no-repeat XF86AudioMute exec noctalia msg volume-mute
 bindsym --locked XF86AudioLowerVolume exec noctalia msg volume-down
 bindsym --locked XF86AudioRaiseVolume exec noctalia msg volume-up
 bindsym --locked --no-repeat XF86AudioMicMute exec noctalia msg mic-mute
-
-# Direct playerctl alternatives:
-# bindsym --locked XF86AudioPlay exec playerctl play-pause
-# bindsym --locked XF86AudioPause exec playerctl play-pause
-# bindsym --locked XF86AudioPrev exec playerctl previous
-# bindsym --locked XF86AudioNext exec playerctl next
-# bindsym --locked XF86AudioStop exec playerctl stop
-
-# ↑ Above: non-Noctalia configuration
-# ↓ Below: Noctalia-specific configuration
 
 # Playback through Noctalia's MPRIS service.
 bindsym --locked --no-repeat XF86AudioPlay exec noctalia msg media toggle
@@ -388,27 +318,6 @@ bindsym --locked XF86AudioPrev exec noctalia msg media previous
 bindsym --locked XF86AudioNext exec noctalia msg media next
 bindsym --locked --no-repeat XF86AudioStop exec noctalia msg media stop
 
-
-# Flameshot alternative:
-# bindsym Print exec flameshot gui
-
 # Screenshots through Noctalia; the configured region capture opens Satty.
 bindsym --no-repeat Print exec noctalia msg screenshot-region
 bindsym --no-repeat Shift+Print exec noctalia msg screenshot-fullscreen
-
-
-### Default Swaybar (disabled)
-
-# Uncomment this block to use Sway's default bar.
-# bar {
-#     position top
-#
-#     # Update the bar whenever the command prints a new line.
-#     status_command while date +'%Y-%m-%d %X'; do sleep 1; done
-#
-#     colors {
-#         statusline #ffffff
-#         background #323232
-#         inactive_workspace #32323200 #32323200 #5c5c5c
-#     }
-# }

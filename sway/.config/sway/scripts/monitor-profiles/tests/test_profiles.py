@@ -1,7 +1,6 @@
 """Failure paths and UI contracts; integration.py exercises real Sway/Shikane."""
 import copy
 import importlib.util
-import json
 from pathlib import Path
 import subprocess
 import tempfile

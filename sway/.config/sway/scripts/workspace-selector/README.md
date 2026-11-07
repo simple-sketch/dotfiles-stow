@@ -32,17 +32,11 @@ No pip dependencies, compositor patches, input-group membership, root daemon,
 raw `/dev/input` access, or synthetic input are used by the running helper.
 
 The source lives in `~/.config/sway/scripts/workspace-selector/`, with the launcher at
-`~/.config/sway/scripts/workspace-selector/workspace-selector.sh` and bindings at
-`~/.config/sway/workspace-selector.conf`.
+`~/.config/sway/scripts/workspace-selector/workspace-selector.sh`. The daemon,
+window rules, and bindings live in the `BEGIN workspace selector` / `END workspace selector`
+block of `~/.config/sway/config`, after `floating_modifier`.
 
-Place this after the general floating-window rules / `floating_modifier` in
-`~/.config/sway/config`:
-
-```sway
-include ~/.config/sway/workspace-selector.conf
-```
-
-Then:
+With the stowed Sway config in place, check and reload:
 
 ```sh
 ~/.config/sway/scripts/workspace-selector/workspace-selector.sh --check
@@ -50,7 +44,7 @@ sway --validate --config ~/.config/sway/config
 swaymsg reload
 ```
 
-The included `exec_always` starts the helper. A session-specific file lock prevents
+The selector block's `exec_always` starts the helper. A session-specific file lock prevents
 duplicate daemons on reload. The program sleeps on Sway IPC events when idle; it
 does not continuously poll pointer position. The dialog exists only during a
 selection. No extra permanent bar or panel is installed.
@@ -132,7 +126,8 @@ The singleton lock is under `$XDG_RUNTIME_DIR`, keyed to `$SWAYSOCK`. Only numer
 window IDs, workspace labels and lifecycle/error messages are logged, not window
 titles or keyboard input.
 
-To disable permanently, remove/comment the `include` line, run `--stop`, then
+To disable permanently, remove/comment the `BEGIN workspace selector` through
+`END workspace selector` block in `~/.config/sway/config`, run `--stop`, then
 `swaymsg reload`. This restores the original native Super+title-bar drag.
 
 ## Tests

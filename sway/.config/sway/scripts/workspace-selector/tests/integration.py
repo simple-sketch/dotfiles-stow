@@ -43,8 +43,11 @@ class HeadlessTests(unittest.TestCase):
                        PYTHONDONTWRITEBYTECODE="1")
         cls.env.pop("SWAYSOCK", None)
         cls.env.pop("WAYLAND_DISPLAY", None)
-        config = (ROOT.parents[1] / "workspace-selector.conf").read_text()
-        config = "\n".join(line for line in config.splitlines() if not line.startswith("exec_always"))
+        sway_config = (ROOT.parents[1] / "config").read_text()
+        config = sway_config.split("# BEGIN workspace selector\n", 1)[1].split(
+            "# END workspace selector", 1)[0]
+        config = "\n".join(line for line in config.splitlines()
+                           if not line.lstrip().startswith("exec_always"))
         cls.config = cls.tmp / "config"
         cls.config.write_text('''set $mod Mod4
 output * resolution 1280x720

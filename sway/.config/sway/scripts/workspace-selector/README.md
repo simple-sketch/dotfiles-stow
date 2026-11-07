@@ -32,7 +32,7 @@ No pip dependencies, compositor patches, input-group membership, root daemon,
 raw `/dev/input` access, or synthetic input are used by the running helper.
 
 The source lives in `~/.config/sway/scripts/workspace-selector/`, with the launcher at
-`~/.config/sway/scripts/workspace-selector.sh` and bindings at
+`~/.config/sway/scripts/workspace-selector/workspace-selector.sh` and bindings at
 `~/.config/sway/workspace-selector.conf`.
 
 Place this after the general floating-window rules / `floating_modifier` in
@@ -45,7 +45,7 @@ include ~/.config/sway/workspace-selector.conf
 Then:
 
 ```sh
-~/.config/sway/scripts/workspace-selector.sh --check
+~/.config/sway/scripts/workspace-selector/workspace-selector.sh --check
 sway --validate --config ~/.config/sway/config
 swaymsg reload
 ```
@@ -115,13 +115,13 @@ Primary references:
 
 ```sh
 # Runtime dependency check
-~/.config/sway/scripts/workspace-selector.sh --check
+~/.config/sway/scripts/workspace-selector/workspace-selector.sh --check
 
 # Stop this session's helper (does not affect separate headless test sessions)
-~/.config/sway/scripts/workspace-selector.sh --stop
+~/.config/sway/scripts/workspace-selector/workspace-selector.sh --stop
 
 # After source changes, restart it without restarting Sway
-~/.config/sway/scripts/workspace-selector.sh --daemon --verbose
+~/.config/sway/scripts/workspace-selector/workspace-selector.sh --daemon --verbose
 ```
 
 The daemon runs in the foreground when launched manually; Ctrl+C stops it. For a

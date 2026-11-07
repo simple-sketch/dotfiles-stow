@@ -1,6 +1,6 @@
 # Monitor profiles
 
-Sway shortcuts and Shikane hooks share `../monitor-profiles.py`. It serializes
+Sway shortcuts and Shikane hooks share `monitor-profiles.py`. It serializes
 changes, checks the resulting output state, positions displays using their
 logical dimensions, and reports results through desktop notifications.
 
@@ -44,12 +44,13 @@ login session and are not preferences saved across reboots.
 ## Commands and requirements
 
 ```sh
-python3 ~/.config/sway/scripts/monitor-profiles.py pick
-python3 ~/.config/sway/scripts/monitor-profiles.py switch laptop
-python3 ~/.config/sway/scripts/monitor-profiles.py toggle portrait
+python3 ~/.config/sway/scripts/monitor-profiles/monitor-profiles.py pick
+python3 ~/.config/sway/scripts/monitor-profiles/monitor-profiles.py switch laptop
+python3 ~/.config/sway/scripts/monitor-profiles/monitor-profiles.py toggle portrait
 ```
 
-`arrange-outputs.sh` remains a compatibility entry point for explicit output
+`~/.config/sway/scripts/monitor-profiles/arrange-outputs.sh` remains a
+compatibility entry point for explicit output
 names and `--toggle [extend|portrait]`. Shikane's profile-level hooks instead use
 `monitor-profiles.py applied "$SHIKANE_PROFILE_NAME"`: obsolete hooks are ignored,
 and completed swaps are left in place.

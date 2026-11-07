@@ -27,7 +27,7 @@
 # External monitor connected -> built-in panel off, external in landscape.
 [[profile]]
 name = "docked"
-exec = ['python3 "$HOME/.config/sway/scripts/monitor-profiles.py" applied "$SHIKANE_PROFILE_NAME"']
+exec = ['python3 "$HOME/.config/sway/scripts/monitor-profiles/monitor-profiles.py" applied "$SHIKANE_PROFILE_NAME"']
     [[profile.output]]
     # AND: the internal connector must match both the canonical output name and
     # the compositor description. Two matching attributes also rank this
@@ -48,7 +48,7 @@ exec = ['python3 "$HOME/.config/sway/scripts/monitor-profiles.py" applied "$SHIK
 # Manual only: use the profile picker or Mod+Shift+V.
 [[profile]]
 name = "portrait"
-exec = ['python3 "$HOME/.config/sway/scripts/monitor-profiles.py" applied "$SHIKANE_PROFILE_NAME"']
+exec = ['python3 "$HOME/.config/sway/scripts/monitor-profiles/monitor-profiles.py" applied "$SHIKANE_PROFILE_NAME"']
     [[profile.output]]
     search = "n/^(eDP|LVDS)-[0-9]+$"
     enable = true
@@ -69,7 +69,7 @@ exec = ['python3 "$HOME/.config/sway/scripts/monitor-profiles.py" applied "$SHIK
 #     use the profile picker or Mod+Shift+G.
 [[profile]]
 name = "extend"
-exec = ['python3 "$HOME/.config/sway/scripts/monitor-profiles.py" applied "$SHIKANE_PROFILE_NAME"']
+exec = ['python3 "$HOME/.config/sway/scripts/monitor-profiles/monitor-profiles.py" applied "$SHIKANE_PROFILE_NAME"']
     [[profile.output]]
     search = "n/^(DP|HDMI-[AB]|DVI-[ADI]|VGA|USB-C)-[0-9]+(-[0-9]+)*$"
     enable = true
@@ -86,7 +86,7 @@ exec = ['python3 "$HOME/.config/sway/scripts/monitor-profiles.py" applied "$SHIK
 # Laptop only while the cable remains connected. Manual: Mod+Shift+I.
 [[profile]]
 name = "laptop"
-exec = ['python3 "$HOME/.config/sway/scripts/monitor-profiles.py" applied "$SHIKANE_PROFILE_NAME"']
+exec = ['python3 "$HOME/.config/sway/scripts/monitor-profiles/monitor-profiles.py" applied "$SHIKANE_PROFILE_NAME"']
     [[profile.output]]
     search = "n/^(eDP|LVDS)-[0-9]+$"
     enable = true
@@ -101,7 +101,7 @@ exec = ['python3 "$HOME/.config/sway/scripts/monitor-profiles.py" applied "$SHIK
 # Nothing else connected -> built-in panel on.
 [[profile]]
 name = "undocked"
-exec = ['python3 "$HOME/.config/sway/scripts/monitor-profiles.py" applied "$SHIKANE_PROFILE_NAME"']
+exec = ['python3 "$HOME/.config/sway/scripts/monitor-profiles/monitor-profiles.py" applied "$SHIKANE_PROFILE_NAME"']
     [[profile.output]]
     # Same vendor-neutral connector checks as the automatic docked profile.
     search = ["n/^(eDP|LVDS)-[0-9]+$", "d/(eDP|LVDS)-[0-9]+"]

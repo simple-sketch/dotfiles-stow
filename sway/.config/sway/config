@@ -21,7 +21,7 @@ exec "dbus-update-activation-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CU
 # Start audio once; the helper stops it when Sway exits or its IPC disconnects.
 # Use exec, not exec_always, so config reloads leave audio alone.
 # Keep the lock for the helper's lifetime; do not pass its fd to audio children.
-exec "exec flock --nonblock --close $XDG_RUNTIME_DIR/sway-audio.lock $HOME/.config/sway/scripts/start-audio.sh"
+exec "exec flock --nonblock --close $XDG_RUNTIME_DIR/sway-audio.lock $HOME/.config/sway/scripts/audio/start-audio.sh"
 
 # Preload Kitty at login and on reload so even the first shortcut is fast.
 # The lock prevents duplicate hidden windows; waiting keeps it held even when
@@ -94,7 +94,7 @@ set $window_switcher_overview noctalia msg window-switcher
 
 # Start once: reloading Sway must preserve the selected display profile.
 exec shikane
-set $displays python3 ~/.config/sway/scripts/monitor-profiles.py
+set $displays python3 ~/.config/sway/scripts/monitor-profiles/monitor-profiles.py
 # Sway resets runtime output settings on reload; restore the last verified layout.
 exec_always $displays reapply
 
@@ -155,7 +155,7 @@ bindsym --no-repeat --to-code $mod+backslash exec noctalia msg keyboard-layout-c
 
     # Focus/launch on workspace 1; open another only when already focused there.
     # Keep placement in browser.sh so dragged-out tabs stay on their current workspace.
-    set $browser_focus_or_new ~/.config/sway/scripts/browser.sh
+    set $browser_focus_or_new ~/.config/sway/scripts/browser/browser.sh
     bindsym --no-repeat $mod+y fullscreen disable; exec $browser_focus_or_new $browser
 
     # Floating terminal.

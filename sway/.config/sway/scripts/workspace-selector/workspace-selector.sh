@@ -1,3 +1,3 @@
 #!/bin/sh
 # Keep the source alongside the Sway configuration; no pip packages required.
-exec python3 "$(dirname -- "$0")/workspace-selector/main.py" "$@"
+exec python3 "$(dirname -- "$0")/main.py" "$@"

@@ -7,7 +7,7 @@ import tempfile
 import unittest
 from unittest.mock import patch
 
-SCRIPT = Path(__file__).resolve().parents[2] / "monitor-profiles.py"
+SCRIPT = Path(__file__).resolve().parents[1] / "monitor-profiles.py"
 spec = importlib.util.spec_from_file_location("profiles", SCRIPT)
 profiles = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(profiles)

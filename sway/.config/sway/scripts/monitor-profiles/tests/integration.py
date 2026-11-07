@@ -16,11 +16,12 @@ import tempfile
 import time
 import unittest
 
-SCRIPT = Path(__file__).resolve().parents[2] / "monitor-profiles.py"
+SCRIPT = Path(__file__).resolve().parents[1] / "monitor-profiles.py"
+SWAY_CONFIG = SCRIPT.parents[2] / "config"
 spec = importlib.util.spec_from_file_location("profiles", SCRIPT)
 profiles = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(profiles)
-SHIKANE_CONFIG = SCRIPT.parents[4] / "shikane/.config/shikane/config.toml"
+SHIKANE_CONFIG = SCRIPT.parents[5] / "shikane/.config/shikane/config.toml"
 
 
 class TestBackend(profiles.Backend):
@@ -63,7 +64,7 @@ class Integration(unittest.TestCase):
                    SHIKANE_LOG="debug", SHIKANE_LOG_STYLE="never", PYTHONDONTWRITEBYTECODE="1")
         env.pop("SWAYSOCK", None)
         env.pop("WAYLAND_DISPLAY", None)
-        validation = sp.run(["sway", "--validate", "--config", str(SCRIPT.parent.parent / "config")],
+        validation = sp.run(["sway", "--validate", "--config", str(SWAY_CONFIG)],
                             env=env, text=True, capture_output=True)
         if validation.returncode:
             raise AssertionError(validation.stdout + validation.stderr)
@@ -109,11 +110,11 @@ sys.exit(result.returncode)
         source = source.replace('n/^(eDP|LVDS)-[0-9]+$', 'n/^HEADLESS-1$')
         source = source.replace('d/(eDP|LVDS)-[0-9]+', 'd/.*')
         source = source.replace('n/^(DP|HDMI-[AB]|DVI-[ADI]|VGA|USB-C)-[0-9]+(-[0-9]+)*$', 'n/^HEADLESS-[23]$')
-        source = source.replace('"$HOME/.config/sway/scripts/monitor-profiles.py"', '"' + str(Path(__file__).resolve()) + '" --worker')
+        source = source.replace('"$HOME/.config/sway/scripts/monitor-profiles/monitor-profiles.py"', '"' + str(Path(__file__).resolve()) + '" --worker')
         cls.shikane_source = source
         (cls.tmp / "shikane.toml").write_text(source)
-        config = (SCRIPT.parent.parent / "config").read_text().split("### Displays (Shikane)", 1)[1].split("### Input", 1)[0]
-        config = config.replace("python3 ~/.config/sway/scripts/monitor-profiles.py", "python3 " + str(Path(__file__).resolve()) + " --worker")
+        config = SWAY_CONFIG.read_text().split("### Displays (Shikane)", 1)[1].split("### Input", 1)[0]
+        config = config.replace("python3 ~/.config/sway/scripts/monitor-profiles/monitor-profiles.py", "python3 " + str(Path(__file__).resolve()) + " --worker")
         (cls.tmp / "sway.conf").write_text('''set $mod Mod4
 output HEADLESS-1 mode 1920x1080 position 2560 180
 output HEADLESS-2 mode 2560x1440 position 0 0

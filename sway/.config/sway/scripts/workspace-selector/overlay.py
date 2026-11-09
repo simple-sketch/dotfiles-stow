@@ -13,6 +13,20 @@ from gi.repository import Gdk, Gtk, Pango, PangoCairo
 from core import WIDTH, HEIGHT, cell_rect, hit_test
 
 
+# Nord dark: polar-night surfaces, snow-storm text, and frost accents.
+BACKGROUND = "#2e3440"
+SURFACE = "#3b4252"
+SURFACE_CURRENT = "#434c5e"
+OUTLINE = "#4c566a"
+PRIMARY = "#88c0d0"
+PRIMARY_OUTLINE = "#8fbcbb"
+CURRENT_OUTLINE = "#81a1c1"
+ON_PRIMARY = "#2e3440"
+TEXT = "#eceff4"
+TEXT_SECONDARY = "#d8dee9"
+TEXT_MUTED = "#a5afc2"
+
+
 def color(ctx, value):
     value = value.lstrip("#")
     ctx.set_source_rgb(*(int(value[i:i + 2], 16) / 255 for i in (0, 2, 4)))
@@ -28,7 +42,7 @@ def rounded(ctx, x, y, w, h, radius):
     ctx.close_path()
 
 
-def text(ctx, value, x, y, size=11, fg="#c9cddd", width=None, bold=False, center=False):
+def text(ctx, value, x, y, size=11, fg=TEXT_SECONDARY, width=None, bold=False, center=False):
     layout = PangoCairo.create_layout(ctx)
     font = Pango.FontDescription()
     font.set_family("Sans")
@@ -122,30 +136,30 @@ class Dialog:
             return True
         ctx.set_operator(cairo.OPERATOR_OVER)
         rounded(ctx, 1, 1, WIDTH - 2, HEIGHT - 2, 14)
-        color(ctx, "#1b1e28")
+        color(ctx, BACKGROUND)
         ctx.fill_preserve()
-        color(ctx, "#44495e")
+        color(ctx, OUTLINE)
         ctx.set_line_width(1.5)
         ctx.stroke()
-        text(ctx, "Move window", 18, 14, 17, "#f0eff9", bold=True)
-        text(ctx, self.target.title.replace("\n", " "), 18, 42, 12, "#a5acc2", width=WIDTH - 36)
+        text(ctx, "Move window", 18, 14, 17, TEXT, bold=True)
+        text(ctx, self.target.title.replace("\n", " "), 18, 42, 12, TEXT_SECONDARY, width=WIDTH - 36)
         for number in range(1, 10):
             x, y, w, h = cell_rect(number)
             active = number == self.hover
             current = number == self.target.number
             rounded(ctx, x, y, w, h, 9)
-            color(ctx, "#b9a5f7" if active else "#2a2f3e" if current else "#242836")
+            color(ctx, PRIMARY if active else SURFACE_CURRENT if current else SURFACE)
             ctx.fill_preserve()
-            color(ctx, "#d8caff" if active else "#8b7db8" if current else "#383e50")
+            color(ctx, PRIMARY_OUTLINE if active else CURRENT_OUTLINE if current else OUTLINE)
             ctx.set_line_width(2 if active else 1)
             ctx.stroke()
-            text(ctx, str(number), x, y + 8, 23, "#20192f" if active else "#f0eff9", width=w,
+            text(ctx, str(number), x, y + 8, 23, ON_PRIMARY if active else TEXT, width=w,
                  bold=True, center=True)
             count = self.counts[number]
             label = "current" if current else "empty" if not count else f"{count} window{'s' if count != 1 else ''}"
-            text(ctx, label, x, y + 43, 10, "#423451" if active else "#a5acc2", width=w, center=True)
+            text(ctx, label, x, y + 43, 10, ON_PRIMARY if active else TEXT_SECONDARY, width=w, center=True)
         hint = f"Click → workspace {self.hover}" if self.hover else "Click a workspace number"
-        text(ctx, hint, 18, 318, 12, "#d5c5ff", width=WIDTH - 36, center=True)
-        text(ctx, "Esc / right-click to cancel · stay here", 18, 340, 10, "#8992aa",
+        text(ctx, hint, 18, 318, 12, PRIMARY, width=WIDTH - 36, center=True)
+        text(ctx, "Esc / right-click to cancel · stay here", 18, 340, 10, TEXT_MUTED,
              width=WIDTH - 36, center=True)
         return True

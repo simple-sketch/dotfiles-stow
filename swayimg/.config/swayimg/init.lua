@@ -1,4 +1,4 @@
--- Balanced desktop settings for Swayimg 5.5.
+-- Balanced desktop settings for Swayimg 5.7.
 -- Swayimg otherwise defaults to a borderless overlay when it detects Sway.
 swayimg.mode = "viewer"
 swayimg.antialiasing = true
@@ -15,7 +15,7 @@ swayimg.imagelist.fsmon = true
 -- Keep decoded-image and thumbnail caches bounded. Full images use much more
 -- memory than thumbnails, so the official conservative limits are appropriate.
 swayimg.viewer.default_scale = "optimal"
-swayimg.viewer.autocenter = true
+swayimg.viewer.autopos = "center"
 swayimg.viewer.preload = 1
 swayimg.viewer.history = 1
 swayimg.gallery.cache = 100
@@ -116,7 +116,9 @@ local function set_wallpaper(mode)
       return
     end
 
-    log("Noctalia wallpaper change failed; trying swaymsg: " .. image.path)
+    log("Noctalia wallpaper change failed; leaving wallpaper unchanged: " .. image.path)
+    swayimg.text.status = "Noctalia wallpaper change failed"
+    return
   else
     log("Noctalia is not running; using swaymsg: " .. image.path)
   end

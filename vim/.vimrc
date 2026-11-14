@@ -25,6 +25,20 @@ packadd! editorconfig
 packadd! hlyank
 packadd! matchit
 
+# Quiet One Dark: keep syntax distinctions, but make comments readable.
+# Configure before plugins load: onedark caches its palette on first use.
+g:onedark_terminal_italics = 0
+g:onedark_hide_endofbuffer = 1
+g:onedark_color_overrides = {
+  foreground: {gui: '#C8CCD4', cterm: '252', cterm16: 'NONE'},
+  white: {gui: '#C8CCD4', cterm: '252', cterm16: '15'},
+  comment_grey: {gui: '#929BAA', cterm: '247', cterm16: '7'},
+  gutter_fg_grey: {gui: '#737D8C', cterm: '243', cterm16: '8'},
+  blue: {gui: '#82B1D6', cterm: '110', cterm16: '4'},
+  purple: {gui: '#B69ACB', cterm: '139', cterm16: '5'},
+  cyan: {gui: '#83B9B5', cterm: '109', cterm16: '6'},
+}
+
 # Bootstrap the minimalist vim-plug manager once.
 final vim_dir = expand('~/.vim')
 final plug_path = vim_dir .. '/autoload/plug.vim'
@@ -147,6 +161,11 @@ enddef
 set number
 set relativenumber
 set signcolumn=yes
+# Mark only the current line number, not a stripe across the code.
+set cursorline
+set cursorlineopt=number
+set scrolloff=5
+set sidescrolloff=5
 set laststatus=2
 set statusline=%<%f\ %h%m%r%=%{g:SearchMatchCount()}%y\ %l:%c\ %P
 set splitbelow

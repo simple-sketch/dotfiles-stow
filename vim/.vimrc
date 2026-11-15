@@ -121,8 +121,13 @@ set tabstop=4
 set hidden
 set linebreak
 set breakindent
-# Avoid stale blank regions caused by terminal scrolling redraw glitches.
+# Smooth scrolling affects wrapped lines, not terminal redraw optimizations.
 set nosmoothscroll
+if &term =~# '^foot'
+  # Repaint moved lines instead of asking Foot to scroll existing screen rows.
+  # Work around stale text/gaps during navigation without changing the buffer.
+  set ttyscroll=0
+endif
 
 # Search and command-line completion.
 set ignorecase
